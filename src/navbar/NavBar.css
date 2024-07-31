@@ -1,0 +1,33 @@
+.sidenav {
+    height: 100vh;
+    width: 200px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #f0f0f0;
+    padding-top: 64px;
+    box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sidenav ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  .sidenav li {
+    padding: 16px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #333;
+  }
+  
+  .sidenav li:hover {
+    background-color: #f2f2f2;
+    cursor: pointer;
+  }
+  
+  .sidenav li.active {
+    background-color: #e0e0e0;
+  }
+  
