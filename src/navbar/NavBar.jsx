@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './NavBar.css'
+import './NavBarIcons.css'
+
 
 export default function NavBar() {
   const [activeLink, setActiveLink] = useState('home');
@@ -11,9 +13,12 @@ export default function NavBar() {
   return (
     <div className="sidenav">
       <ul>
-        <li className={`nav-item ${activeLink === 'home' ? 'active' : ''}`} onClick={() => handleItemClick('home')}>Home</li>
-        <li className={`nav-item ${activeLink === 'about' ? 'active' : ''}`} onClick={() => handleItemClick('about')}>About</li>
-        <li className={`nav-item ${activeLink === 'contact' ? 'active' : ''}`} onClick={() => handleItemClick('contact')}>Contact</li>
+        <li className='border'>
+            <div className='gg-menu'></div>
+        </li>
+        <li className='border'>
+            <div className='gg-add-r'></div>
+        </li>
       </ul>
     </div>
   );
