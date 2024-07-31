@@ -11,6 +11,7 @@ export default {
       'grey-dark': '#3d3b3b',
       'grey': '#706e6e',
       'grey-light': '#aba6a6',
+      'white': '#ffffff',
     },
     fontFamily: {
       sans: [],
