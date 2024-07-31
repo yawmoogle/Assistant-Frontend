@@ -47,7 +47,6 @@ const Roles = () => {
                     placeholder="Enter your desired user roles and press Enter"
                     className="flex-grow p-2 border-none outline-none min-w-[600px]"
                 >
-                    
                 </input>
             </div>
             </div>
