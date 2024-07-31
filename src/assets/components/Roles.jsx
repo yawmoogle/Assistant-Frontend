@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Button from "../components/Button";
 
 const Roles = () => {
     //Store input roles from text box and store information into array for pill display
@@ -25,12 +26,12 @@ const Roles = () => {
 
     return (
         <div className="container mx-auto mt-10 p-4">
-            <div className="border border-grey rounded p-2 flex flex-wrap items-center focus-within:border-blue-500">
+            <div className="border border-grey rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue-500">
                 <div className="flex flex-wrap items-center">
                 {rolePills.map((pill,index) => (
                     <div
                     key={index}
-                    className="bg-blue text-white flex items-center rounded-full px-3 py-1 mr-1 mb-1">
+                    className="bg-white text-black border border-black flex items-center rounded-full px-3 py-1 mr-1 mb-1">
                         {pill}
                         <span
                         onClick={() => removePill(index)}
@@ -50,6 +51,7 @@ const Roles = () => {
                 </input>
             </div>
             </div>
+            <Button>Test</Button>
         </div>
     );
 };
