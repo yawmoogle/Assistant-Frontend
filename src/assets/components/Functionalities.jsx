@@ -59,6 +59,7 @@ const Functionalities = () => {
             className="bg-slate-50 appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline resize-none"
             rows="1"
             placeholder={`Enter functionality ${func.id}`}
+            required
           />
           <button
             type="button"
