@@ -25,8 +25,8 @@ const Roles = () => {
     };
 
     return (
-        <div className="container mx-auto mt-10 p-4">
-            <div className="border border-grey rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue-500">
+        <div className="container w-full mt-10 p-4">
+            <div className="border border-grey rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue">
                 <div className="flex flex-wrap items-center">
                 {rolePills.map((pill,index) => (
                     <div
@@ -46,7 +46,7 @@ const Roles = () => {
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     placeholder="Enter your desired user roles and press Enter"
-                    className="flex-grow p-2 border-none outline-none min-w-[600px]"
+                    className="flex-grow p-2 border-none outline-none min-w-[150px] w-5/6"
                 >
                 </input>
             </div>
