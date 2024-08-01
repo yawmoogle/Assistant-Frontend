@@ -6,7 +6,7 @@
     position: fixed;
     top: 0;
     left: 0;
-    /* background-color: #f0f0f0; */
+    background-color: rgb(53, 52, 52);
     padding-top: 64px;
     box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
   }
@@ -18,13 +18,22 @@
   }
 
   .sidenav li {
-    margin: 10px 0px 25px 10px;
+    padding: 10px 0px 15px 10px;
     /* padding: 10px 0px 50px 10px; */
   }
   
   .sidenav li:hover {
     cursor: pointer;
-    transform: scale(1.5);
+    /* transform: scale(1.5); */
+    /* background-color: #ada8a8;
+    border-radius: 5px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    width: 30px;
+    height: 20px; */
   }
 
-  
+  .caption {
+    font-size: small;
+    text-align: justify;
+    margin: 0px;
+  }

@@ -1,24 +1,27 @@
 import React, { useState } from 'react';
 import './NavBar.css'
 import './NavBarIcons.css'
+import AddProject from './AddProjectButton'
+import SelectProject from './SelectProjectButton'
 
 
 export default function NavBar() {
-  const [activeLink, setActiveLink] = useState('home');
 
-  const handleItemClick = (link) => {
-    setActiveLink(link);
-  };
+    // const addProject = 
 
   return (
     <div className="sidenav">
       <ul>
-        <li className='border'>
+        <li >
             <div className='gg-menu'></div>
         </li>
-        <li className='border'>
-            <div className='gg-add-r'></div>
-        </li>
+      </ul>
+      <ul>
+        <AddProject/>
+      </ul>
+      <br></br>
+      <ul>
+        <SelectProject />
       </ul>
     </div>
   );
