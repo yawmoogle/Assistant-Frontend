@@ -1,12 +1,10 @@
-import { useState } from 'react'
-import Functionalities from './assets/components/Functionalities'
-import './App.css'
+import Form from './assets/components/Form'
 
 function App() {
 
   return (
     <div className="App">
-      <Functionalities/>
+      <Form/>
     </div>
   )
 }
