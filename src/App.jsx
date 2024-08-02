@@ -6,14 +6,13 @@ import './App.css'
 
 function App() {
 
-  return (
-    <div className="App">
-      <Form/>
+  return (   
     <div className="App w-full">
       <Details/>
+      <Form/>
       <Roles/>
     </div>
   )
 }
 
-export default App
+export default App;

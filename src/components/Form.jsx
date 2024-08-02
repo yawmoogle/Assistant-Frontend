@@ -48,7 +48,7 @@ const Form = () => {
   //   }
   // };
 
-  //
+  // Log data in console
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log('Form Data Submitted: ', functionalities);
