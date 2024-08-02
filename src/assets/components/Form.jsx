@@ -30,22 +30,27 @@ const Form = () => {
     setOtherInput(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   try {
+  //     const response = await fetch('/api/submit-form', { // Replace with your API endpoint
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify({ functionalities, otherInput }), // Include other inputs here
+  //     });
+  //     if (!response.ok) throw new Error('Failed to submit form');
+  //     const result = await response.json();
+  //     console.log('API Response:', result);
+  //   } catch (error) {
+  //     console.error('Error submitting form:', error);
+  //   }
+  // };
+
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const response = await fetch('/api/submit-form', { // Replace with your API endpoint
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ functionalities, otherInput }), // Include other inputs here
-      });
-      if (!response.ok) throw new Error('Failed to submit form');
-      const result = await response.json();
-      console.log('API Response:', result);
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
+    console.log('Form Data Submitted: ', functionalities);
   };
 
   return (
