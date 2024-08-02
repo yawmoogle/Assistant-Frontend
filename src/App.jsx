@@ -3,7 +3,7 @@ import { useState } from 'react'
 import Roles from './components/Roles'
 import Details from './components/Details'
 import './App.css'
-import SideNavBar from './navbar/NavBar'
+import SideNavBar from './components/navbar/NavBar'
 
 function App() {
 
@@ -14,9 +14,7 @@ function App() {
         <SideNavBar />
       </div>
       <div className='form-body'>
-        <Details />
         <Form />
-        <Roles />
       </div>
     </div>
   )

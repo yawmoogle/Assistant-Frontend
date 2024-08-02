@@ -1,6 +1,8 @@
 // Form.jsx
 import React, { useState } from 'react';
+import Details from'./Details';
 import Functionalities from './FunctionalitiesV2';
+import Roles from './Roles';
 import SubmitButton from './FuncSubmitButton';
 
 const Form = () => {
@@ -55,13 +57,14 @@ const Form = () => {
 
   return (
     <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10 p-6 bg-red-50 shadow-md rounded-lg">
+      <Details/>
       <Functionalities
         functionalities={functionalities}
         handleChange={handleChange}
         handleAddFunctionality={handleAddFunctionality}
         handleRemoveFunctionality={handleRemoveFunctionality}
       />
-
+      <Roles/>
       <SubmitButton />
     </form>
   );
