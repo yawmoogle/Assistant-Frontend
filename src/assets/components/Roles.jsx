@@ -31,7 +31,7 @@ const Roles = () => {
                 {rolePills.map((pill,index) => (
                     <div
                     key={index}
-                    className="bg-white text-black border border-black flex items-center rounded-full px-3 py-1 mr-1 mb-1">
+                    className="bg-red-50 text-black border border-black flex items-center rounded-full px-3 py-1 mr-1 mb-1">
                         {pill}
                         <span
                         onClick={() => removePill(index)}
@@ -51,7 +51,6 @@ const Roles = () => {
                 </input>
             </div>
             </div>
-            <Button>Test</Button>
         </div>
     );
 };
