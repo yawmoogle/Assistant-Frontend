@@ -1,16 +1,22 @@
+import Form from './assets/components/Form'
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import Roles from './assets/components/Roles'
+import Details from './assets/components/Details'
 import './App.css'
 import SideNavBar from './navbar/NavBar'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
       <SideNavBar />
     </>
+    <div className="App">
+      <Form/>
+    <div className="App w-full">
+      <Details/>
+      <Roles/>
+    </div>
   )
 }
 
