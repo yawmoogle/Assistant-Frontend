@@ -7,7 +7,13 @@ import SelectProject from './SelectProjectButton'
 
 export default function NavBar() {
 
-    // const addProject = 
+  const [showButton, setShowButton] = useState(false);
+
+  const handleButtonClick = (e) => {
+    // Logic to hide the button
+    e.preventDefault();
+    setShowButton(true);
+  };
 
   return (
     <div className="sidenav">
@@ -17,11 +23,11 @@ export default function NavBar() {
         </li>
       </ul>
       <ul>
-        <AddProject/>
+        <AddProject onClick={handleButtonClick} />
       </ul>
       <br></br>
       <ul>
-        <SelectProject />
+        {showButton && <SelectProject />}
       </ul>
     </div>
   );

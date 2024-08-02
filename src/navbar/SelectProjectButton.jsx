@@ -5,7 +5,6 @@ import './NavBarIcons.css'
 
 export default function SelectProjectButton() {
 
-    // const addProject = 
 
   return (
     <div>

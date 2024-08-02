@@ -3,13 +3,12 @@ import './NavBar.css'
 import './NavBarIcons.css'
 
 
-export default function AddProjectButton() {
+export default function AddProjectButton({onClick, type = 'button'}) {
 
-    // const addProject = 
 
   return (
     <div>
-        <button type='submit' className='nav-button'>
+        <button type={type} onClick={onClick} className='nav-button'>
             <div className='gg-add-r'></div>
         </button>
     </div>

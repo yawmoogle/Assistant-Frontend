@@ -72,6 +72,10 @@
 }
 
 /* project backlog icon */
+.hidden-button {
+    display: none;
+}
+
 .gg-ereader {
     box-sizing: border-box;
     position: relative;
