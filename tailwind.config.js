@@ -5,18 +5,6 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    colors: {
-      'blue': '#34c3eb',
-      'red': '#f70707',
-      'grey-dark': '#3d3b3b',
-      'grey': '#706e6e',
-      'grey-light': '#aba6a6',
-      'white': '#ffffff',
-    },
-    fontFamily: {
-      sans: [],
-      serif: [],
-    },
     extend: {
       colors: {
       }
