@@ -8,14 +8,16 @@ import SideNavBar from './navbar/NavBar'
 function App() {
 
   return (
-    <>
-      <SideNavBar />
-    </>
-    <div className="App">
-      <Form/>
+
     <div className="App w-full">
-      <Details/>
-      <Roles/>
+      <div className='sidebar'>
+        <SideNavBar />
+      </div>
+      <div className='form-body'>
+        <Details />
+        <Form />
+        <Roles />
+      </div>
     </div>
   )
 }
