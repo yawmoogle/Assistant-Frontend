@@ -1,23 +1,24 @@
-import Form from './assets/components/Form'
+import Form from './components/Form'
 import { useState } from 'react'
-import Roles from './assets/components/Roles'
-import Details from './assets/components/Details'
+import Roles from './components/Roles'
+import Details from './components/Details'
 import './App.css'
-import SideNavBar from './navbar/NavBar'
+import SideNavBar from './components/navbar/NavBar'
 
 function App() {
 
   return (
-    <>
+    <div className="app-container">
       <SideNavBar />
-    </>
-    <div className="App">
-      <Form/>
-    <div className="App w-full">
-      <Details/>
-      <Roles/>
+      <div className="main-content">
+        <Form />
+        <div className="details-and-roles">
+          <Details />
+          <Roles />
+        </div>
+      </div>
     </div>
   )
 }
 
-export default App
+export default App;
