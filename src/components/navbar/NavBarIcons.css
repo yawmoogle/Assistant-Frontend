@@ -4,13 +4,14 @@
     position: relative;
     width: 30px;
     height: 40px;
+    background-color: rgb(245, 161, 175);
 }
 
 .nav-button:hover {
     /* background-color: #ada8a8; */
     border-radius: 5px;
     box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    border-color: black;
+    /* border-color: black; */
 }
 
 /* add icon */
@@ -58,7 +59,7 @@
     width: 20px;
     height: 2px;
     border-radius: 3px;
-    background: white;
+    background: black;
     content: '';
 }
 .gg-menu::after,

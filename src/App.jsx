@@ -3,6 +3,7 @@ import { useState } from 'react'
 import Roles from './components/Roles'
 import Details from './components/Details'
 import './App.css'
+import './index.css'
 import SideNavBar from './components/navbar/NavBar'
 
 function App() {
