@@ -11,7 +11,7 @@ const Form = () => {
   const [rolePills, setRolePills] = useState([]);
   const [titleValue, setTitleValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
-  const [otherInput, setOtherInput] = useState(''); // Example of another form input
+  // const [otherInput, setOtherInput] = useState(''); // Example of another form input
 
   const handleChange = (id, e) => {
     const newFunctionalities = functionalities.map((func) => {
@@ -32,9 +32,10 @@ const Form = () => {
     setFunctionalities(functionalities.filter((func) => func.id !== id));
   };
 
-  const handleOtherInputChange = (e) => {
-    setOtherInput(e.target.value);
-  };
+  // Example of input handler
+  // const handleOtherInputChange = (e) => {
+  //   setOtherInput(e.target.value);
+  // };
   
   const handleRoleChange = (e) => {
     setRoleValue(e.target.value);
@@ -90,7 +91,7 @@ const Form = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-10 p-6 bg-red-50 shadow-md rounded-lg">
+    <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-red-50">
       <Details
         titleValue={titleValue}
         descriptionValue={descriptionValue}

@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 const Roles = ({roleValue, rolePills, handleRoleChange, handleRoleEntry, handleRoleRemove}) => {
 
     return (
-        <div className="container w-full mt-10 p-4">
-            <div className="border border-grey rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue">
+        <div className="w-full mt-5 mb-2">
+            <label className="text-black text-xl text-left font-bold mb-2 flex items-center">Roles</label>
+            <div className="bg-slate-50 border border-grey rounded-lg flex flex-wrap items-center focus-within:border-blue">
                 <div className="flex flex-wrap items-center">
                 {rolePills.map((pill,index) => (
                     <div
@@ -24,7 +25,7 @@ const Roles = ({roleValue, rolePills, handleRoleChange, handleRoleEntry, handleR
                     onChange={handleRoleChange}
                     onKeyDown={handleRoleEntry}
                     placeholder="Enter your desired user roles and press Enter"
-                    className="flex-grow p-2 border-none outline-none min-w-[150px] w-5/6"
+                    className="bg-slate-50 flex-grow p-2 border-none outline-none w-full"
                 >
                 </input>
             </div>

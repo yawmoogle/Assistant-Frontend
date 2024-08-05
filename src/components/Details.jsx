@@ -1,12 +1,13 @@
 import { useState } from "react";
+import PropTypes from 'prop-types';
 
 const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescriptionChange}) => {
     const [showTooltip, setShowTooltip] = useState(false);
 
     return (
-        <div className="container mx-auto mt-10 p-4">
-            <label className="text-black font-bold mb-2 flex items-center">Project Title</label>
-            <div className="border border-gray rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue mt-5">
+        <div className="mt-10 mb-2">
+            <label className="text-black text-xl text-left font-bold mb-2 flex items-center">Project Title</label>
+            <div className="border border-gray rounded-lg flex flex-wrap items-center focus-within:border-blue mt-5">
             <input 
                 type="text"
                 name="title"
@@ -15,10 +16,11 @@ const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescri
                 onChange={handleTitleChange}
                 placeholder="Enter your project title"
                 className="flex-grow p-2 border-none outline-none"
+                required
                 />
             </div>
             <div>
-            <label className="text-black font-bold mb-2 flex items-center mt-5">
+            <label className="text-black text-xl font-bold mb-2 flex items-center mt-5">
                 Description
                 <span
                     className="ml-2 text-blue cursor-pointer-relative"
@@ -46,18 +48,25 @@ const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescri
                 )}
                 </span>
             </label>
-            <div className="border border-gray rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue mt-5">
+            <div className="border border-gray rounded-lg flex flex-wrap items-center focus-within:border-blue mt-5">
             <input
                 type="text"
                 value={descriptionValue}
                 onChange={handleDescriptionChange}
                 placeholder="Enter a short description of your project"
                 className="flex-grow p-2 border-none outline-none"
+                required
                 />
         </div>
         </div>
         </div>
     );
 };
+Details.propTypes = {
+    titleValue: PropTypes.string,
+    descriptionValue: PropTypes.string,
+    handleTitleChange: PropTypes.func,
+    handleDescriptionChange: PropTypes.func
+}
 
 export default Details;
