@@ -1,22 +1,12 @@
 import { useState } from "react";
 
-const Details = () => {
-    const [titleValue, setTitleValue] = useState('');
-    const [descriptionValue, setDescriptionValue] = useState('');
+const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescriptionChange}) => {
     const [showTooltip, setShowTooltip] = useState(false);
-
-    const handleTitleChange = (e) => {
-        setTitleValue(e.target.value);
-    };
-
-    const handleDescriptionChange = (e) => {
-        setDescriptionValue(e.target.value);
-    }
 
     return (
         <div className="container mx-auto mt-10 p-4">
             <label className="text-black font-bold mb-2 flex items-center">Project Title</label>
-            <div className="border border-grey rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue mt-5">
+            <div className="border border-gray rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue mt-5">
             <input 
                 type="text"
                 name="title"
@@ -50,13 +40,13 @@ const Details = () => {
               />
             </svg>
                 {showTooltip && (
-                    <div className="absolute bg-grey-dark text-white text-xs rounded px-2 py-1 z-50">
+                    <div className="absolute bg-black text-white text-xs rounded px-2 py-1 z-50">
                         This is a lengthy test string tooltip for the description in order to test the textbox wrapping and size. I am extending this test string until the end of the page to see if it fits or if it wraps.
                     </div>
                 )}
                 </span>
             </label>
-            <div className="border border-grey rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue mt-5">
+            <div className="border border-gray rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue mt-5">
             <input
                 type="text"
                 value={descriptionValue}
