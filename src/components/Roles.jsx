@@ -1,40 +1,19 @@
-import { useState } from "react";
-import Button from "../components/Button";
+import PropTypes from 'prop-types';
 
-const Roles = () => {
-    //Store input roles from text box and store information into array for pill display
-    const [roleValue, setRoleValue] = useState('');
-    const[rolePills, setRolePills] = useState([]);
-
-    //Track textbox input changes
-    const handleChange = (e) => {
-        setRoleValue(e.target.value);
-    };
-
-    //Setup Enter key to trigger pill creation
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter' && roleValue.trim() !== '') {
-            setRolePills([...rolePills, roleValue.trim()]);
-            setRoleValue('');
-        }
-    };
-
-    //Function to remove a pill
-    const removePill = (index) => {
-        setRolePills(rolePills.filter((_,i) => i !== index));
-    };
+const Roles = ({roleValue, rolePills, handleRoleChange, handleRoleEntry, handleRoleRemove}) => {
 
     return (
-        <div className="container w-full mt-10 p-4">
-            <div className="border border-grey rounded-lg p-2 flex flex-wrap items-center focus-within:border-blue">
+        <div className="w-full mt-5 mb-2">
+            <label className="text-black text-xl text-left font-bold mb-2 flex items-center">Roles</label>
+            <div className="bg-slate-50 border border-grey rounded-lg flex flex-wrap items-center focus-within:border-blue">
                 <div className="flex flex-wrap items-center">
                 {rolePills.map((pill,index) => (
                     <div
                     key={index}
-                    className="bg-white text-black border border-black flex items-center rounded-full px-3 py-1 mr-1 mb-1">
+                    className="bg-slate-50 text-black border border-black flex items-center rounded-full px-3 py-1 mr-1 mb-1">
                         {pill}
                         <span
-                        onClick={() => removePill(index)}
+                        onClick={() => handleRoleRemove(index)}
                         className="m1-2 cursor-pointer">
                             &times;
                         </span>
@@ -43,17 +22,23 @@ const Roles = () => {
                 <input
                     type="text"
                     value={roleValue}
-                    onChange={handleChange}
-                    onKeyDown={handleKeyDown}
+                    onChange={handleRoleChange}
+                    onKeyDown={handleRoleEntry}
                     placeholder="Enter your desired user roles and press Enter"
-                    className="flex-grow p-2 border-none outline-none min-w-[150px] w-5/6"
+                    className="bg-slate-50 flex-grow p-2 border-none outline-none w-full"
                 >
                 </input>
             </div>
             </div>
-            <Button>Test</Button>
         </div>
     );
 };
+Roles.propTypes = {
+    roleValue: PropTypes.string,
+    rolePills: PropTypes.array,
+    handleRoleChange: PropTypes.func,
+    handleRoleEntry: PropTypes.func,
+    handleRoleRemove: PropTypes.func
+}
 
 export default Roles;
