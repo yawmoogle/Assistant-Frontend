@@ -5,16 +5,16 @@ const Roles = ({roleValue, rolePills, handleRoleChange, handleRoleEntry, handleR
     return (
         <div className="w-full mt-5 mb-2">
             <label className="text-black text-xl text-left font-bold mb-2 flex items-center">Roles</label>
-            <div className="bg-slate-50 border border-grey rounded-lg flex flex-wrap items-center focus-within:border-blue">
+            <div className="bg-slate-50 border border-grey rounded-lg flex-grow flex-wrap items-center focus-within:border-blue">
                 <div className="flex flex-wrap items-center">
                 {rolePills.map((pill,index) => (
                     <div
                     key={index}
-                    className="bg-slate-50 text-black border border-black flex items-center rounded-full px-3 py-1 mr-1 mb-1">
+                    className="bg-red-200 text-black border border-black flex items-center rounded-full px-3 py-1 ml-2 mr-1 mb-1 mt-1">
                         {pill}
                         <span
                         onClick={() => handleRoleRemove(index)}
-                        className="m1-2 cursor-pointer">
+                        className="ml-2 cursor-pointer font-bold text-red-600">
                             &times;
                         </span>
                     </div>
