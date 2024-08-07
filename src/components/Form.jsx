@@ -4,7 +4,6 @@ import Details from'./Details';
 import Functionalities from './FunctionalitiesV2';
 import Roles from './Roles';
 import SubmitButton from './FuncSubmitButton';
-import SelectProjectButton from './navbar/SelectProjectButton';
 
 const Form = () => {
   const [functionalities, setFunctionalities] = useState([{ id: 1, value: '' }]);

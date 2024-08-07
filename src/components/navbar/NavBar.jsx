@@ -4,16 +4,19 @@ import './NavBarIcons.css'
 import AddProject from './AddProjectButton'
 import SelectProject from './SelectProjectButton'
 import Form from '../Form';
+import HomePage from '../home-page/HomePage';
 
 
 export default function NavBar() {
 
   const [showProject, setShowButton] = useState(false);
+  const [showHomePage, setShowHomePage] = useState(true);
 
   const handleButtonClick = (e) => {
     // Logic to hide the button
     e.preventDefault();
     setShowButton(true);
+    setShowHomePage(false);
   };
 
   return (
@@ -32,7 +35,8 @@ export default function NavBar() {
           {showProject && <SelectProject />}
         </ul>
       </div>
-      <div className='App w-full h-screen flex'>
+      <div className='w-full h-screen flex'>
+        {showHomePage && <HomePage />}
         {showProject && <Form />}
       </div>
     </>
