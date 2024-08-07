@@ -8,7 +8,6 @@ function App() {
   return (
     <div className='App w-full h-screen flex'>
       <SideNavBar />
-      <Form />
     </div>
   )
 }

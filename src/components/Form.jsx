@@ -4,6 +4,7 @@ import Details from'./Details';
 import Functionalities from './FunctionalitiesV2';
 import Roles from './Roles';
 import SubmitButton from './FuncSubmitButton';
+import SelectProjectButton from './navbar/SelectProjectButton';
 
 const Form = () => {
   const [functionalities, setFunctionalities] = useState([{ id: 1, value: '' }]);
@@ -91,27 +92,34 @@ const Form = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-red-50">
-      <Details
-        titleValue={titleValue}
-        descriptionValue={descriptionValue}
-        handleTitleChange={handleTitleChange}
-        handleDescriptionChange={handleDescriptionChange}/>
-      <Functionalities
-        functionalities={functionalities}
-        handleChange={handleChange}
-        handleAddFunctionality={handleAddFunctionality}
-        handleRemoveFunctionality={handleRemoveFunctionality}
-      />
-      <Roles 
-        roleValue={roleValue}
-        rolePills={rolePills}
-        handleRoleChange={handleRoleChange}
-        handleRoleEntry={handleRoleEntry}
-        handleRoleRemove={handleRoleRemove}
-      />
-      <SubmitButton />
-    </form>
+    <>
+      {/* <div className='sidenav'>
+        <ul>
+          <SelectProjectButton />
+        </ul>
+      </div> */}
+      <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-red-50">
+        <Details
+          titleValue={titleValue}
+          descriptionValue={descriptionValue}
+          handleTitleChange={handleTitleChange}
+          handleDescriptionChange={handleDescriptionChange}/>
+        <Functionalities
+          functionalities={functionalities}
+          handleChange={handleChange}
+          handleAddFunctionality={handleAddFunctionality}
+          handleRemoveFunctionality={handleRemoveFunctionality}
+        />
+        <Roles 
+          roleValue={roleValue}
+          rolePills={rolePills}
+          handleRoleChange={handleRoleChange}
+          handleRoleEntry={handleRoleEntry}
+          handleRoleRemove={handleRoleRemove}
+        />
+        <SubmitButton />
+      </form>
+    </>
   );
 };
 
