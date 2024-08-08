@@ -11,6 +11,8 @@ const Form = () => {
   const [rolePills, setRolePills] = useState([]);
   const [titleValue, setTitleValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
+
+  const [responseMessage, setResponseMessage] = useState('');
   // const [otherInput, setOtherInput] = useState(''); // Example of another form input
 
   const handleChange = (id, e) => {
@@ -81,37 +83,71 @@ const Form = () => {
   //   }
   // };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data Submitted: ',
-      {title: titleValue},
-      {description: descriptionValue},
-      {functionalities: functionalities.map(func => func.value)},
-      {roles: rolePills});
+    const projectSummaryPayload = {
+          title: titleValue,
+          description: descriptionValue,
+          functionalities: functionalities.map(func => func.value),
+          roles: rolePills
+    }
+    try {
+      const response = await fetch('/v1/questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(projectSummaryPayload),
+      });
+      console.log(JSON.stringify(projectSummaryPayload));
+      if (response.ok) {
+        const data = await response.json();
+        const questions = data.map(item => item.question);
+        
+        setResponseMessage('Success: ${data}');
+      } else {
+        setResponseMessage('Error: Failed to submit');
+      }
+    } catch (error) {
+      setResponseMessage('Error: Network issue conencting to API');
+    }
   };
+    // console.log('Form Data Submitted: ',
+    //   {title: titleValue},
+    //   {description: descriptionValue},
+    //   {functionalities: functionalities.map(func => func.value)},
+    //   {roles: rolePills});
 
   return (
-    <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-red-50">
-      <Details
-        titleValue={titleValue}
-        descriptionValue={descriptionValue}
-        handleTitleChange={handleTitleChange}
-        handleDescriptionChange={handleDescriptionChange}/>
-      <Functionalities
-        functionalities={functionalities}
-        handleChange={handleChange}
-        handleAddFunctionality={handleAddFunctionality}
-        handleRemoveFunctionality={handleRemoveFunctionality}
-      />
-      <Roles 
-        roleValue={roleValue}
-        rolePills={rolePills}
-        handleRoleChange={handleRoleChange}
-        handleRoleEntry={handleRoleEntry}
-        handleRoleRemove={handleRoleRemove}
-      />
-      <SubmitButton />
-    </form>
+    <>
+      {/* <div className='sidenav'>
+        <ul>
+          <SelectProjectButton />
+        </ul>
+      </div> */}
+      <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-red-50">
+        <Details
+          titleValue={titleValue}
+          descriptionValue={descriptionValue}
+          handleTitleChange={handleTitleChange}
+          handleDescriptionChange={handleDescriptionChange}/>
+        <Functionalities
+          functionalities={functionalities}
+          handleChange={handleChange}
+          handleAddFunctionality={handleAddFunctionality}
+          handleRemoveFunctionality={handleRemoveFunctionality}
+        />
+        <Roles 
+          roleValue={roleValue}
+          rolePills={rolePills}
+          handleRoleChange={handleRoleChange}
+          handleRoleEntry={handleRoleEntry}
+          handleRoleRemove={handleRoleRemove}
+        />
+        <SubmitButton />
+      </form>
+      {responseMessage && <p>{responseMessage}</p>}
+    </>
   );
 };
 
