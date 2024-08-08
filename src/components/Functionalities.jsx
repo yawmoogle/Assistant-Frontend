@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import AddButton from './FuncAddButton';
 import RemoveButton from './FuncRemoveButton';
 
-const FunctionalitiesV2 = ({ functionalities, handleChange, handleAddFunctionality, handleRemoveFunctionality }) => {
+const Functionalities = ({ functionalities, handleChange, handleAddFunctionality, handleRemoveFunctionality }) => {
 
     return (
         <div className="mt-5">
@@ -14,7 +14,7 @@ const FunctionalitiesV2 = ({ functionalities, handleChange, handleAddFunctionali
             </div>
 
             {functionalities.map((func) => (
-                <div key={func.id} className="mb-4 flex flex-col">
+                <div key={func.id} className="relative mb-4 flex flex-col">
                     <div className="flex items-center gap-1">
                         <textarea
                             name={`functionality${func.id}`} // Trailing Id
@@ -24,18 +24,18 @@ const FunctionalitiesV2 = ({ functionalities, handleChange, handleAddFunctionali
                             rows="1"
                             placeholder={`Enter functionality`}
                         />
-                        <RemoveButton onClick={() => handleRemoveFunctionality(func.id)} />
+                        <RemoveButton onClick={() => handleRemoveFunctionality(func.id)} className="absolute top-2 right-2" />
                     </div>
                 </div>
             ))}
         </div>
     );
 };
-FunctionalitiesV2.propTypes = {
+Functionalities.propTypes = {
     functionalities: PropTypes.array,
     handleChange: PropTypes.func,
     handleAddFunctionality: PropTypes.func,
     handleRemoveFunctionality: PropTypes.func
 }
 
-export default FunctionalitiesV2;
+export default Functionalities;

@@ -1,16 +1,16 @@
 import Form from './components/Form'
 import { useState } from 'react'
 import './App.css'
-import SideNavBar from './components/navbar/NavBar'
+import DisplayPage from './components/navbar/NavBar'
+import HomePage from './components/home-page/HomePage'
 
 function App() {
 
   return (
-    <div className='App w-full h-screen flex'>
-      <SideNavBar />
-      <Form />
+    <div>
+      <DisplayPage />
     </div>
   )
 }
 
-export default App
+export default App;
