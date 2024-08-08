@@ -103,7 +103,8 @@ const Form = () => {
       if (response.ok) {
         const data = await response.json();
         const questions = data.map(item => item.question);
-        
+        //placeholder navigate for questions
+        //navigate('/questions', {state: {questions}});
         setResponseMessage('Success: ${data}');
       } else {
         setResponseMessage('Error: Failed to submit');
