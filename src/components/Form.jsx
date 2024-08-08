@@ -1,7 +1,7 @@
 // Form.jsx
 import React, { useState } from 'react';
 import Details from'./Details';
-import Functionalities from './FunctionalitiesV2';
+import Functionalities from './Functionalities';
 import Roles from './Roles';
 import SubmitButton from './FuncSubmitButton';
 
