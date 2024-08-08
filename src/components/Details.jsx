@@ -15,7 +15,7 @@ const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescri
                 value={titleValue}
                 onChange={handleTitleChange}
                 placeholder="Enter your project title"
-                className="flex-grow p-2 border-none outline-none"
+                className="bg-slate-50 flex-grow p-2 border-none outline-none"
                 required
                 />
             </div>
@@ -54,7 +54,7 @@ const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescri
                 value={descriptionValue}
                 onChange={handleDescriptionChange}
                 placeholder="Enter a short description of your project"
-                className="flex-grow p-2 border-none outline-none"
+                className="bg-slate-50 flex-grow p-2 border-none outline-none"
                 required
                 />
         </div>

@@ -1,7 +1,7 @@
 // Form.jsx
 import React, { useState } from 'react';
 import Details from'./Details';
-import Functionalities from './FunctionalitiesV2';
+import Functionalities from './Functionalities';
 import Roles from './Roles';
 import SubmitButton from './FuncSubmitButton';
 
@@ -11,6 +11,8 @@ const Form = () => {
   const [rolePills, setRolePills] = useState([]);
   const [titleValue, setTitleValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
+
+  const [responseMessage, setResponseMessage] = useState('');
   // const [otherInput, setOtherInput] = useState(''); // Example of another form input
 
   const handleChange = (id, e) => {
@@ -81,14 +83,41 @@ const Form = () => {
   //   }
   // };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form Data Submitted: ',
-      {title: titleValue},
-      {description: descriptionValue},
-      {functionalities: functionalities.map(func => func.value)},
-      {roles: rolePills});
+    const projectSummaryPayload = {
+          title: titleValue,
+          description: descriptionValue,
+          functionalities: functionalities.map(func => func.value),
+          roles: rolePills
+    }
+    try {
+      const response = await fetch('/v1/questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(projectSummaryPayload),
+      });
+      console.log(JSON.stringify(projectSummaryPayload));
+      if (response.ok) {
+        const data = await response.json();
+        const questions = data.map(item => item.question);
+        //placeholder navigate for questions
+        //navigate('/questions', {state: {questions}});
+        setResponseMessage('Success: ${data}');
+      } else {
+        setResponseMessage('Error: Failed to submit');
+      }
+    } catch (error) {
+      setResponseMessage('Error: Network issue conencting to API');
+    }
   };
+    // console.log('Form Data Submitted: ',
+    //   {title: titleValue},
+    //   {description: descriptionValue},
+    //   {functionalities: functionalities.map(func => func.value)},
+    //   {roles: rolePills});
 
   return (
     <>
@@ -118,6 +147,7 @@ const Form = () => {
         />
         <SubmitButton />
       </form>
+      {responseMessage && <p>{responseMessage}</p>}
     </>
   );
 };
