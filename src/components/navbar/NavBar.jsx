@@ -3,43 +3,40 @@ import './NavBar.css'
 import './NavBarIcons.css'
 import AddProject from './AddProjectButton'
 import SelectProject from './SelectProjectButton'
-import Form from '../Form';
-import HomePage from '../home-page/HomePage';
 
 
 export default function NavBar() {
 
   const [showProject, setShowButton] = useState(false);
-  const [showHomePage, setShowHomePage] = useState(true);
+  const [projects, showProjects] = useState([]);
 
-  const handleButtonClick = (e) => {
+  const handleButtonClick = () => {
     // Logic to hide the button
-    e.preventDefault();
-    setShowButton(true);
-    setShowHomePage(false);
+    const newProject = {
+      id: Date.now(),
+      name: 'Project ${projects.length+1}'
+    };
+    setProjects([...projects, newProject]);
   };
 
   return (
-    <>
       <div className="sidenav">
-        <ul>
-          <li >
-              <div className='gg-menu'></div>
-          </li>
-        </ul>
-        <ul>
+        <div className="menu-icon">
+          <div className="gg-menu">
+            
+          </div>
+        </div>
+        <div className="add-project-container">
           <AddProject onClick={handleButtonClick} />
-        </ul>
-        <br></br>
-        <ul>
-          {showProject && <SelectProject />}
-        </ul>
+        </div>
+        <div className="projects-list">
+          {projects.map(project => (
+            <div key={project.id} className="project-button">
+              <Link to={'/Assistant-Frontend/backlog/${project.id}'}>{project.name}</Link>
+            </div>
+          ))}
+        </div>
       </div>
-      <div className='w-full h-screen flex'>
-        {showHomePage && <HomePage />}
-        {showProject && <Form />}
-      </div>
-    </>
   );
 }
 
