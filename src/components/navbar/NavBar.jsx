@@ -3,21 +3,24 @@ import './NavBar.css'
 import './NavBarIcons.css'
 import AddProject from './AddProjectButton'
 import SelectProject from './SelectProjectButton'
+import { 
+  Outlet,
+  Link,
+  useLoaderData,
+  Form,
+} from 'react-router-dom'
+import { getProjects } from '../../projects'
 
+export async function loader() {
+  const projects = await getProjects();
+  return { projects };
+}
 
 export default function NavBar() {
 
-  const [showProject, setShowButton] = useState(false);
-  const [projects, showProjects] = useState([]);
+  const { projects } = useLoaderData();  
 
-  const handleButtonClick = () => {
-    // Logic to hide the button
-    const newProject = {
-      id: Date.now(),
-      name: 'Project ${projects.length+1}'
-    };
-    setProjects([...projects, newProject]);
-  };
+  const [showProject, setShowButton] = useState(false);
 
   return (
       <div className="sidenav">
@@ -27,7 +30,10 @@ export default function NavBar() {
           </div>
         </div>
         <div className="add-project-container">
-          <AddProject onClick={handleButtonClick} />
+          <Form method="post">
+            <button className="gg-add-r" type="submit">
+            </button>
+          </Form>
         </div>
         <div className="projects-list">
           {projects.map(project => (

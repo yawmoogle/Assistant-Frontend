@@ -86,11 +86,17 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const projectSummaryPayload = {
+      config:{
+        AIModel: "Gemini",
+        numOfQuestions: "3"
+      },
+      projectDetails:{
           title: titleValue,
           description: descriptionValue,
           functionalities: functionalities.map(func => func.value),
           roles: rolePills
-    }
+        },
+      }
     try {
       const response = await fetch('/v1/questions', {
         method: 'POST',
@@ -110,7 +116,7 @@ const Form = () => {
         setResponseMessage('Error: Failed to submit');
       }
     } catch (error) {
-      setResponseMessage('Error: Network issue conencting to API');
+      setResponseMessage('Error: Network issue connecting to API');
     }
   };
     // console.log('Form Data Submitted: ',
