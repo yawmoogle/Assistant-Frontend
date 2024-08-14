@@ -86,10 +86,14 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const projectSummaryPayload = {
-          title: titleValue,
-          description: descriptionValue,
-          functionalities: functionalities.map(func => func.value),
-          roles: rolePills
+          config: {
+            AIModel: "Gemini",
+            numOfQuestions: "3"},
+          projectDetails: {
+            title: titleValue,
+            description: descriptionValue,
+            functionalities: functionalities.map(func => func.value),
+            roles: rolePills}
     }
     try {
       const response = await fetch('/v1/questions', {
