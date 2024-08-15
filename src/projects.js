@@ -3,48 +3,55 @@ import { matchSorter } from "match-sorter";
 import sortBy from "sort-by";
 
 export async function getProjects(query) {
-  await fakeNetwork(`getContacts:${query}`);
-  let contacts = await localforage.getItem("contacts");
-  if (!contacts) contacts = [];
+  await fakeNetwork(`getProjects:${query}`);
+  let projects = await localforage.getItem("projects");
+  if (!projects) projects = [];
   if (query) {
-    contacts = matchSorter(contacts, query, { keys: ["first", "last"] });
+    projects = matchSorter(projects, query, { keys: ["first", "last"] });
   }
-  return contacts.sort(sortBy("last", "createdAt"));
+  return projects.sort(sortBy("last", "createdAt"));
 }
 
 export async function createProject() {
   await fakeNetwork();
   let id = Math.random().toString(36).substring(2, 9);
-  let contact = { id, createdAt: Date.now() };
-  let contacts = await getContacts();
-  contacts.unshift(contact);
-  await set(contacts);
-  return contact;
+  let project = { id,
+    config:{AIModel:"GEMINI", numOfQuestions:"5"},
+    projectDetails:{
+      title: "Enter your project title", 
+      description: "A short description of your project",
+      functionalities: [],
+      rolePills: [],
+    } };
+  let projects = await getProjects();
+  projects.unshift(project);
+  await set(projects);
+  return project;
 }
 
 export async function getProject(id) {
-  await fakeNetwork(`contact:${id}`);
-  let contacts = await localforage.getItem("contacts");
-  let contact = contacts.find(contact => contact.id === id);
-  return contact ?? null;
+  await fakeNetwork(`project:${id}`);
+  let projects = await localforage.getItem("projects");
+  let project = projects.find(project => project.id === id);
+  return project ?? null;
 }
 
 export async function updateProject(id, updates) {
   await fakeNetwork();
-  let contacts = await localforage.getItem("contacts");
-  let contact = contacts.find(contact => contact.id === id);
-  if (!contact) throw new Error("No contact found for", id);
-  Object.assign(contact, updates);
-  await set(contacts);
-  return contact;
+  let projects = await localforage.getItem("projects");
+  let project = projects.find(project => project.id === id);
+  if (!project) throw new Error("No contact found for", id);
+  Object.assign(project, updates);
+  await set(projects);
+  return project;
 }
 
 export async function deleteProject(id) {
-  let contacts = await localforage.getItem("contacts");
-  let index = contacts.findIndex(contact => contact.id === id);
+  let projects = await localforage.getItem("projects");
+  let index = projects.findIndex(project => project.id === id);
   if (index > -1) {
-    contacts.splice(index, 1);
-    await set(contacts);
+    projects.splice(index, 1);
+    await set(projects);
     return true;
   }
   return false;
