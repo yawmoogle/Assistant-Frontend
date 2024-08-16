@@ -34,7 +34,8 @@
 
   .caption {
     font-size: small;
-    text-align: justify;
+    text-align: center;
     margin: 0px;
+    margin-left: -22px;
     color: white;
   }

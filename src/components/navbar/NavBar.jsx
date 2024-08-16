@@ -5,7 +5,7 @@ import AddProject from './AddProjectButton'
 import SelectProject from './SelectProjectButton'
 import { 
   Outlet,
-  Link,
+  NavLink,
   useLoaderData,
   Form,
   redirect,
@@ -37,13 +37,18 @@ export default function NavBar() {
           <nav>
           {projects.map(project => (
             <div key={project.id}>
-            <Link to={`/Assistant-Frontend/backlog/${project.id}`}>
+            <NavLink to={`/Assistant-Frontend/backlog/${project.id}`} className={({isActive, isPending}) =>
+            isActive
+              ? "active"
+              : isPending
+              ? "pending"
+              : ""}>
             <button key={project.id} className="nav-button">
             <div className="gg-ereader text-black">
             </div>
             </button>
-            </Link>
-            <p className="caption text-white">{project.id}</p>
+            </NavLink>
+            <p className="caption text-white">{project.projectDetails.title}</p>
             </div>
           ))}
           </nav>

@@ -110,7 +110,7 @@ const Form = () => {
       }
     updateProject(project.id, projectSummaryPayload);
     try {
-      const response = await fetch('/v1/questions', {
+      const response = await fetch('http://localhost:8080/v1/questions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
