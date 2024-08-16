@@ -6,7 +6,8 @@ import {
 } from 'react-router-dom';
 import App from './App.jsx'
 import ErrorPage from './components/ErrorPage.jsx'
-import NavBar, { loader as projectLoader, action as projectAction } from './components/navbar/NavBar.jsx';
+import HomePage from './components/home-page/HomePage.jsx'
+import { loader as projectLoader, action as projectAction } from './components/navbar/NavBar.jsx';
 import Form , {action as editAction } from './components/BacklogForm.jsx'
 import Backlog, { loader as backlogLoader } from './features/backlog/Backlog.jsx'
 import './index.css'
@@ -19,6 +20,10 @@ const router =  createBrowserRouter([
     loader: projectLoader,
     action: projectAction,
     children: [
+      {
+        index: true,
+        element: <HomePage />
+      },
       {
         path: "/Assistant-Frontend/backlog/:projectId",
         element: <Backlog />,

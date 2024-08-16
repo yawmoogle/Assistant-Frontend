@@ -1,6 +1,6 @@
 // Form.jsx
 import React, { useState } from 'react';
-import { redirect } from 'react-router-dom';
+import { redirect, useLoaderData } from 'react-router-dom';
 import Details from'./Details';
 import Functionalities from './Functionalities';
 import Roles from './Roles';
@@ -9,6 +9,7 @@ import { updateProject } from '../projects';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
+    console.log(formData);
     const updates = Object.fromEntries(formData);
     await updateProject(params.projectId, updates);
     return redirect(`/backlog/${params.projectId}`);
@@ -20,6 +21,7 @@ const Form = () => {
   const [rolePills, setRolePills] = useState([]);
   const [titleValue, setTitleValue] = useState('');
   const [descriptionValue, setDescriptionValue] = useState('');
+  const { project } = useLoaderData();
 
   const [responseMessage, setResponseMessage] = useState('');
   // const [otherInput, setOtherInput] = useState(''); // Example of another form input
@@ -106,6 +108,7 @@ const Form = () => {
           roles: rolePills
         },
       }
+    updateProject(project.id, projectSummaryPayload);
     try {
       const response = await fetch('/v1/questions', {
         method: 'POST',
@@ -136,12 +139,12 @@ const Form = () => {
 
   return (
     <>
-      {/* <div className='sidenav'>
-        <ul>
-          <SelectProjectButton />
-        </ul>
-      </div> */}
       <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-red-50">
+        {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span className="block sm:inline">{responseMessage}</span>
+        <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
+        </span>
+        </div>}
         <Details
           titleValue={titleValue}
           descriptionValue={descriptionValue}
@@ -162,7 +165,6 @@ const Form = () => {
         />
         <SubmitButton />
       </form>
-      {responseMessage && <p>{responseMessage}</p>}
     </>
   );
 };

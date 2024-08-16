@@ -8,6 +8,7 @@ import {
   Link,
   useLoaderData,
   Form,
+  redirect,
 } from 'react-router-dom'
 import { getProjects, createProject } from '../../projects'
 
@@ -18,7 +19,7 @@ export async function loader() {
 
 export async function action() {
   const project = await createProject();
-  return { project };
+  return redirect(`/Assistant-Frontend/backlog/${project.id}/edit`);
 }
 
 export default function NavBar() {
@@ -27,14 +28,9 @@ export default function NavBar() {
 
   return (
       <div className="sidenav justify-items-center">
-        <div className="menu-icon mb-4 ml-6">
-          <div className="gg-menu">
-          </div>
-        </div>
         <div className="add-project-container ml-4 mb-4">
           <Form method="post">
-            <AddProject type="submit">
-            </AddProject>
+            <AddProject type="submit" />
           </Form>
         </div>
         <div className="projects-list ml-4 justify-items-center">
