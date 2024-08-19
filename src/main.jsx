@@ -11,6 +11,7 @@ import { loader as projectLoader, action as projectAction } from './components/n
 import Form , {action as editAction } from './components/BacklogForm.jsx'
 import Backlog, { loader as backlogLoader } from './features/backlog/Backlog.jsx'
 import './index.css'
+import QAForm, { action as qaAction } from './components/QAForm.jsx';
 
 const router =  createBrowserRouter([
   {
@@ -34,6 +35,11 @@ const router =  createBrowserRouter([
         element: <Form />,
         loader: backlogLoader,
         action: editAction,
+      },
+      {
+        path: "/Assistant-Frontend/backlog/:projectId/questions",
+        element: <QAForm />,
+        action: qaAction,
       }
     ]
   },

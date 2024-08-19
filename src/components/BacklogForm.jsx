@@ -122,6 +122,7 @@ const Form = () => {
         const data = await response.json();
         const questions = data.map(item => item.question);
         //placeholder navigate for questions
+        redirect(`/Assistant-Frontend/backlog/${project.id}/questions`)
         //navigate('/questions', {state: {questions}});
         setResponseMessage('Success: ${data}');
       } else {

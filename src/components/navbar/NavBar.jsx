@@ -4,7 +4,6 @@ import './NavBarIcons.css'
 import AddProject from './AddProjectButton'
 import SelectProject from './SelectProjectButton'
 import { 
-  Outlet,
   NavLink,
   useLoaderData,
   Form,
