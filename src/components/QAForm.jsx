@@ -13,6 +13,8 @@ export async function action({ request, params }) {
 
 const QAForm = () => {
     const { project } = useLoaderData();
+    const [responseMessage, setResponseMessage] = useState('');
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const questionsPayload = {
@@ -49,6 +51,7 @@ const QAForm = () => {
         </form>
         </>
     )
+}
 }
 
 
