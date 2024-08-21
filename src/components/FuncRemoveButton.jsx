@@ -5,7 +5,7 @@ const RemoveButton = ({ onClick, className }) => {
     <button
       type="button"
       onClick={onClick}
-      className={`absolute top-1 right-1 rounded-full ${className} cursor-pointer bg-slate-50 text-red-600 p-1 px-3 hover:bg-slate-100 `}
+      className={`absolute right-1 rounded-full ${className} cursor-pointer bg-slate-50 text-red-600 p-1 px-3 hover:bg-slate-100 `}
     >
       X
     </button>

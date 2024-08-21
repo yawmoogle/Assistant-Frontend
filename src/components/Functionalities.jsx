@@ -20,11 +20,11 @@ const Functionalities = ({ functionalities, handleChange, handleAddFunctionality
                             name={`functionality${func.id}`} // Trailing Id
                             value={func.value}
                             onChange={(e) => handleChange(func.id, e)}
-                            className="bg-slate-50 appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:outline-none focus:shadow-outline resize-none"
+                            className="bg-slate-50 appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:shadow-outline resize-none"
                             rows="1"
                             placeholder={`Enter functionality`}
                         />
-                        <RemoveButton onClick={() => handleRemoveFunctionality(func.id)} className="absolute top-2 right-2" />
+                        <RemoveButton onClick={() => handleRemoveFunctionality(func.id)} className="absolute right-1" />
                     </div>
                 </div>
             ))}

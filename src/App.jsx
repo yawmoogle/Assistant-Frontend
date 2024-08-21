@@ -1,14 +1,16 @@
-import Form from './components/Form'
 import { useState } from 'react'
+import { Outlet, Link } from 'react-router-dom'
 import './App.css'
-import DisplayPage from './components/navbar/NavBar'
-import HomePage from './components/home-page/HomePage'
+import SideNavBar from './components/navbar/NavBar'
 
 function App() {
 
   return (
-    <div>
-      <DisplayPage />
+    <div className='h-screen flex'>
+      <SideNavBar />
+      <div className='w-full h-screen flex'>
+      <Outlet />
+      </div>
     </div>
   )
 }
