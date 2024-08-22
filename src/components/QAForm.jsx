@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SubmitButton from './FuncSubmitButton';
 import { redirect, useLoaderData } from 'react-router-dom';
-import { updateProject } from '../projects';
+import { updateProject, getProject } from '../projects';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -11,9 +11,21 @@ export async function action({ request, params }) {
     return redirect(`backlog/${params.projectId}/`)
 }
 
+export async function loader({ params }) {
+    const project = await getProject(params.projectId);
+    return { project };
+}
+
 const QAForm = () => {
     const { project } = useLoaderData();
+    const [answer, setAnswer] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
+
+    console.log(project);
+
+    const handleChange = (e) => {
+        setAnswer(e.target.value);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,13 +43,15 @@ const QAForm = () => {
         });
         if (response.ok) {
             const data = await response.json();
-            const stories = data.map(item => item.story);
+            updateProject(project.id, data);
             setResponseMessage('Success: ${data}');
+            redirect(`/backlog/${project.id}`);
         } else {
             setResponseMessage('Error: Failed to submit');
         }
     } catch (error) {
         setResponseMessage('Error: Network issue connecting to API');
+    }
     }
 
     return (
@@ -47,12 +61,32 @@ const QAForm = () => {
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
-        {/* iterator for questions and answers text boxes here */}
+        <div className="mt-10 text-black flex flex-col mb-2">
+        {project.qaDetails.map((question,index) => (
+            <div key={index} className="flex flex-col">
+                <label className="text-black text-xl mt-5">
+                    {question.question}
+                </label>
+                <input
+                    type="text"
+                    value={answer}
+                    onChange={handleChange}
+                    id="answer"
+                    placeholder="Enter your answer to the above question"
+                    className="bg-slate-50 flex-grow p-2 border-none outline-none mt-2"
+                />
+            </div>
+        ))}
+        <label className="text-black text-xl ml-5 mb-5">
+            
+        </label>
+        </div>
+        <SubmitButton />
         </form>
         </>
     )
 }
-}
+
 
 
 export default QAForm;

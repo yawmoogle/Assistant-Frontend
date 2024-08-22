@@ -18,8 +18,11 @@ export default function Backlog() {
             <h2 className="text-black text-xl ml-5 mb-5 text-left">
                 {project.project.projectDetails.description}
             </h2>
+            <div id="userStories" className="container">
+            {/* iterator for user stories in <project.project> */}
+            </div>
             <div>
-            <Form action="edit" className="ml-5">
+            <Form action="edit" className="mt-4 ml-5">
                 <button type="submit">
                     Edit
                 </button>

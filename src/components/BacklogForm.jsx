@@ -1,6 +1,6 @@
 // Form.jsx
 import React, { useState } from 'react';
-import { redirect, useLoaderData } from 'react-router-dom';
+import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import Details from'./Details';
 import Functionalities from './Functionalities';
 import Roles from './Roles';
@@ -25,6 +25,8 @@ const Form = () => {
 
   const [responseMessage, setResponseMessage] = useState('');
   // const [otherInput, setOtherInput] = useState(''); // Example of another form input
+
+  const navigate = useNavigate();
 
   const handleChange = (id, e) => {
     const newFunctionalities = functionalities.map((func) => {
@@ -108,29 +110,31 @@ const Form = () => {
           roles: rolePills
         },
       }
-    updateProject(project.id, projectSummaryPayload);
-    try {
-      const response = await fetch('http://localhost:8080/v1/questions', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(projectSummaryPayload),
-      });
-      console.log(JSON.stringify(projectSummaryPayload));
-      if (response.ok) {
-        const data = await response.json();
-        const questions = data.map(item => item.question);
-        //placeholder navigate for questions
-        redirect(`/Assistant-Frontend/backlog/${project.id}/questions`)
-        //navigate('/questions', {state: {questions}});
-        setResponseMessage('Success: ${data}');
-      } else {
-        setResponseMessage('Error: Failed to submit');
-      }
-    } catch (error) {
-      setResponseMessage('Error: Network issue connecting to API');
-    }
+    await updateProject(project.id, projectSummaryPayload);
+    // try {
+    //   const response = await fetch('http://localhost:8080/v1/questions', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(projectSummaryPayload),
+    //   });
+    console.log("Submit button pressed");
+    navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
+    //   if (response.ok) {
+    //     const data = await response.json();
+    //     console.log(data);
+    //     const questions = data.map(item => item.question);
+    //     //placeholder navigate for questions
+    //     redirect(`/Assistant-Frontend/backlog/${project.id}/questions`)
+    //     //navigate('/questions', {state: {questions}});
+    //     setResponseMessage('Success: ${data}');
+    //   } else {
+    //     setResponseMessage('Error: Failed to submit');
+    //   }
+    // } catch (error) {
+    //   setResponseMessage('Error: Network issue connecting to API');
+    // }
   };
     // console.log('Form Data Submitted: ',
     //   {title: titleValue},
