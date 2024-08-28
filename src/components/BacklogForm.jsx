@@ -111,36 +111,40 @@ const Form = () => {
         },
       }
     await updateProject(project.id, projectSummaryPayload);
-    // try {
-    //   const response = await fetch('http://localhost:8080/v1/questions', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(projectSummaryPayload),
-    //   });
+    try {
+      const response = await fetch('http://localhost:8080/api/v1/questions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(projectSummaryPayload),
+      });
     console.log("Submit button pressed");
-    navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
-    //   if (response.ok) {
-    //     const data = await response.json();
-    //     console.log(data);
-    //     const questions = data.map(item => item.question);
-    //     //placeholder navigate for questions
-    //     redirect(`/Assistant-Frontend/backlog/${project.id}/questions`)
-    //     //navigate('/questions', {state: {questions}});
-    //     setResponseMessage('Success: ${data}');
-    //   } else {
-    //     setResponseMessage('Error: Failed to submit');
-    //   }
-    // } catch (error) {
-    //   setResponseMessage('Error: Network issue connecting to API');
-    // }
+    // navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+        const questions = {
+          clarificationQAs: data
+        };
+        await updateProject(project.id, questions);
+        //placeholder navigate for questions
+        // redirect(`/Assistant-Frontend/backlog/${project.id}/questions`)
+        navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
+        setResponseMessage('Success: ${data}');
+      } else {
+        setResponseMessage('Error: Failed to submit');
+      }
+    } catch (error) {
+      console.log(error);
+      setResponseMessage('Error: Network issue connecting to API');
+    }
   };
-    // console.log('Form Data Submitted: ',
-    //   {title: titleValue},
-    //   {description: descriptionValue},
-    //   {functionalities: functionalities.map(func => func.value)},
-    //   {roles: rolePills});
+    console.log('Form Data Submitted: ',
+      {title: titleValue},
+      {description: descriptionValue},
+      {functionalities: functionalities.map(func => func.value)},
+      {roles: rolePills},);
 
   return (
     <>

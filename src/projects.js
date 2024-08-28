@@ -14,14 +14,14 @@ export async function getProjects(query) {
 export async function createProject() {
   let id = Math.random().toString(36).substring(2, 9);
   let project = { id,
-    config:{AIModel:"GEMINI", numOfQuestions:"5"},
+    config:{AIModel:"GEMINI", numOfQuestions:"5", numOfUserStories:"10"},
     projectDetails:{
       title: "Enter your project title", 
       description: "A short description of your project",
       functionalities: [],
       rolePills: [],
     },
-    qaDetails:[{question:"What do you need?",answer:""},
+    clarificationQAs:[{question:"What do you need?",answer:""},
                 {question:"What has been done?",answer:""},
                 {question:"Lorem Ipsum?",answer:""},
     ],

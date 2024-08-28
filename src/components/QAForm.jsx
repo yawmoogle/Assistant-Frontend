@@ -22,8 +22,6 @@ const QAForm = () => {
     const [answers, setAnswers] = useState(project.qaDetails.map(()=> ""));
     const [responseMessage, setResponseMessage] = useState('');
 
-    console.log(project);
-
     const handleChange = (e, index) => {
         const newAnswers = [...answers];
         newAnswers[index] = e.target.value;
@@ -32,29 +30,38 @@ const QAForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    //     const questionsPayload = {
-    //         "questiondata":"answerdata"
-    //     }
-    updateProject(project.id, answers);    
-    // try {
-    //     const response = await fetch("endpointurl",{
-    //         method: "post",
-    //         headers: {
-    //             'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify(questionsPayload),
-    //     });
-    //     if (response.ok) {
-    //         const data = await response.json();
-    //         updateProject(project.id, data);
-    //         setResponseMessage('Success: ${data}');
+        const updatedProject = {
+            ...project,
+            clarificationQAs: project.clarificationQAs.map((question, index) => ({
+                ...question,
+                answer: answers[index]
+            }))
+        };
+        await updateProject(project.id, updatedProject);
+        console.log(project);
+    try {
+        const response = await fetch("http://localhost:8080/api/v1/user-stories",{
+            method: "post",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(project),
+        });
+        if (response.ok) {
+            const data = await response.json();
+            console.log(data);
+            const userStories = {
+                userStories: data
+            }
+            updateProject(project.id, userStories);
+            setResponseMessage('Success: ${data}');
             return navigate(`/Assistant-Frontend/backlog/${project.id}`);
-    //     } else {
-    //         setResponseMessage('Error: Failed to submit');
-    //     }
-    // } catch (error) {
-    //     setResponseMessage('Error: Network issue connecting to API');
-    // }
+        } else {
+            setResponseMessage('Error: Failed to submit');
+        }
+    } catch (error) {
+        setResponseMessage('Error: Network issue connecting to API');
+    }
     };
 
     return (
@@ -65,7 +72,7 @@ const QAForm = () => {
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
         <div className="mt-10 text-black flex flex-col mb-2">
-        {project.qaDetails.map((question,index) => (
+        {project.clarificationQAs.map((question,index) => (
             <div key={index} className="flex flex-col">
                 <label className="text-black text-xl mt-5">
                     {question.question}
