@@ -8,10 +8,10 @@ import App from './App.jsx'
 import ErrorPage from './components/ErrorPage.jsx'
 import HomePage from './components/home-page/HomePage.jsx'
 import { loader as projectLoader, action as projectAction } from './components/navbar/NavBar.jsx';
-import Form , {action as editAction } from './components/BacklogForm.jsx'
+import Form , { action as editAction } from './components/BacklogForm.jsx'
 import Backlog, { loader as backlogLoader } from './features/backlog/Backlog.jsx'
 import './index.css'
-import QAForm, { action as qaAction } from './components/QAForm.jsx';
+import QAForm, { action as qaAction, loader as qaLoader } from './components/QAForm.jsx';
 
 const router =  createBrowserRouter([
   {
@@ -39,6 +39,7 @@ const router =  createBrowserRouter([
       {
         path: "/Assistant-Frontend/backlog/:projectId/questions",
         element: <QAForm />,
+        loader: qaLoader,
         action: qaAction,
       }
     ]

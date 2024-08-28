@@ -3,7 +3,6 @@ import { matchSorter } from "match-sorter";
 import sortBy from "sort-by";
 
 export async function getProjects(query) {
-  await fakeNetwork(`getProjects:${query}`);
   let projects = await localforage.getItem("projects");
   if (!projects) projects = [];
   if (query) {
@@ -13,16 +12,23 @@ export async function getProjects(query) {
 }
 
 export async function createProject() {
-  await fakeNetwork();
   let id = Math.random().toString(36).substring(2, 9);
   let project = { id,
-    config:{AIModel:"GEMINI", numOfQuestions:"5"},
+    config:{AIModel:"GEMINI", numOfQuestions:"5", numOfUserStories:"10"},
     projectDetails:{
       title: "Enter your project title", 
       description: "A short description of your project",
       functionalities: [],
       rolePills: [],
-    } };
+    },
+    clarificationQAs:[{question:"What do you need?",answer:""},
+                {question:"What has been done?",answer:""},
+                {question:"Lorem Ipsum?",answer:""},
+    ],
+    userStories:[{userStory:"Story 1",description:"Description"},
+                {userStory:"Story 2",description:"Description"},
+                {userStory:"Story 3",description:"Description"},
+    ] };
   let projects = await getProjects();
   projects.unshift(project);
   await set(projects);
@@ -30,14 +36,12 @@ export async function createProject() {
 }
 
 export async function getProject(id) {
-  await fakeNetwork(`project:${id}`);
   let projects = await localforage.getItem("projects");
   let project = projects.find(project => project.id === id);
   return project ?? null;
 }
 
 export async function updateProject(id, updates) {
-  await fakeNetwork();
   let projects = await localforage.getItem("projects");
   let project = projects.find(project => project.id === id);
   if (!project) throw new Error("No contact found for", id);
@@ -62,19 +66,19 @@ function set(projects) {
 }
 
 // fake a cache so we don't slow down stuff we've already seen
-let fakeCache = {};
+// let fakeCache = {};
 
-async function fakeNetwork(key) {
-  if (!key) {
-    fakeCache = {};
-  }
+// async function fakeNetwork(key) {
+//   if (!key) {
+//     fakeCache = {};
+//   }
 
-  if (fakeCache[key]) {
-    return;
-  }
+//   if (fakeCache[key]) {
+//     return;
+//   }
 
-  fakeCache[key] = true;
-  return new Promise(res => {
-    setTimeout(res, Math.random() * 800);
-  });
-}
+//   fakeCache[key] = true;
+//   return new Promise(res => {
+//     setTimeout(res, Math.random() * 800);
+//   });
+// }

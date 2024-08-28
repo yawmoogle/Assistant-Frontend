@@ -1,4 +1,5 @@
 import { Form, useLoaderData } from 'react-router-dom';
+import './Backlog.css'
 import { useEffect } from 'react';
 import { getProject } from '../../projects'
 
@@ -18,8 +19,24 @@ export default function Backlog() {
             <h2 className="text-black text-xl ml-5 mb-5 text-left">
                 {project.project.projectDetails.description}
             </h2>
+            {project?.project?.userStories?.length > 0 &&(
+            <div className="w-full mx-auto bg-red-50 flex flex-wrap items-start">
+            {project.project.userStories
+            .filter(story => story.userStory.trim() !== "" || story.description.trim() !== "")
+            .map((story,index) => (
+                <div key={index} className="bg-red-50 text-black border mx-3 p-4 rounded-md flex-none w-auto">
+                    <h2 className="text-black text-xl font-semibold">
+                        {story.userStory}
+                    </h2>
+                    <h4 className="text-black text-md">
+                        {story.description}
+                    </h4>
+                </div>
+            ))}
+            </div>
+            )}
             <div>
-            <Form action="edit" className="ml-5">
+            <Form action="edit" className="mt-4 ml-5">
                 <button type="submit">
                     Edit
                 </button>

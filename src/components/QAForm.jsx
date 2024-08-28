@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import SubmitButton from './FuncSubmitButton';
-import { redirect, useLoaderData } from 'react-router-dom';
-import { updateProject } from '../projects';
+import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
+import { updateProject, getProject } from '../projects';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -11,34 +11,58 @@ export async function action({ request, params }) {
     return redirect(`backlog/${params.projectId}/`)
 }
 
+export async function loader({ params }) {
+    const project = await getProject(params.projectId);
+    return { project };
+}
+
 const QAForm = () => {
     const { project } = useLoaderData();
+    const navigate = useNavigate();
+    const [answers, setAnswers] = useState(project.qaDetails.map(()=> ""));
     const [responseMessage, setResponseMessage] = useState('');
+
+    const handleChange = (e, index) => {
+        const newAnswers = [...answers];
+        newAnswers[index] = e.target.value;
+        setAnswers(newAnswers);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const questionsPayload = {
-            "questiondata":"answerdata"
-        }
-    updateProject(project.id, questionsPayload);    
+        const updatedProject = {
+            ...project,
+            clarificationQAs: project.clarificationQAs.map((question, index) => ({
+                ...question,
+                answer: answers[index]
+            }))
+        };
+        await updateProject(project.id, updatedProject);
+        console.log(project);
     try {
-        const response = await fetch("endpointurl",{
+        const response = await fetch("http://localhost:8080/api/v1/user-stories",{
             method: "post",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(questionsPayload),
+            body: JSON.stringify(project),
         });
         if (response.ok) {
             const data = await response.json();
-            const stories = data.map(item => item.story);
+            console.log(data);
+            const userStories = {
+                userStories: data
+            }
+            updateProject(project.id, userStories);
             setResponseMessage('Success: ${data}');
+            return navigate(`/Assistant-Frontend/backlog/${project.id}`);
         } else {
             setResponseMessage('Error: Failed to submit');
         }
     } catch (error) {
         setResponseMessage('Error: Network issue connecting to API');
     }
+    };
 
     return (
         <>
@@ -47,12 +71,32 @@ const QAForm = () => {
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
-        {/* iterator for questions and answers text boxes here */}
+        <div className="mt-10 text-black flex flex-col mb-2">
+        {project.clarificationQAs.map((question,index) => (
+            <div key={index} className="flex flex-col">
+                <label className="text-black text-xl mt-5">
+                    {question.question}
+                </label>
+                <input
+                    type="text"
+                    value={answers[index]}
+                    onChange={(e) => handleChange(e, index)}
+                    id={`answer-${index}`}
+                    placeholder="Enter your answer to the above question"
+                    className="bg-slate-50 flex-grow p-2 border-none outline-none mt-2"
+                />
+            </div>
+        ))}
+        <label className="text-black text-xl ml-5 mb-5">
+            
+        </label>
+        </div>
+        <SubmitButton />
         </form>
         </>
     )
 }
-}
+
 
 
 export default QAForm;
