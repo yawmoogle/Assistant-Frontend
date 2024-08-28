@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import SubmitButton from './FuncSubmitButton';
-import { redirect, useLoaderData } from 'react-router-dom';
+import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import { updateProject, getProject } from '../projects';
 
 export async function action({ request, params }) {
@@ -18,41 +18,44 @@ export async function loader({ params }) {
 
 const QAForm = () => {
     const { project } = useLoaderData();
-    const [answer, setAnswer] = useState('');
+    const navigate = useNavigate();
+    const [answers, setAnswers] = useState(project.qaDetails.map(()=> ""));
     const [responseMessage, setResponseMessage] = useState('');
 
     console.log(project);
 
-    const handleChange = (e) => {
-        setAnswer(e.target.value);
+    const handleChange = (e, index) => {
+        const newAnswers = [...answers];
+        newAnswers[index] = e.target.value;
+        setAnswers(newAnswers);
     }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const questionsPayload = {
-            "questiondata":"answerdata"
-        }
-    updateProject(project.id, questionsPayload);    
-    try {
-        const response = await fetch("endpointurl",{
-            method: "post",
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(questionsPayload),
-        });
-        if (response.ok) {
-            const data = await response.json();
-            updateProject(project.id, data);
-            setResponseMessage('Success: ${data}');
-            redirect(`/backlog/${project.id}`);
-        } else {
-            setResponseMessage('Error: Failed to submit');
-        }
-    } catch (error) {
-        setResponseMessage('Error: Network issue connecting to API');
-    }
-    }
+    //     const questionsPayload = {
+    //         "questiondata":"answerdata"
+    //     }
+    updateProject(project.id, answers);    
+    // try {
+    //     const response = await fetch("endpointurl",{
+    //         method: "post",
+    //         headers: {
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(questionsPayload),
+    //     });
+    //     if (response.ok) {
+    //         const data = await response.json();
+    //         updateProject(project.id, data);
+    //         setResponseMessage('Success: ${data}');
+            return navigate(`/Assistant-Frontend/backlog/${project.id}`);
+    //     } else {
+    //         setResponseMessage('Error: Failed to submit');
+    //     }
+    // } catch (error) {
+    //     setResponseMessage('Error: Network issue connecting to API');
+    // }
+    };
 
     return (
         <>
@@ -69,9 +72,9 @@ const QAForm = () => {
                 </label>
                 <input
                     type="text"
-                    value={answer}
-                    onChange={handleChange}
-                    id="answer"
+                    value={answers[index]}
+                    onChange={(e) => handleChange(e, index)}
+                    id={`answer-${index}`}
                     placeholder="Enter your answer to the above question"
                     className="bg-slate-50 flex-grow p-2 border-none outline-none mt-2"
                 />

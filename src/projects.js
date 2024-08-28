@@ -25,7 +25,10 @@ export async function createProject() {
                 {question:"What has been done?",answer:""},
                 {question:"Lorem Ipsum?",answer:""},
     ],
-    userStories:[{userStory:"",description:""},] };
+    userStories:[{userStory:"Story 1",description:"Description"},
+                {userStory:"Story 2",description:"Description"},
+                {userStory:"Story 3",description:"Description"},
+    ] };
   let projects = await getProjects();
   projects.unshift(project);
   await set(projects);
