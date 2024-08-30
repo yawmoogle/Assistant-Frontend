@@ -21,14 +21,9 @@ export async function createProject() {
       functionalities: [],
       rolePills: [],
     },
-    clarificationQAs:[{question:"What do you need?",answer:""},
-                {question:"What has been done?",answer:""},
-                {question:"Lorem Ipsum?",answer:""},
-    ],
-    userStories:[{userStory:"Story 1",description:"Description"},
-                {userStory:"Story 2",description:"Description"},
-                {userStory:"Story 3",description:"Description"},
-    ] };
+    clarificationQAs:[],
+    userStories:[],
+   };
   let projects = await getProjects();
   projects.unshift(project);
   await set(projects);
