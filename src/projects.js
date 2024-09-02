@@ -22,8 +22,7 @@ export async function createProject() {
       rolePills: [],
     },
     clarificationQAs:[],
-    userStories:[],
-   };
+    userStories:[] };
   let projects = await getProjects();
   projects.unshift(project);
   await set(projects);
