@@ -87,9 +87,6 @@ const QAForm = () => {
                 />
             </div>
         ))}
-        <label className="text-black text-xl ml-5 mb-5">
-            
-        </label>
         </div>
         <SubmitButton />
         </form>
