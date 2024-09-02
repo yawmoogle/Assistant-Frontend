@@ -78,24 +78,6 @@ const Form = () => {
       setDescriptionValue(e.target.value);
   }  
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await fetch('/api/submit-form', { // Replace with your API endpoint
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ functionalities, otherInput }), // Include other inputs here
-  //     });
-  //     if (!response.ok) throw new Error('Failed to submit form');
-  //     const result = await response.json();
-  //     console.log('API Response:', result);
-  //   } catch (error) {
-  //     console.error('Error submitting form:', error);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     const projectSummaryPayload = {
@@ -119,8 +101,6 @@ const Form = () => {
         },
         body: JSON.stringify(projectSummaryPayload),
       });
-    console.log("Submit button pressed");
-    // navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
       if (response.ok) {
         const data = await response.json();
         console.log(data);
@@ -128,8 +108,6 @@ const Form = () => {
           clarificationQAs: data
         };
         await updateProject(project.id, questions);
-        //placeholder navigate for questions
-        // redirect(`/Assistant-Frontend/backlog/${project.id}/questions`)
         navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
         setResponseMessage('Success: ${data}');
       } else {
