@@ -19,7 +19,7 @@ export async function loader({ params }) {
 const QAForm = () => {
     const { project } = useLoaderData();
     const navigate = useNavigate();
-    const [answers, setAnswers] = useState(project.qaDetails.map(()=> ""));
+    const [answers, setAnswers] = useState(project.clarificationQAs.map(()=> ""));
     const [responseMessage, setResponseMessage] = useState('');
 
     const handleChange = (e, index) => {
