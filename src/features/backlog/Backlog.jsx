@@ -40,7 +40,7 @@ export default function Backlog() {
             )}
             <div className="container flex bg-red-50">
             <Form action="edit" className="mt-4 ml-5 mb-5">
-                <button type="submit">
+                <button type="submit" className="border-blue-100">
                     Edit
                 </button>
                 <DownloadButton />

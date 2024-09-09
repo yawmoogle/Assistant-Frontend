@@ -19,7 +19,11 @@ export async function loader({ params }) {
 const QAForm = () => {
     const { project } = useLoaderData();
     const navigate = useNavigate();
-    const [answers, setAnswers] = useState(project.clarificationQAs.map(()=> ""));
+
+    console.log(project);
+
+    const [loading, setLoading] = useState(false);
+    const [answers, setAnswers] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
 
     const handleChange = (e, index) => {
@@ -30,6 +34,7 @@ const QAForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const updatedProject = {
             ...project,
             clarificationQAs: project.clarificationQAs.map((question, index) => ({
@@ -51,9 +56,9 @@ const QAForm = () => {
             const data = await response.json();
             console.log(data);
             const userStories = {
-                userStories: data
+                userStories: data.projectContextObj.userStories
             }
-            updateProject(project.id, userStories);
+            await updateProject(project.id, userStories);
             setResponseMessage('Success: ${data}');
             return navigate(`/Assistant-Frontend/backlog/${project.id}`);
         } else {
@@ -62,6 +67,7 @@ const QAForm = () => {
     } catch (error) {
         setResponseMessage('Error: Network issue connecting to API');
     }
+    setLoading(false);
     };
 
     return (
@@ -88,7 +94,7 @@ const QAForm = () => {
             </div>
         ))}
         </div>
-        <SubmitButton />
+        <SubmitButton loading={loading}/>
         </form>
         </>
     )

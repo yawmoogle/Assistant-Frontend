@@ -17,14 +17,13 @@ const Functionalities = ({ functionalities, handleChange, handleAddFunctionality
                 <div key={index} className="relative mb-4 flex flex-col">
                     <div className="flex items-center gap-1">
                         <textarea
-                            name={`functionality${func.id}`} // Trailing Id
-                            value={func}
+                            value={func || ''}
                             onChange={(e) => handleChange(e, index)}
                             className="bg-slate-50 appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:shadow-outline resize-none"
                             rows="1"
                             placeholder={`${func}` || "Enter a functionality here"}
                         />
-                        <RemoveButton onClick={() => handleRemoveFunctionality(func.id)} className="absolute right-1" />
+                        <RemoveButton onClick={() => handleRemoveFunctionality(index)} className="absolute right-1" />
                     </div>
                 </div>
             ))}

@@ -18,11 +18,13 @@ export async function action({ request, params }) {
 const Form = () => {
   const { project } = useLoaderData();
 
+  console.log(project);
+
   const [loading, setLoading] = useState(false);
 
-  const [functionalities, setFunctionalities] = useState(project.projectDetails.functionalities.map(() => ""));
+  const [functionalities, setFunctionalities] = useState(project.projectDetails.functionalities.map(func => func));
   const [roleValue, setRoleValue] = useState('');
-  const [rolePills, setRolePills] = useState(project.projectDetails.roles.map(() => ""));
+  const [rolePills, setRolePills] = useState(project.projectDetails.roles.map(role => role));
   const [titleValue, setTitleValue] = useState(project.projectDetails.title || '');
   const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
 
@@ -41,8 +43,8 @@ const Form = () => {
     setFunctionalities([...functionalities, ""])
   };
 
-  const handleRemoveFunctionality = (id) => {
-    setFunctionalities(functionalities.filter((func) => func.id !== id));
+  const handleRemoveFunctionality = (indexRemove) => {
+    setFunctionalities(functionalities.filter((_,index) => index !== indexRemove));
   };
 
   // Example of input handler
@@ -82,12 +84,13 @@ const Form = () => {
     const projectSummaryPayload = {
       config:{
         AIModel: "GEMINI",
-        numOfQuestions: "5"
+        numOfQuestions: "5",
+        numOfUserStories:"10",
       },
       projectDetails:{
           title: titleValue,
           description: descriptionValue,
-          functionalities: functionalities.map(func => func.value),
+          functionalities: functionalities,
           roles: rolePills
         },
       }
@@ -104,7 +107,7 @@ const Form = () => {
         const data = await response.json();
         console.log(data);
         const questions = {
-          clarificationQAs: data
+          clarificationQAs: data.projectContextObj.clarificationQAs
         };
         await updateProject(project.id, questions);
         navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
@@ -118,11 +121,11 @@ const Form = () => {
     }
     setLoading(false);
   };
-    console.log('Form Data Submitted: ',
-      {title: titleValue},
-      {description: descriptionValue},
-      {functionalities: functionalities.map(func => func.value)},
-      {roles: rolePills},);
+    // console.log('Form Data Submitted: ',
+    //   {title: titleValue},
+    //   {description: descriptionValue},
+    //   {functionalities: functionalities.map(func => func.value)},
+    //   {roles: rolePills},);
 
   return (
     <>
