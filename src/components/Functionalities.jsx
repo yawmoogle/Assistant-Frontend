@@ -13,16 +13,16 @@ const Functionalities = ({ functionalities, handleChange, handleAddFunctionality
                 <AddButton onClick={handleAddFunctionality} />
             </div>
 
-            {functionalities.map((func) => (
-                <div key={func.id} className="relative mb-4 flex flex-col">
+            {functionalities.map((func,index) => (
+                <div key={index} className="relative mb-4 flex flex-col">
                     <div className="flex items-center gap-1">
                         <textarea
                             name={`functionality${func.id}`} // Trailing Id
-                            value={func.value}
-                            onChange={(e) => handleChange(func.id, e)}
+                            value={func}
+                            onChange={(e) => handleChange(e, index)}
                             className="bg-slate-50 appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:shadow-outline resize-none"
                             rows="1"
-                            placeholder={`${func.value}`}
+                            placeholder={`${func}` || "Enter a functionality here"}
                         />
                         <RemoveButton onClick={() => handleRemoveFunctionality(func.id)} className="absolute right-1" />
                     </div>

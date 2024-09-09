@@ -16,31 +16,29 @@ export async function action({ request, params }) {
 }
 
 const Form = () => {
-  const [functionalities, setFunctionalities] = useState([{ id: 1, value: '' }]);
-  const [roleValue, setRoleValue] = useState('');
-  const [rolePills, setRolePills] = useState([]);
-  const [titleValue, setTitleValue] = useState('');
-  const [descriptionValue, setDescriptionValue] = useState('');
   const { project } = useLoaderData();
+
+  const [loading, setLoading] = useState(false);
+
+  const [functionalities, setFunctionalities] = useState(project.projectDetails.functionalities.map(() => ""));
+  const [roleValue, setRoleValue] = useState('');
+  const [rolePills, setRolePills] = useState(project.projectDetails.roles.map(() => ""));
+  const [titleValue, setTitleValue] = useState(project.projectDetails.title || '');
+  const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
 
   const [responseMessage, setResponseMessage] = useState('');
   // const [otherInput, setOtherInput] = useState(''); // Example of another form input
 
   const navigate = useNavigate();
 
-  const handleChange = (id, e) => {
-    const newFunctionalities = functionalities.map((func) => {
-      if (func.id === id) {
-        return { ...func, value: e.target.value };
-      }
-      return func;
-    });
+  const handleChange = (e, index) => {
+    const newFunctionalities = [...functionalities];
+    newFunctionalities[index] = e.target.value;
     setFunctionalities(newFunctionalities);
   };
 
   const handleAddFunctionality = () => {
-    const newId = functionalities.length > 0 ? functionalities[functionalities.length - 1].id + 1 : 1;
-    setFunctionalities([...functionalities, { id: newId, value: '' }]);
+    setFunctionalities([...functionalities, ""])
   };
 
   const handleRemoveFunctionality = (id) => {
@@ -80,6 +78,7 @@ const Form = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const projectSummaryPayload = {
       config:{
         AIModel: "GEMINI",
@@ -117,6 +116,7 @@ const Form = () => {
       console.log(error);
       setResponseMessage('Error: Network issue connecting to API');
     }
+    setLoading(false);
   };
     console.log('Form Data Submitted: ',
       {title: titleValue},
@@ -126,7 +126,8 @@ const Form = () => {
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-red-50">
+      <div className="w-full h-auto p-6 bg-red-50">
+      <form onSubmit={handleSubmit} className="w-full h-auto p-6 bg-red-50">
         {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
         <span className="block sm:inline">{responseMessage}</span>
         <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -150,8 +151,9 @@ const Form = () => {
           handleRoleEntry={handleRoleEntry}
           handleRoleRemove={handleRoleRemove}
         />
-        <SubmitButton />
+        <SubmitButton loading={loading}/>
       </form>
+      </div>
     </>
   );
 };

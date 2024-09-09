@@ -16,10 +16,10 @@ export async function createProject() {
   let project = { id,
     config:{AIModel:"GEMINI", numOfQuestions:"5", numOfUserStories:"10"},
     projectDetails:{
-      title: "Enter your project title", 
-      description: "A short description of your project",
+      title: "", 
+      description: "",
       functionalities: [],
-      rolePills: [],
+      roles: [],
     },
     clarificationQAs:[],
     userStories:[] };

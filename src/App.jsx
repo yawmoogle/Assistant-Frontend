@@ -6,9 +6,9 @@ import SideNavBar from './components/navbar/NavBar'
 function App() {
 
   return (
-    <div className='h-screen flex'>
+    <div className='min-h-screen flex'>
       <SideNavBar />
-      <div className='w-full h-screen flex'>
+      <div className='w-full min-h-screen flex'>
       <Outlet />
       </div>
     </div>

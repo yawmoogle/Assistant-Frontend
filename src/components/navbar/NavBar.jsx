@@ -35,7 +35,7 @@ export default function NavBar() {
         <div className="projects-list ml-4 justify-items-center">
           <nav>
           {projects.map(project => (
-            <div key={project.id}>
+            <div key={project.id} className="mb-5">
             <NavLink to={`/Assistant-Frontend/backlog/${project.id}`} className={({isActive, isPending}) =>
             isActive
               ? "active"
