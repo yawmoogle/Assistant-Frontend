@@ -72,7 +72,7 @@ const QAForm = () => {
 
     return (
         <>
-        <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-red-50">
+        <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-slate-100">
             {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
@@ -89,7 +89,7 @@ const QAForm = () => {
                     onChange={(e) => handleChange(e, index)}
                     id={`answer-${index}`}
                     placeholder="Enter your answer to the above question"
-                    className="bg-slate-50 flex-grow p-2 border-none outline-none mt-2"
+                    className="bg-white flex-grow p-2 border-none outline-none mt-2"
                 />
             </div>
         ))}

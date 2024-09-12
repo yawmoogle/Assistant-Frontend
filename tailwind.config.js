@@ -7,7 +7,10 @@ export default {
   theme: {
     extend: {
       colors: {
-      }
+        sidebar: '#FFAF87',
+        story: '#4CE0B3',
+        button: '#FF8E72',
+      },
     },
   },
   plugins: [],

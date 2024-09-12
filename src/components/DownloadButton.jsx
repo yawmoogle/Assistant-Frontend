@@ -38,7 +38,7 @@ const DownloadButton = () => {
     }
   };
 
-  return <button className="ml-5" onClick={handleDownload}>Download CSV</button>;
+  return <button className="ml-5 border-2 bg-button hover:bg-sidebar" onClick={handleDownload}>Download CSV</button>;
 };
 
 export default DownloadButton;

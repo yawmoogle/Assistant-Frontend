@@ -19,7 +19,7 @@ const Functionalities = ({ functionalities, handleChange, handleAddFunctionality
                         <textarea
                             value={func || ''}
                             onChange={(e) => handleChange(e, index)}
-                            className="bg-slate-50 appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:shadow-outline resize-none"
+                            className="bg-white appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:shadow-outline resize-none"
                             rows="1"
                             placeholder={`${func}` || "Enter a functionality here"}
                         />

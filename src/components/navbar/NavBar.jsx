@@ -26,7 +26,7 @@ export default function NavBar() {
   const { projects } = useLoaderData();  
 
   return (
-      <div className="sidenav justify-items-center">
+      <div className="sidenav justify-items-center bg-sidebar overflow-y-auto">
         <div className="add-project-container ml-4 mb-4">
           <Form method="post">
             <AddProject type="submit" />
@@ -47,7 +47,7 @@ export default function NavBar() {
             </div>
             </button>
             </NavLink>
-            <p className="caption text-white">{project.projectDetails.title}</p>
+            <p className="caption text-black">{project.projectDetails.title}</p>
             </div>
           ))}
           </nav>
