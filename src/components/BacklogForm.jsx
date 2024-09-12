@@ -81,27 +81,13 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    const projectSummaryPayload = {
-      config:{
-        AIModel: "GEMINI",
-        numOfQuestions: "5",
-        numOfUserStories:"10",
-      },
-      projectDetails:{
-          title: titleValue,
-          description: descriptionValue,
-          functionalities: functionalities,
-          roles: rolePills
-        },
-      }
-    await updateProject(project.id, projectSummaryPayload);
     try {
       const response = await fetch('http://localhost:8080/api/v1/questions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(projectSummaryPayload),
+        body: JSON.stringify(project),
       });
       if (response.ok) {
         const data = await response.json();
