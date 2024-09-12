@@ -43,7 +43,7 @@ export default function Backlog() {
                 <button type="submit" className="border-2 bg-button hover:bg-sidebar">
                     Edit
                 </button>
-                <DownloadButton dltarget={project}/>
+                <DownloadButton dltarget={project.project}/>
             </Form>
             </div>
         </div>
