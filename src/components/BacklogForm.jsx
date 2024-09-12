@@ -81,6 +81,15 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+    const updatedProject ={
+      projectDetails:{
+        title:titleValue,
+        description:descriptionValue,
+        functionalities:functionalities,
+        roles:rolePills
+      }
+    }
+    await updateProject(project.id, updatedProject);
     try {
       const response = await fetch('http://localhost:8080/api/v1/questions', {
         method: 'POST',
