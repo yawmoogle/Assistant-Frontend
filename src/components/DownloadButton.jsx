@@ -1,11 +1,11 @@
 import React from 'react';
 
-const DownloadButton = (dltarget) => {
+const DownloadButton = ({dltarget}) => {
   const handleDownload = async (e) => {
     e.preventDefault();
-    console.log(dltarget);
+    console.log(JSON.stringify(dltarget));
     try {
-      // Make a GET request to the backend endpoint
+      // Make a POST request to the backend endpoint
       const response = await fetch('http://localhost:8080/v1/download', {
         method: 'POST',
         headers: {
