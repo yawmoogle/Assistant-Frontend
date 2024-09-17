@@ -45,7 +45,7 @@ const QAForm = () => {
         await updateProject(project.id, updatedProject);
         console.log(project);
     try {
-        const response = await fetch("http://localhost:8080/api/v1/user-stories",{
+        const response = await fetch("https://assistant-backend-uhn9.onrender.com/api/v1/user-stories",{
             method: "post",
             headers: {
                 'Content-Type': 'application/json',

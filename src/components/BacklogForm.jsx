@@ -91,7 +91,7 @@ const Form = () => {
     }
     await updateProject(project.id, updatedProject);
     try {
-      const response = await fetch('http://localhost:8080/api/v1/questions', {
+      const response = await fetch('https://assistant-backend-uhn9.onrender.com/api/v1/questions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
