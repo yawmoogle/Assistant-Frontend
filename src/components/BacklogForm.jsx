@@ -16,7 +16,8 @@ export async function action({ request, params }) {
 }
 
 const Form = () => {
-  const { project } = useLoaderData();
+  const { project:initialProject } = useLoaderData();
+  const [project, setProject] = useState(initialProject);
 
   console.log(project);
 
@@ -90,6 +91,10 @@ const Form = () => {
       }
     }
     await updateProject(project.id, updatedProject);
+    setProject(prevProject => ({
+      ...prevProject,
+      ...updatedProject
+    }));
     try {
       const response = await fetch('https://assistant-backend-uhn9.onrender.com/api/v1/questions', {
         method: 'POST',

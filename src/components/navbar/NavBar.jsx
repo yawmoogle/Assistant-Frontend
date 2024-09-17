@@ -42,8 +42,8 @@ export default function NavBar() {
               : isPending
               ? "pending"
               : ""}>
-            <button key={project.id} className="nav-button">
-            <div className="gg-ereader text-black">
+            <button key={project.id} className="nav-button bg-white">
+            <div className="gg-ereader text-black bg-white">
             </div>
             </button>
             </NavLink>

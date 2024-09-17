@@ -17,7 +17,7 @@ const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescri
                 value={titleValue}
                 onChange={handleTitleChange}
                 placeholder={placeholderTitle}
-                className="bg-white flex-grow p-2 border-none outline-none"
+                className="bg-white text-black flex-grow p-2 border-none outline-none"
                 required
                 />
             </div>
@@ -56,7 +56,7 @@ const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescri
                 value={descriptionValue}
                 onChange={handleDescriptionChange}
                 placeholder={placeholderDescription}
-                className="bg-white flex-grow p-2 border-none outline-none"
+                className="bg-white text-black flex-grow p-2 border-none outline-none"
                 required
                 />
         </div>

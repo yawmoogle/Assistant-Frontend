@@ -5,7 +5,7 @@ const RemoveButton = ({ onClick, className }) => {
     <button
       type="button"
       onClick={onClick}
-      className={`absolute right-1 ${className} cursor-pointer p-1 px-3 border-none focus:outline-none`}
+      className={`absolute right-1 ${className} cursor-pointer p-1 px-3 border-none focus:outline-none bg-white`}
     >
       <svg height="24px" width="24px" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 26 26">
 <g>
