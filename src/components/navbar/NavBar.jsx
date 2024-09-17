@@ -18,7 +18,7 @@ export async function loader() {
 
 export async function action() {
   const project = await createProject();
-  return redirect(`/Assistant-Frontend/backlog/${project.id}/edit`);
+  return redirect(`/backlog/${project.id}/edit`);
 }
 
 export default function NavBar() {
