@@ -15,7 +15,7 @@ import QAForm, { action as qaAction, loader as qaLoader } from './components/QAF
 
 const router =  createBrowserRouter([
   {
-    path: "/Assistant-Frontend/",
+    path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
     loader: projectLoader,
@@ -26,18 +26,18 @@ const router =  createBrowserRouter([
         element: <HomePage />
       },
       {
-        path: "/Assistant-Frontend/backlog/:projectId",
+        path: "/backlog/:projectId",
         element: <Backlog />,
         loader: backlogLoader,
       },
       {
-        path: "/Assistant-Frontend/backlog/:projectId/edit",
+        path: "/backlog/:projectId/edit",
         element: <Form />,
         loader: backlogLoader,
         action: editAction,
       },
       {
-        path: "/Assistant-Frontend/backlog/:projectId/questions",
+        path: "/backlog/:projectId/questions",
         element: <QAForm />,
         loader: qaLoader,
         action: qaAction,
