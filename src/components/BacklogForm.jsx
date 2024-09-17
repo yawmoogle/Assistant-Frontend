@@ -105,7 +105,7 @@ const Form = () => {
           clarificationQAs: data.projectContextObj.clarificationQAs
         };
         await updateProject(project.id, questions);
-        navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
+        navigate(`/backlog/${project.id}/questions`);
         setResponseMessage('Success: ${data}');
       } else {
         setResponseMessage('Error: Failed to submit');

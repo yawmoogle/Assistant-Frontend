@@ -36,7 +36,7 @@ export default function NavBar() {
           <nav>
           {projects.map(project => (
             <div key={project.id} className="mb-5">
-            <NavLink to={`/Assistant-Frontend/backlog/${project.id}`} className={({isActive, isPending}) =>
+            <NavLink to={`/backlog/${project.id}`} className={({isActive, isPending}) =>
             isActive
               ? "active"
               : isPending

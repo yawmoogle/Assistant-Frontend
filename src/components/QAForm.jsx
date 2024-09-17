@@ -60,7 +60,7 @@ const QAForm = () => {
             }
             await updateProject(project.id, userStories);
             setResponseMessage('Success: ${data}');
-            return navigate(`/Assistant-Frontend/backlog/${project.id}`);
+            return navigate(`/backlog/${project.id}`);
         } else {
             setResponseMessage('Error: Failed to submit');
         }
