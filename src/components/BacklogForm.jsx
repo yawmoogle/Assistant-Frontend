@@ -16,35 +16,35 @@ export async function action({ request, params }) {
 }
 
 const Form = () => {
-  const [functionalities, setFunctionalities] = useState([{ id: 1, value: '' }]);
-  const [roleValue, setRoleValue] = useState('');
-  const [rolePills, setRolePills] = useState([]);
-  const [titleValue, setTitleValue] = useState('');
-  const [descriptionValue, setDescriptionValue] = useState('');
   const { project } = useLoaderData();
+
+  console.log(project);
+
+  const [loading, setLoading] = useState(false);
+
+  const [functionalities, setFunctionalities] = useState(project.projectDetails.functionalities.map(func => func));
+  const [roleValue, setRoleValue] = useState('');
+  const [rolePills, setRolePills] = useState(project.projectDetails.roles.map(role => role));
+  const [titleValue, setTitleValue] = useState(project.projectDetails.title || '');
+  const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
 
   const [responseMessage, setResponseMessage] = useState('');
   // const [otherInput, setOtherInput] = useState(''); // Example of another form input
 
   const navigate = useNavigate();
 
-  const handleChange = (id, e) => {
-    const newFunctionalities = functionalities.map((func) => {
-      if (func.id === id) {
-        return { ...func, value: e.target.value };
-      }
-      return func;
-    });
+  const handleChange = (e, index) => {
+    const newFunctionalities = [...functionalities];
+    newFunctionalities[index] = e.target.value;
     setFunctionalities(newFunctionalities);
   };
 
   const handleAddFunctionality = () => {
-    const newId = functionalities.length > 0 ? functionalities[functionalities.length - 1].id + 1 : 1;
-    setFunctionalities([...functionalities, { id: newId, value: '' }]);
+    setFunctionalities([...functionalities, ""])
   };
 
-  const handleRemoveFunctionality = (id) => {
-    setFunctionalities(functionalities.filter((func) => func.id !== id));
+  const handleRemoveFunctionality = (indexRemove) => {
+    setFunctionalities(functionalities.filter((_,index) => index !== indexRemove));
   };
 
   // Example of input handler
@@ -78,58 +78,33 @@ const Form = () => {
       setDescriptionValue(e.target.value);
   }  
 
-  // const handleSubmit = async (e) => {
-  //   e.preventDefault();
-  //   try {
-  //     const response = await fetch('/api/submit-form', { // Replace with your API endpoint
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ functionalities, otherInput }), // Include other inputs here
-  //     });
-  //     if (!response.ok) throw new Error('Failed to submit form');
-  //     const result = await response.json();
-  //     console.log('API Response:', result);
-  //   } catch (error) {
-  //     console.error('Error submitting form:', error);
-  //   }
-  // };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const projectSummaryPayload = {
-      config:{
-        AIModel: "GEMINI",
-        numOfQuestions: "5"
-      },
+    setLoading(true);
+    const updatedProject ={
       projectDetails:{
-          title: titleValue,
-          description: descriptionValue,
-          functionalities: functionalities.map(func => func.value),
-          roles: rolePills
-        },
+        title:titleValue,
+        description:descriptionValue,
+        functionalities:functionalities,
+        roles:rolePills
       }
-    await updateProject(project.id, projectSummaryPayload);
+    }
+    await updateProject(project.id, updatedProject);
     try {
       const response = await fetch('http://localhost:8080/api/v1/questions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(projectSummaryPayload),
+        body: JSON.stringify(project),
       });
-    console.log("Submit button pressed");
-    // navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
       if (response.ok) {
         const data = await response.json();
         console.log(data);
         const questions = {
-          clarificationQAs: data
+          clarificationQAs: data.projectContextObj.clarificationQAs
         };
         await updateProject(project.id, questions);
-        //placeholder navigate for questions
-        // redirect(`/Assistant-Frontend/backlog/${project.id}/questions`)
         navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
         setResponseMessage('Success: ${data}');
       } else {
@@ -139,16 +114,18 @@ const Form = () => {
       console.log(error);
       setResponseMessage('Error: Network issue connecting to API');
     }
+    setLoading(false);
   };
-    console.log('Form Data Submitted: ',
-      {title: titleValue},
-      {description: descriptionValue},
-      {functionalities: functionalities.map(func => func.value)},
-      {roles: rolePills},);
+    // console.log('Form Data Submitted: ',
+    //   {title: titleValue},
+    //   {description: descriptionValue},
+    //   {functionalities: functionalities.map(func => func.value)},
+    //   {roles: rolePills},);
 
   return (
     <>
-      <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-red-50">
+      <div className="w-full h-auto p-6 bg-white">
+      <form onSubmit={handleSubmit} className="w-full h-auto p-6 bg-slate-100">
         {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
         <span className="block sm:inline">{responseMessage}</span>
         <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -172,8 +149,9 @@ const Form = () => {
           handleRoleEntry={handleRoleEntry}
           handleRoleRemove={handleRoleRemove}
         />
-        <SubmitButton />
+        <SubmitButton loading={loading}/>
       </form>
+      </div>
     </>
   );
 };

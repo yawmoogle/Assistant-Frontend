@@ -19,7 +19,11 @@ export async function loader({ params }) {
 const QAForm = () => {
     const { project } = useLoaderData();
     const navigate = useNavigate();
-    const [answers, setAnswers] = useState(project.clarificationQAs.map(()=> ""));
+
+    console.log(project);
+
+    const [loading, setLoading] = useState(false);
+    const [answers, setAnswers] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
 
     const handleChange = (e, index) => {
@@ -30,6 +34,7 @@ const QAForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        setLoading(true);
         const updatedProject = {
             ...project,
             clarificationQAs: project.clarificationQAs.map((question, index) => ({
@@ -51,9 +56,9 @@ const QAForm = () => {
             const data = await response.json();
             console.log(data);
             const userStories = {
-                userStories: data
+                userStories: data.projectContextObj.userStories
             }
-            updateProject(project.id, userStories);
+            await updateProject(project.id, userStories);
             setResponseMessage('Success: ${data}');
             return navigate(`/Assistant-Frontend/backlog/${project.id}`);
         } else {
@@ -62,11 +67,12 @@ const QAForm = () => {
     } catch (error) {
         setResponseMessage('Error: Network issue connecting to API');
     }
+    setLoading(false);
     };
 
     return (
         <>
-        <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-red-50">
+        <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-slate-100">
             {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
@@ -83,12 +89,12 @@ const QAForm = () => {
                     onChange={(e) => handleChange(e, index)}
                     id={`answer-${index}`}
                     placeholder="Enter your answer to the above question"
-                    className="bg-slate-50 flex-grow p-2 border-none outline-none mt-2"
+                    className="bg-white flex-grow p-2 border-none outline-none mt-2"
                 />
             </div>
         ))}
         </div>
-        <SubmitButton />
+        <SubmitButton loading={loading}/>
         </form>
         </>
     )

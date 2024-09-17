@@ -1,12 +1,10 @@
 import { useState } from "react";
-import { useLoaderData } from 'react-router-dom'
 import PropTypes from 'prop-types';
 
 const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescriptionChange}) => {
     const [showTooltip, setShowTooltip] = useState(false);
-    const { project } = useLoaderData();
-    const placeholderTitle = project.projectDetails.title || "Enter your project title"
-    const placeholderDescription = project.projectDetails.description || "Enter a short description of your project"
+    const placeholderTitle = titleValue || "Enter your project title"
+    const placeholderDescription = descriptionValue || "Enter a short description of your project"
 
     return (
         <div className="mt-10 mb-2">
@@ -19,7 +17,7 @@ const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescri
                 value={titleValue}
                 onChange={handleTitleChange}
                 placeholder={placeholderTitle}
-                className="bg-slate-50 flex-grow p-2 border-none outline-none"
+                className="bg-white flex-grow p-2 border-none outline-none"
                 required
                 />
             </div>
@@ -58,7 +56,7 @@ const Details = ({ titleValue, descriptionValue, handleTitleChange, handleDescri
                 value={descriptionValue}
                 onChange={handleDescriptionChange}
                 placeholder={placeholderDescription}
-                className="bg-slate-50 flex-grow p-2 border-none outline-none"
+                className="bg-white flex-grow p-2 border-none outline-none"
                 required
                 />
         </div>

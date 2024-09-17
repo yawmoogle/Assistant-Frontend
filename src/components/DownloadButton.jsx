@@ -1,13 +1,18 @@
 import React from 'react';
 
-const DownloadButton = () => {
-  const handleDownload = async () => {
+const DownloadButton = ({dltarget}) => {
+  const handleDownload = async (e) => {
+    e.preventDefault();
+    console.log(JSON.stringify(dltarget));
     try {
-      // Make a GET request to the backend endpoint
-      const response = await fetch('http://localhost:8080/v1/download', {
-        method: 'GET',
+      // Make a POST request to the backend endpoint
+      const response = await fetch('http://localhost:8080/api/v1/download', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dltarget),
       });
-
       // Check if the response is ok
       if (response.ok) {
         // Convert the response to a Blob
@@ -38,7 +43,7 @@ const DownloadButton = () => {
     }
   };
 
-  return <button className="ml-5" onClick={handleDownload}>Download CSV</button>;
+  return <button className="ml-5 border-2 bg-button hover:bg-sidebar" onClick={handleDownload}>Download CSV</button>;
 };
 
 export default DownloadButton;

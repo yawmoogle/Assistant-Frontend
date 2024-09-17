@@ -1,12 +1,13 @@
 import React from 'react';
 
-const SubmitButton = () => {
+const SubmitButton = ({ loading }) => {
   return (
     <button
       type="submit"
-      className="bg-cyan-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-    >
-      Submit
+      disabled={loading}
+      className={`bg-button ${loading ? 'opacity-50 cursor-note-allowed' : 'hover:bg-sidebar'}
+      text-black py-2 px-4 rounded focus:outline-none focus:shadow-outline`}>
+      { loading ? "Submitting" : "Submit"}
     </button>
   );
 };
