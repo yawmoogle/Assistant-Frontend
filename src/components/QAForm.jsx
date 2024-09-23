@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import SubmitButton from './FuncSubmitButton';
+import SubmitButton from './SubmitButton';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import { updateProject, getProject } from '../projects';
 
@@ -43,7 +43,6 @@ const QAForm = () => {
             }))
         };
         await updateProject(project.id, updatedProject);
-        console.log(project);
     try {
         const response = await fetch("https://assistant-backend-uhn9.onrender.com/api/v1/user-stories",{
             method: "post",
@@ -54,7 +53,6 @@ const QAForm = () => {
         });
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
             const userStories = {
                 userStories: data.projectContextObj.userStories
             }

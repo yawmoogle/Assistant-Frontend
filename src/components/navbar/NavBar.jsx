@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import './NavBar.css'
 import './NavBarIcons.css'
-import AddProject from './AddProjectButton'
-import SelectProject from './SelectProjectButton'
+import AddProject from './AddNavIconButton'
+import SelectProject from './NavBarIcons'
 import { 
   NavLink,
   useLoaderData,

@@ -2,9 +2,9 @@
 import React, { useState } from 'react';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import Details from'./Details';
-import Functionalities from './Functionalities';
+import Functionalities from './MultiLineTextField/Functionalities';
 import Roles from './Roles';
-import SubmitButton from './FuncSubmitButton';
+import SubmitButton from './SubmitButton';
 import { updateProject } from '../projects';
 
 export async function action({ request, params }) {
@@ -19,8 +19,6 @@ const Form = () => {
   const { project:initialProject } = useLoaderData();
   const [project, setProject] = useState(initialProject);
 
-  console.log(project);
-
   const [loading, setLoading] = useState(false);
 
   const [functionalities, setFunctionalities] = useState(project.projectDetails.functionalities.map(func => func));
@@ -30,7 +28,6 @@ const Form = () => {
   const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
 
   const [responseMessage, setResponseMessage] = useState('');
-  // const [otherInput, setOtherInput] = useState(''); // Example of another form input
 
   const navigate = useNavigate();
 
@@ -47,11 +44,6 @@ const Form = () => {
   const handleRemoveFunctionality = (indexRemove) => {
     setFunctionalities(functionalities.filter((_,index) => index !== indexRemove));
   };
-
-  // Example of input handler
-  // const handleOtherInputChange = (e) => {
-  //   setOtherInput(e.target.value);
-  // };
   
   const handleRoleChange = (e) => {
     setRoleValue(e.target.value);
@@ -105,7 +97,6 @@ const Form = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         const questions = {
           clarificationQAs: data.projectContextObj.clarificationQAs
         };
@@ -121,11 +112,6 @@ const Form = () => {
     }
     setLoading(false);
   };
-    // console.log('Form Data Submitted: ',
-    //   {title: titleValue},
-    //   {description: descriptionValue},
-    //   {functionalities: functionalities.map(func => func.value)},
-    //   {roles: rolePills},);
 
   return (
     <>
@@ -141,6 +127,10 @@ const Form = () => {
           descriptionValue={descriptionValue}
           handleTitleChange={handleTitleChange}
           handleDescriptionChange={handleDescriptionChange}/>
+        <div className="w-full h-auto container">
+          <input>
+          </input>
+        </div>
         <Functionalities
           functionalities={functionalities}
           handleChange={handleChange}
