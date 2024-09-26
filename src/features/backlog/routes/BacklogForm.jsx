@@ -29,7 +29,8 @@ const Form = () => {
   const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
 
   const [responseMessage, setResponseMessage] = useState('');
-  const options = [1,2,3];
+  const AIModels = ["GEMINI","CHATGPT"]
+  const options = ["1","2","3"];
 
   const navigate = useNavigate();
 
@@ -84,12 +85,13 @@ const Form = () => {
         roles:rolePills
       }
     }
-    await updateProject(project.id, updatedProject);
-    setProject(prevProject => ({
-      ...prevProject,
-      ...updatedProject
-    }));
     try {
+      await updateProject(project.id, updatedProject);
+      setProject(project => ({
+        ...project,
+        ...updatedProject
+      }));
+      console.log(project)
       const response = await fetch('https://assistant-backend-uhn9.onrender.com/api/v1/questions', {
         method: 'POST',
         headers: {
@@ -131,7 +133,7 @@ const Form = () => {
           handleDescriptionChange={handleDescriptionChange}/>
         <Dropdown 
           label="AI Model"
-          options={options} />
+          options={AIModels} />
         <Dropdown 
           label="Number of Questions"
           options={options}/>
