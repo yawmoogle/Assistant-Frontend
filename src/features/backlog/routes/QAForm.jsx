@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import SubmitButton from './SubmitButton';
+import SubmitButton from '../../../components/SubmitButton';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
-import { updateProject, getProject } from '../projects';
+import { updateProject, getProject } from '../../../projects';
 
 export async function action({ request, params }) {
     const formData = await request.formData();

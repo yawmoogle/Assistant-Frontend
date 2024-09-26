@@ -1,11 +1,12 @@
 // Form.jsx
 import React, { useState } from 'react';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
-import Details from'./Details';
-import Functionalities from './MultiLineTextField/Functionalities';
-import Roles from './Roles';
-import SubmitButton from './SubmitButton';
-import { updateProject } from '../projects';
+import Details from'../../../components/Details';
+import Functionalities from '../../../components/MultiLineTextField/Functionalities';
+import Roles from '../../../components/PillTextField';
+import SubmitButton from '../../../components/SubmitButton';
+import Dropdown from '../../../components/DropdownOptions';
+import { updateProject } from '../../../projects';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -28,6 +29,7 @@ const Form = () => {
   const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
 
   const [responseMessage, setResponseMessage] = useState('');
+  const options = [1,2,3];
 
   const navigate = useNavigate();
 
@@ -127,10 +129,15 @@ const Form = () => {
           descriptionValue={descriptionValue}
           handleTitleChange={handleTitleChange}
           handleDescriptionChange={handleDescriptionChange}/>
-        <div className="w-full h-auto container">
-          <input>
-          </input>
-        </div>
+        <Dropdown 
+          label="AI Model"
+          options={options} />
+        <Dropdown 
+          label="Number of Questions"
+          options={options}/>
+        <Dropdown
+          label="Number of User Stories"
+          options={options}/>
         <Functionalities
           functionalities={functionalities}
           handleChange={handleChange}
@@ -138,11 +145,11 @@ const Form = () => {
           handleRemoveFunctionality={handleRemoveFunctionality}
         />
         <Roles 
-          roleValue={roleValue}
-          rolePills={rolePills}
-          handleRoleChange={handleRoleChange}
-          handleRoleEntry={handleRoleEntry}
-          handleRoleRemove={handleRoleRemove}
+          inputValue={roleValue}
+          inputPills={rolePills}
+          handleInputChange={handleRoleChange}
+          handleInputEntry={handleRoleEntry}
+          handleInputRemove={handleRoleRemove}
         />
         <SubmitButton loading={loading}/>
       </form>

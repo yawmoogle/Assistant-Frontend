@@ -5,13 +5,13 @@ import {
   RouterProvider,
 } from 'react-router-dom';
 import App from './App.jsx'
-import ErrorPage from './components/ErrorPage.jsx'
+import ErrorPage from './features/backlog/routes/ErrorPage.jsx'
 import HomePage from './components/home-page/HomePage.jsx'
 import { loader as projectLoader, action as projectAction } from './components/navbar/NavBar.jsx';
-import Form , { action as editAction } from './components/BacklogForm.jsx'
+import Form , { action as editAction } from './features/backlog/routes/BacklogForm.jsx'
 import Backlog, { loader as backlogLoader } from './features/backlog/Backlog.jsx'
 import './index.css'
-import QAForm, { action as qaAction, loader as qaLoader } from './components/QAForm.jsx';
+import QAForm, { action as qaAction, loader as qaLoader } from './features/backlog/routes/QAForm.jsx';
 
 const router =  createBrowserRouter([
   {
