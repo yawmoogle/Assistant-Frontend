@@ -18,7 +18,7 @@ export async function loader() {
 
 export async function action() {
   const project = await createProject();
-  return redirect(`/backlog/${project.id}/edit`);
+  return redirect(`/backlog/${project.uri}/edit`);
 }
 
 export default function NavBar() {
@@ -35,14 +35,14 @@ export default function NavBar() {
         <div className="projects-list ml-4 justify-items-center">
           <nav>
           {projects.map(project => (
-            <div key={project.id} className="mb-5">
-            <NavLink to={`/backlog/${project.id}`} className={({isActive, isPending}) =>
+            <div key={project.uri} className="mb-5">
+            <NavLink to={`/backlog/${project.uri}`} className={({isActive, isPending}) =>
             isActive
               ? "active"
               : isPending
               ? "pending"
               : ""}>
-            <button key={project.id} className="nav-button bg-white">
+            <button key={project.uri} className="nav-button bg-white">
             <div className="gg-ereader text-black bg-white">
             </div>
             </button>

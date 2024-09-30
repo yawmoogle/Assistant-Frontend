@@ -20,7 +20,6 @@ const QAForm = () => {
     const { project } = useLoaderData();
     const navigate = useNavigate();
 
-    console.log(project);
 
     const [loading, setLoading] = useState(false);
     const [answers, setAnswers] = useState('');
@@ -37,28 +36,29 @@ const QAForm = () => {
         setLoading(true);
         const updatedProject = {
             ...project,
+            id:"3002", //placeholder for future DTO
             clarificationQAs: project.clarificationQAs.map((question, index) => ({
                 ...question,
                 answer: answers[index]
             }))
         };
-        await updateProject(project.id, updatedProject);
+        await updateProject(project.uri, updatedProject);
     try {
-        const response = await fetch("https://assistant-backend-uhn9.onrender.com/api/v1/user-stories",{
+        const response = await fetch("http://localhost:8080/api/v1/user-stories",{
             method: "post",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(project),
+            body: JSON.stringify(updatedProject),
         });
         if (response.ok) {
             const data = await response.json();
             const userStories = {
-                userStories: data.projectContextObj.userStories
+                userStories: data
             }
-            await updateProject(project.id, userStories);
+            await updateProject(project.uri, userStories);
             setResponseMessage('Success: ${data}');
-            return navigate(`/backlog/${project.id}`);
+            return navigate(`/backlog/${project.uri}`);
         } else {
             setResponseMessage('Error: Failed to submit');
         }

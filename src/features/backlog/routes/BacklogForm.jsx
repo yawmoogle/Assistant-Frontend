@@ -17,8 +17,7 @@ export async function action({ request, params }) {
 }
 
 const Form = () => {
-  const { project:initialProject } = useLoaderData();
-  const [project, setProject] = useState(initialProject);
+  const { project } = useLoaderData();
 
   const [loading, setLoading] = useState(false);
 
@@ -78,6 +77,7 @@ const Form = () => {
     e.preventDefault();
     setLoading(true);
     const updatedProject ={
+      ...project,
       projectDetails:{
         title:titleValue,
         description:descriptionValue,
@@ -86,26 +86,21 @@ const Form = () => {
       }
     }
     try {
-      await updateProject(project.id, updatedProject);
-      setProject(project => ({
-        ...project,
-        ...updatedProject
-      }));
-      console.log(project)
-      const response = await fetch('https://assistant-backend-uhn9.onrender.com/api/v1/questions', {
+      await updateProject(project.uri, updatedProject);
+      const response = await fetch('http://localhost:8080/api/v1/questions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(project),
+        body: JSON.stringify(updatedProject),
       });
       if (response.ok) {
         const data = await response.json();
         const questions = {
-          clarificationQAs: data.projectContextObj.clarificationQAs
+          clarificationQAs: data
         };
-        await updateProject(project.id, questions);
-        navigate(`/backlog/${project.id}/questions`);
+        await updateProject(project.uri, questions);
+        navigate(`/backlog/${project.uri}/questions`);
         setResponseMessage('Success: ${data}');
       } else {
         setResponseMessage('Error: Failed to submit');
