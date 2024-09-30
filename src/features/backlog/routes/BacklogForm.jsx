@@ -87,6 +87,7 @@ const Form = () => {
     }
     try {
       await updateProject(project.uri, updatedProject);
+      console.log(updatedProject)
       const response = await fetch('http://localhost:8080/api/v1/questions', {
         method: 'POST',
         headers: {
@@ -96,8 +97,10 @@ const Form = () => {
       });
       if (response.ok) {
         const data = await response.json();
+        console.log(data);
         const questions = {
-          clarificationQAs: data
+          id:data.project_context_id,
+          clarificationQAs: data.clarification_qa_list
         };
         await updateProject(project.uri, questions);
         navigate(`/backlog/${project.uri}/questions`);

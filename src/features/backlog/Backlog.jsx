@@ -11,6 +11,7 @@ export async function loader({ params }) {
 
 export default function Backlog() {
     const project = useLoaderData();
+    console.log(project);
 
     return (
         <div id="project-details" className="w-full h-full mx-auto bg-white">

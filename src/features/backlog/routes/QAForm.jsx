@@ -54,7 +54,8 @@ const QAForm = () => {
         if (response.ok) {
             const data = await response.json();
             const userStories = {
-                userStories: data
+                id:data.project_context_id,
+                userStories: data.user_stories
             }
             await updateProject(project.uri, userStories);
             setResponseMessage('Success: ${data}');
@@ -83,7 +84,7 @@ const QAForm = () => {
                 </label>
                 <input
                     type="text"
-                    value={answers[index]}
+                    value={answers[index]||""}
                     onChange={(e) => handleChange(e, index)}
                     id={`answer-${index}`}
                     placeholder="Enter your answer to the above question"
