@@ -12,7 +12,7 @@ import Form , { action as editAction } from './features/backlog/routes/BacklogFo
 import Backlog, { loader as backlogLoader } from './features/backlog/Backlog.jsx'
 import './index.css'
 import QAForm, { action as qaAction, loader as qaLoader } from './features/backlog/routes/QAForm.jsx';
-import Register from './components/register/Register.jsx';
+import AuthenticationPage from './components/authentication/AuthenticationPage.jsx';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -51,7 +51,7 @@ const router =  createBrowserRouter([
   },
   {
     path: "/register",
-    element: <Register />
+    element: <AuthenticationPage />
   }
 ]);
 
