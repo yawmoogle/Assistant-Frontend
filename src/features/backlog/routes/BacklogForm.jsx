@@ -1,11 +1,14 @@
 // Form.jsx
 import React, { useState } from 'react';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
-import Details from'../../../components/Details';
+
 import Functionalities from '../../../components/MultiLineTextField/Functionalities';
 import Roles from '../../../components/PillTextField';
 import SubmitButton from '../../../components/SubmitButton';
 import Dropdown from '../../../components/DropdownOptions';
+import Title from '../../../components/TextField';
+import Description from '../../../components/TooltipTextField';
+
 import { updateProject } from '../../../projects';
 
 export async function action({ request, params }) {
@@ -124,11 +127,14 @@ const Form = () => {
         <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
         </span>
         </div>}
-        <Details
-          titleValue={titleValue}
-          descriptionValue={descriptionValue}
-          handleTitleChange={handleTitleChange}
-          handleDescriptionChange={handleDescriptionChange}/>
+        <Title 
+          label="Title"
+          inputValue={titleValue}
+          inputChange={handleTitleChange}/>
+        <Description 
+          label="Description"
+          inputValue={descriptionValue}
+          inputChange={handleDescriptionChange}/>
         <Dropdown 
           label="AI Model"
           options={AIModels} />
@@ -139,12 +145,14 @@ const Form = () => {
           label="Number of User Stories"
           options={options}/>
         <Functionalities
-          functionalities={functionalities}
+          label="Functionalities"
+          items={functionalities}
           handleChange={handleChange}
-          handleAddFunctionality={handleAddFunctionality}
-          handleRemoveFunctionality={handleRemoveFunctionality}
+          handleAddItem={handleAddFunctionality}
+          handleRemoveItem={handleRemoveFunctionality}
         />
         <Roles 
+          label="Roles"
           inputValue={roleValue}
           inputPills={rolePills}
           handleInputChange={handleRoleChange}

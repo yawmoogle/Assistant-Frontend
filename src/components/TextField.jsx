@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 const TextField = ({label, inputValue, inputChange}) => {
     return (
         <div>
-            <label className="text-black text-xl text-left font-bold mb-2 flex items-center">{label}</label>
-            <div className="border border-gray rounded-lg flex flex-wrap items-center focus-within:border-blue mt-5">
+            <label className="text-black text-xl text-left font-bold mb-5 flex items-center">{label}</label>
+            <div className="border border-gray rounded-lg flex flex-wrap items-center focus-within:border-blue mt-5 mb-5">
             <input 
                 type="text"
                 name="title"
@@ -14,7 +14,6 @@ const TextField = ({label, inputValue, inputChange}) => {
                 onChange={inputChange}
                 placeholder={`Enter your ${label} here`}
                 className="bg-white text-black flex-grow p-2 border-none outline-none"
-                required
                 />
             </div>
         </div>

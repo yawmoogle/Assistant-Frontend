@@ -4,26 +4,26 @@ import PropTypes from 'prop-types';
 import AddButton from './FuncAddButton';
 import RemoveButton from './FuncRemoveButton';
 
-const Functionalities = ({ functionalities, handleChange, handleAddFunctionality, handleRemoveFunctionality }) => {
+const Functionalities = ({ label, items, handleChange, handleAddItem, handleRemoveItem }) => {
 
     return (
         <div className="mt-5">
             <div className="flex items-center justify-between mb-2 gap-10">
-                <h2 className="text-black text-xl font-bold mb-5 text-left">Desired Functionalities</h2>
-                <AddButton onClick={handleAddFunctionality} />
+                <h2 className="text-black text-xl font-bold mb-5 text-left">{label}</h2>
+                <AddButton onClick={handleAddItem} />
             </div>
 
-            {functionalities.map((func,index) => (
+            {items.map((item,index) => (
                 <div key={index} className="relative mb-4 flex flex-col">
                     <div className="flex items-center gap-1">
                         <textarea
-                            value={func || ''}
+                            value={item || ''}
                             onChange={(e) => handleChange(e, index)}
                             className="bg-white appearance-none border rounded w-full py-2 px-3 text-black leading-tight focus:shadow-outline resize-none"
                             rows="1"
-                            placeholder={`${func}` || "Enter a functionality here"}
+                            placeholder={`${item}` || `Enter ${label} here`}
                         />
-                        <RemoveButton onClick={() => handleRemoveFunctionality(index)} className="absolute right-1" />
+                        <RemoveButton onClick={() => handleRemoveItem(index)} className="absolute right-1" />
                     </div>
                 </div>
             ))}
@@ -31,10 +31,10 @@ const Functionalities = ({ functionalities, handleChange, handleAddFunctionality
     );
 };
 Functionalities.propTypes = {
-    functionalities: PropTypes.array,
+    items: PropTypes.array,
     handleChange: PropTypes.func,
-    handleAddFunctionality: PropTypes.func,
-    handleRemoveFunctionality: PropTypes.func
+    handleAddItem: PropTypes.func,
+    handleRemoveItem: PropTypes.func
 }
 
 export default Functionalities;
