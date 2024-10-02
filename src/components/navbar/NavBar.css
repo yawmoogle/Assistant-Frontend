@@ -3,7 +3,7 @@
 .sidenav {
     height: 100vh;
     width: 80px;
-    position: fixed;
+    /* position: fixed; */
     top: 0;
     left: 0;
     padding-top: 24px;
