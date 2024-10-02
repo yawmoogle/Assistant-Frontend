@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import SubmitButton from './FuncSubmitButton';
+import SubmitButton from '../../../components/SubmitButton';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
-import { updateProject, getProject } from '../projects';
+import { updateProject, getProject } from '../../../projects';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -20,7 +20,6 @@ const QAForm = () => {
     const { project } = useLoaderData();
     const navigate = useNavigate();
 
-    console.log(project);
 
     const [loading, setLoading] = useState(false);
     const [answers, setAnswers] = useState('');
@@ -37,30 +36,30 @@ const QAForm = () => {
         setLoading(true);
         const updatedProject = {
             ...project,
+            id:"3002", //placeholder for future DTO
             clarificationQAs: project.clarificationQAs.map((question, index) => ({
                 ...question,
                 answer: answers[index]
             }))
         };
-        await updateProject(project.id, updatedProject);
-        console.log(project);
+        await updateProject(project.uri, updatedProject);
     try {
         const response = await fetch("http://localhost:8080/api/v1/user-stories",{
             method: "post",
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify(project),
+            body: JSON.stringify(updatedProject),
         });
         if (response.ok) {
             const data = await response.json();
-            console.log(data);
             const userStories = {
-                userStories: data.projectContextObj.userStories
+                id:data.project_context_id,
+                userStories: data.user_stories
             }
-            await updateProject(project.id, userStories);
+            await updateProject(project.uri, userStories);
             setResponseMessage('Success: ${data}');
-            return navigate(`/Assistant-Frontend/backlog/${project.id}`);
+            return navigate(`/backlog/${project.uri}`);
         } else {
             setResponseMessage('Error: Failed to submit');
         }
@@ -85,7 +84,7 @@ const QAForm = () => {
                 </label>
                 <input
                     type="text"
-                    value={answers[index]}
+                    value={answers[index]||""}
                     onChange={(e) => handleChange(e, index)}
                     id={`answer-${index}`}
                     placeholder="Enter your answer to the above question"

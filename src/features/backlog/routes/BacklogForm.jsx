@@ -1,11 +1,15 @@
 // Form.jsx
 import React, { useState } from 'react';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
-import Details from'./Details';
-import Functionalities from './Functionalities';
-import Roles from './Roles';
-import SubmitButton from './FuncSubmitButton';
-import { updateProject } from '../projects';
+
+import Functionalities from '../../../components/MultiLineTextField/Functionalities';
+import Roles from '../../../components/PillTextField';
+import SubmitButton from '../../../components/SubmitButton';
+import Dropdown from '../../../components/DropdownOptions';
+import Title from '../../../components/TextField';
+import Description from '../../../components/TooltipTextField';
+
+import { updateProject } from '../../../projects';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -18,8 +22,6 @@ export async function action({ request, params }) {
 const Form = () => {
   const { project } = useLoaderData();
 
-  console.log(project);
-
   const [loading, setLoading] = useState(false);
 
   const [functionalities, setFunctionalities] = useState(project.projectDetails.functionalities.map(func => func));
@@ -29,7 +31,8 @@ const Form = () => {
   const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
 
   const [responseMessage, setResponseMessage] = useState('');
-  // const [otherInput, setOtherInput] = useState(''); // Example of another form input
+  const AIModels = ["GEMINI","CHATGPT"]
+  const options = ["1","2","3"];
 
   const navigate = useNavigate();
 
@@ -46,11 +49,6 @@ const Form = () => {
   const handleRemoveFunctionality = (indexRemove) => {
     setFunctionalities(functionalities.filter((_,index) => index !== indexRemove));
   };
-
-  // Example of input handler
-  // const handleOtherInputChange = (e) => {
-  //   setOtherInput(e.target.value);
-  // };
   
   const handleRoleChange = (e) => {
     setRoleValue(e.target.value);
@@ -82,6 +80,7 @@ const Form = () => {
     e.preventDefault();
     setLoading(true);
     const updatedProject ={
+      ...project,
       projectDetails:{
         title:titleValue,
         description:descriptionValue,
@@ -89,23 +88,25 @@ const Form = () => {
         roles:rolePills
       }
     }
-    await updateProject(project.id, updatedProject);
     try {
+      await updateProject(project.uri, updatedProject);
+      console.log(updatedProject)
       const response = await fetch('http://localhost:8080/api/v1/questions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(project),
+        body: JSON.stringify(updatedProject),
       });
       if (response.ok) {
         const data = await response.json();
         console.log(data);
         const questions = {
-          clarificationQAs: data.projectContextObj.clarificationQAs
+          id:data.project_context_id,
+          clarificationQAs: data.clarification_qa_list
         };
-        await updateProject(project.id, questions);
-        navigate(`/Assistant-Frontend/backlog/${project.id}/questions`);
+        await updateProject(project.uri, questions);
+        navigate(`/backlog/${project.uri}/questions`);
         setResponseMessage('Success: ${data}');
       } else {
         setResponseMessage('Error: Failed to submit');
@@ -116,11 +117,6 @@ const Form = () => {
     }
     setLoading(false);
   };
-    // console.log('Form Data Submitted: ',
-    //   {title: titleValue},
-    //   {description: descriptionValue},
-    //   {functionalities: functionalities.map(func => func.value)},
-    //   {roles: rolePills},);
 
   return (
     <>
@@ -131,23 +127,37 @@ const Form = () => {
         <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
         </span>
         </div>}
-        <Details
-          titleValue={titleValue}
-          descriptionValue={descriptionValue}
-          handleTitleChange={handleTitleChange}
-          handleDescriptionChange={handleDescriptionChange}/>
+        <Title 
+          label="Title"
+          inputValue={titleValue}
+          inputChange={handleTitleChange}/>
+        <Description 
+          label="Description"
+          inputValue={descriptionValue}
+          inputChange={handleDescriptionChange}/>
+        <Dropdown 
+          label="AI Model"
+          options={AIModels} />
+        <Dropdown 
+          label="Number of Questions"
+          options={options}/>
+        <Dropdown
+          label="Number of User Stories"
+          options={options}/>
         <Functionalities
-          functionalities={functionalities}
+          label="Functionalities"
+          items={functionalities}
           handleChange={handleChange}
-          handleAddFunctionality={handleAddFunctionality}
-          handleRemoveFunctionality={handleRemoveFunctionality}
+          handleAddItem={handleAddFunctionality}
+          handleRemoveItem={handleRemoveFunctionality}
         />
         <Roles 
-          roleValue={roleValue}
-          rolePills={rolePills}
-          handleRoleChange={handleRoleChange}
-          handleRoleEntry={handleRoleEntry}
-          handleRoleRemove={handleRoleRemove}
+          label="Roles"
+          inputValue={roleValue}
+          inputPills={rolePills}
+          handleInputChange={handleRoleChange}
+          handleInputEntry={handleRoleEntry}
+          handleInputRemove={handleRoleRemove}
         />
         <SubmitButton loading={loading}/>
       </form>

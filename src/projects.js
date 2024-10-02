@@ -12,8 +12,8 @@ export async function getProjects(query) {
 }
 
 export async function createProject() {
-  let id = Math.random().toString(36).substring(2, 9);
-  let project = { id,
+  let uri = Math.random().toString(36).substring(2, 9);
+  let project = { uri,
     config:{AIModel:"GEMINI", numOfQuestions:"5", numOfUserStories:"10"},
     projectDetails:{
       title: "", 
@@ -29,24 +29,24 @@ export async function createProject() {
   return project;
 }
 
-export async function getProject(id) {
+export async function getProject(uri) {
   let projects = await localforage.getItem("projects");
-  let project = projects.find(project => project.id === id);
+  let project = projects.find(project => project.uri === uri);
   return project ?? null;
 }
 
-export async function updateProject(id, updates) {
+export async function updateProject(uri, updates) {
   let projects = await localforage.getItem("projects");
-  let project = projects.find(project => project.id === id);
-  if (!project) throw new Error("No contact found for", id);
+  let project = projects.find(project => project.uri === uri);
+  if (!project) throw new Error("No project found for", uri);
   Object.assign(project, updates);
   await set(projects);
   return project;
 }
 
-export async function deleteProject(id) {
+export async function deleteProject(uri) {
   let projects = await localforage.getItem("projects");
-  let index = projects.findIndex(project => project.id === id);
+  let index = projects.findIndex(project => project.uri === uri);
   if (index > -1) {
     projects.splice(index, 1);
     await set(projects);

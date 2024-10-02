@@ -27,11 +27,37 @@ a:hover {
 }
 
 body {
+  font-family: "Roboto", sans-serif;
+  font-weight: 400;
+
   margin: 0;
   display: flex;
-  place-items: center;
+  flex-direction: row;
   min-width: 100vw;
   min-height: 100vh;
+
+  div#root {
+    display: flex;
+    flex-direction: row;
+    margin: 0;
+
+    div#error-page {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    div.main-app {
+      display: flex;
+      flex-direction: row;
+
+      div.welcome-card {
+        width: 100vw;
+      }
+    }
+  }
 }
 
 h1 {

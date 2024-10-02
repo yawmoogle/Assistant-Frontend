@@ -1,0 +1,73 @@
+div.login {
+    flex: 1;
+    margin: 130px;
+
+    color: white;
+    background-color: rgb(17, 25, 40, 0.75);
+    backdrop-filter: blur(19px) saturate(180%);
+
+    border-radius: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+
+    span h3 {
+        font-weight: 700;
+        font-size: x-large;
+        text-align: center;
+    }
+
+    form div.form {
+        display: flex;
+        flex-direction: column;
+        padding-left: 20px;
+        padding-right: 20px;
+
+        div.aa-field {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 20px;
+    
+            .label {
+                width: 150px;
+                
+                label {
+                    text-wrap: nowrap;
+                }
+            }  
+            div.MuiFormControl-root {
+                width: 220px;
+                
+                label {
+                    color: white;
+                }
+
+                div input {
+                    color: white;
+                    caret-color: white;
+                }
+                
+                div fieldset {
+                    border-color: rgba(255, 255, 255, 1);
+                }
+
+                div div button {
+                    color: white;
+                    outline-style: none;
+                }
+                
+            }
+
+            
+        }
+    
+        div.submit-button {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 16px;
+        }
+    }
+}

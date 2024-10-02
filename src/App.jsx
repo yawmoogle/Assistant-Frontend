@@ -6,10 +6,10 @@ import SideNavBar from './components/navbar/NavBar'
 function App() {
 
   return (
-    <div className='min-h-screen flex'>
+    <div className='main-app min-h-screen flex'>
       <SideNavBar />
-      <div className='w-full min-h-screen flex'>
-      <Outlet />
+      <div className='welcome-card flex'>
+        <Outlet />
       </div>
     </div>
   )
