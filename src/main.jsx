@@ -4,10 +4,9 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from 'react-router-dom';
-import App from './App.jsx'
-import ErrorPage from './features/backlog/routes/ErrorPage.jsx'
 import HomePage from './components/home-page/HomePage.jsx'
-import { loader as projectLoader, action as projectAction } from './components/navbar/NavBar.jsx';
+import ErrorPage from './features/backlog/routes/ErrorPage.jsx'
+import { loader as projectLoader, action as projectAction } from './components/home-page/sidebar/SideBar.jsx';
 import Form , { action as editAction } from './features/backlog/routes/BacklogForm.jsx'
 import Backlog, { loader as backlogLoader } from './features/backlog/Backlog.jsx'
 import './index.css'
@@ -17,18 +16,19 @@ import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
+import WelcomeCard from './components/home-page/outlets/WelcomeCard.jsx';
 
 const router =  createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <HomePage />,
     errorElement: <ErrorPage />,
     loader: projectLoader,
     action: projectAction,
     children: [
       {
         index: true,
-        element: <HomePage />
+        element: <WelcomeCard />
       },
       {
         path: "/backlog/:projectId",
