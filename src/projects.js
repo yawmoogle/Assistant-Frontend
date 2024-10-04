@@ -14,7 +14,7 @@ export async function getProjects(query) {
 export async function createProject() {
   let uri = Math.random().toString(36).substring(2, 9);
   let project = { uri,
-    config:{AIModel:"GEMINI", numOfQuestions:"5", numOfUserStories:"10"},
+    config:{AIModel:"GEMINI", numOfQuestions:5, numOfUserStories:10},
     projectDetails:{
       title: "", 
       description: "",

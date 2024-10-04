@@ -11,6 +11,8 @@ import Description from '../../../components/TooltipTextField';
 
 import { updateProject } from '../../../projects';
 
+import { Select, MenuItem, Slider } from '@mui/material';
+
 export async function action({ request, params }) {
     const formData = await request.formData();
     console.log(formData);
@@ -29,10 +31,11 @@ const Form = () => {
   const [rolePills, setRolePills] = useState(project.projectDetails.roles.map(role => role));
   const [titleValue, setTitleValue] = useState(project.projectDetails.title || '');
   const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
+  const [AIValue, setAIValue] = useState(project.config.AIModel || '');
+  const [questionsValue, setQuestionsValue] = useState(project.config.numOfQuestions || 5);
+  const [storiesValue, setStoriesValue] = useState(project.config.numOfUserStories || 10);
 
   const [responseMessage, setResponseMessage] = useState('');
-  const AIModels = ["GEMINI","CHATGPT"]
-  const options = ["1","2","3"];
 
   const navigate = useNavigate();
 
@@ -67,20 +70,37 @@ const Form = () => {
   const handleRoleRemove = (index) => {
       setRolePills(rolePills.filter((_,i) => i !== index));
   };
-
-  const handleTitleChange = (e) => {
+  
+  const handleInputChange = (e) => {
+    switch (e.target.name) {
+      case 'title':
       setTitleValue(e.target.value);
-  };
-
-  const handleDescriptionChange = (e) => {
-      setDescriptionValue(e.target.value);
-  }  
+      break;
+      case 'description':
+        setDescriptionValue(e.target.value);
+      break;
+      case 'model':
+        setAIValue(e.target.value);
+      break;
+      case 'questions':
+        setQuestionsValue(e.target.value);
+      break;
+      case 'stories':
+        setStoriesValue(e.target.value);
+      break;
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     const updatedProject ={
       ...project,
+      config:{
+        model: AIValue,
+        numOfQuestions: questionsValue,
+        numOfUserStories: storiesValue
+      },
       projectDetails:{
         title:titleValue,
         description:descriptionValue,
@@ -129,21 +149,38 @@ const Form = () => {
         </div>}
         <Title 
           label="Title"
+          name="title"
           inputValue={titleValue}
-          inputChange={handleTitleChange}/>
+          inputChange={handleInputChange}/>
         <Description 
           label="Description"
+          name="description"
           inputValue={descriptionValue}
-          inputChange={handleDescriptionChange}/>
-        <Dropdown 
+          inputChange={handleInputChange}/>
+        <Select
+          labelId="ai-label"
+          id="ai-select"
+          name="model"
+          value={AIValue}
           label="AI Model"
-          options={AIModels} />
-        <Dropdown 
-          label="Number of Questions"
-          options={options}/>
-        <Dropdown
-          label="Number of User Stories"
-          options={options}/>
+          onChange={handleInputChange}>
+            <MenuItem value={"GEMINI"}>Gemini</MenuItem>
+            <MenuItem value={"CHATGPT"}>ChatGPT</MenuItem>
+        </Select>
+        <Slider 
+          aria-label="Number of Questions"
+          name="questions"
+          defaultValue={5}
+          value={questionsValue}
+          max={20}
+          onChange={handleInputChange}/>
+        <Slider 
+          aria-label="Number of User Stories"
+          name="stories"
+          defaultValue={10}
+          value={storiesValue}
+          max={50}
+          onChange={handleInputChange}/>
         <Functionalities
           label="Functionalities"
           items={functionalities}

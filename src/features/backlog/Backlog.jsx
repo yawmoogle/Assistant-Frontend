@@ -1,6 +1,5 @@
 import { Form, useLoaderData } from 'react-router-dom';
 import './Backlog.css'
-import { useEffect } from 'react';
 import { getProject } from '../../projects'
 import DownloadButton from '../../components/DownloadButton';
 
@@ -28,13 +27,13 @@ export default function Backlog() {
             {project.project.userStories
             .filter(story => story.userStory.trim() !== "" || story.description.trim() !== "")
             .map((story,index) => (
-                <div key={index} className="bg-story text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-wrap w-1/5">
-                    <h2 className="text-black text-xl font-semibold">
+                <div key={index} className="bg-story text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-wrap">
+                    <div className="text-black text-xl font-semibold">
                         {story.userStory.replace(/^\d+\.\s*/, "")}
-                    </h2>
-                    <h4 className="text-black text-sm font-sans whitespace-pre-wrap break-words">
+                    </div>
+                    <div className="text-black text-sm font-sans whitespace-pre-wrap break-words">
                         {story.description.replace(/([:.]) (\d+\.)/g, "$1\n$2")}
-                    </h4>
+                    </div>
                 </div>
             ))}
             </div>
