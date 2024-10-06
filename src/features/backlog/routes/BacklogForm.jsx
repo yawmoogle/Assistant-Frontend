@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 
-import Functionalities from '../../../components/MultiLineTextField/Functionalities';
+import Functionalities from '../../../components/MultiLineTextField/MultiLineTextField';
 import Roles from '../../../components/PillTextField';
 import SubmitButton from '../../../components/SubmitButton';
 import Dropdown from '../../../components/DropdownOptions';
@@ -11,7 +11,7 @@ import Description from '../../../components/TooltipTextField';
 
 import { updateProject } from '../../../projects';
 
-import { Select, MenuItem, Slider } from '@mui/material';
+import { Select, MenuItem, Slider, InputLabel } from '@mui/material';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -140,8 +140,8 @@ const Form = () => {
 
   return (
     <>
-      <div className="w-full h-auto p-6 bg-white">
-      <form onSubmit={handleSubmit} className="w-full h-auto p-6 bg-slate-100">
+      <div className="w-11/12 h-auto p-6 bg-white">
+      <form onSubmit={handleSubmit} className="w-auto h-auto p-6 bg-slate-100">
         {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
         <span className="block sm:inline">{responseMessage}</span>
         <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
@@ -157,6 +157,7 @@ const Form = () => {
           name="description"
           inputValue={descriptionValue}
           inputChange={handleInputChange}/>
+        <label className="text-black text-xl text-left font-bold mt-5 flex items-center" id="ai-label">AI Model</label>
         <Select
           labelId="ai-label"
           id="ai-select"
@@ -167,20 +168,30 @@ const Form = () => {
             <MenuItem value={"GEMINI"}>Gemini</MenuItem>
             <MenuItem value={"CHATGPT"}>ChatGPT</MenuItem>
         </Select>
+        <div className="flex-auto max-w-md">
+        <label className="text-black text-xl text-left font-bold mt-5 flex items-center">Number of Questions</label>
         <Slider 
           aria-label="Number of Questions"
           name="questions"
+          valueLabelDisplay="auto"
+          size="small"
           defaultValue={5}
           value={questionsValue}
+          min={1}
           max={20}
           onChange={handleInputChange}/>
+        <label className="text-black text-xl text-left font-bold mt-5 flex items-center">Number of User Stories</label>
         <Slider 
           aria-label="Number of User Stories"
           name="stories"
+          valueLabelDisplay="auto"
+          size="small"
           defaultValue={10}
           value={storiesValue}
+          min={1}
           max={50}
           onChange={handleInputChange}/>
+        </div>
         <Functionalities
           label="Functionalities"
           items={functionalities}
