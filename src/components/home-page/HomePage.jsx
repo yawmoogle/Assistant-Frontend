@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom'
+import { Outlet, useNavigate } from 'react-router-dom'
 import './home-page.css'
 import SideBar from './sidebar/SideBar';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -6,16 +6,21 @@ import CloseIcon from '@mui/icons-material/Close';
 import { useState } from 'react';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useAuthContext } from '../../contexts/useAuthContext';
 
 const HomePage = () =>  {
 
-  const jwt = true;
-
   const [showSidebar, setShowSidebar] = useState(false)
+  const { user, setUser } = useAuthContext();
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar)
-    console.log(showSidebar)
+  }
+
+  const handleLogout = () => {
+    setUser(null);
+    navigate('/register', { replace: true })
   }
 
   return (
@@ -28,7 +33,7 @@ const HomePage = () =>  {
         </div>
         <div className="login-logout">
           <button>
-            { jwt ? <LogoutIcon /> : <LoginIcon />} 
+            { user ? <LogoutIcon onClick={handleLogout} /> : <LoginIcon />} 
           </button>
         </div>
       </div>

@@ -1,9 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import {
-  createBrowserRouter,
-  RouterProvider,
-} from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import HomePage from './components/home-page/HomePage.jsx'
 import ErrorPage from './features/backlog/routes/ErrorPage.jsx'
 import { loader as projectLoader, action as projectAction } from './components/home-page/sidebar/SideBar.jsx';
@@ -17,11 +14,13 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import WelcomeCard from './components/home-page/outlets/WelcomeCard.jsx';
+import AuthContextProvider from './contexts/AuthContextProvider.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 const router =  createBrowserRouter([
   {
     path: "/",
-    element: <HomePage />,
+    element: <ProtectedRoute><HomePage /></ProtectedRoute>,
     errorElement: <ErrorPage />,
     loader: projectLoader,
     action: projectAction,
@@ -57,6 +56,8 @@ const router =  createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthContextProvider>
+      <RouterProvider router={router} />
+    </AuthContextProvider>
   </React.StrictMode>,
 )

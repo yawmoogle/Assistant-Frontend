@@ -2,14 +2,23 @@ import { Button, IconButton, InputAdornment, TextField } from "@mui/material";
 import "./login.css"
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useAuthContext } from "../../../contexts/useAuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-    const [showPassword, setShowPassword] = useState(false)
+    const [showPassword, setShowPassword] = useState(false);
+    const { setUser } = useAuthContext();
+    const navigate = useNavigate();
 
     const handleClickShowPassword = () => {
         setShowPassword(!showPassword)
     }
 
+    const handleLogin = () => {
+        setUser({id: 1})
+        navigate('/', { replace: true })
+    }
+        
     return (
         <div className="login">
             <span>
@@ -19,16 +28,16 @@ const Login = () => {
                 <div className="form">
                     <div className="aa-field">
                         <div className="label">
-                            <label htmlFor="username">Username</label>
+                            <label htmlFor="username-login">Username</label>
                         </div>
-                        <TextField id="username" label="Username" variant="outlined" margin="normal" autoComplete="off" required />
+                        <TextField id="username-login" label="Username" variant="outlined" margin="normal" autoComplete="off" required />
                     </div>
                     <div className="aa-field">
                         <div className="label">
-                            <label htmlFor="password">Password</label>
+                            <label htmlFor="password-login">Password</label>
                         </div>
                         <TextField 
-                            id="password" 
+                            id="password-login" 
                             label="Password" 
                             variant="outlined"
                             margin="normal" 
@@ -50,7 +59,7 @@ const Login = () => {
                         />
                     </div>
                     <div className="submit-button">
-                        <Button variant="contained">Log In</Button>
+                        <Button variant="contained" onClick={handleLogin}>Log In</Button>
                     </div>
                 </div>
             </form>
