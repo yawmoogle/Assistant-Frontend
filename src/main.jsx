@@ -14,8 +14,9 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import WelcomeCard from './components/home-page/outlets/WelcomeCard.jsx';
-import AuthContextProvider from './contexts/AuthContextProvider.jsx';
+import AuthContextProvider from './contexts/auth/AuthContextProvider.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import AlertContextProvider from './contexts/alert/AlertContextProvider.jsx';
 
 const router =  createBrowserRouter([
   {
@@ -57,7 +58,9 @@ const router =  createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <AuthContextProvider>
-      <RouterProvider router={router} />
+      <AlertContextProvider>
+        <RouterProvider router={router} />
+      </AlertContextProvider>
     </AuthContextProvider>
   </React.StrictMode>,
 )

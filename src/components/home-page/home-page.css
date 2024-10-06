@@ -73,6 +73,13 @@ div.home-page {
     }
 
     div.main-content {
+
+      div.MuiPaper-root {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+
       flex: 10;
       padding: 30px;
     }

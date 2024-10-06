@@ -3,16 +3,25 @@ import './home-page.css'
 import SideBar from './sidebar/SideBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useAuthContext } from '../../contexts/useAuthContext';
+import { useAuthContext } from '../../contexts/auth/useAuthContext';
+import { Alert } from '@mui/material';
+import { useAlertContext } from '../../contexts/alert/useAlertContext';
 
 const HomePage = () =>  {
 
   const [showSidebar, setShowSidebar] = useState(false)
   const { user, setUser } = useAuthContext();
+  const { alert, setAlert } = useAlertContext();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    setTimeout(() => {
+      setAlert(null);
+    }, 10000);
+  }, [setAlert])
 
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar)
@@ -20,6 +29,7 @@ const HomePage = () =>  {
 
   const handleLogout = () => {
     setUser(null);
+    setAlert({ severity: 'success', message: 'Logout Successfully!'})
     navigate('/register', { replace: true })
   }
 
@@ -40,6 +50,7 @@ const HomePage = () =>  {
       <div className="body">
         <SideBar showSidebar={showSidebar} />
         <div className='main-content'>
+          {alert ? <Alert severity={alert.severity}>{alert.message}</Alert> : <></>}
           <Outlet />
         </div>
       </div>
