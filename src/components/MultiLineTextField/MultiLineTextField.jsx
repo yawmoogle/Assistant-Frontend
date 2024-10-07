@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import AddButton from './FuncAddButton';
 import RemoveButton from './FuncRemoveButton';
 
-const Functionalities = ({ label, items, handleChange, handleAddItem, handleRemoveItem }) => {
+const MultiLineTextField = ({ label, items, handleChange, handleAddItem, handleRemoveItem }) => {
 
     return (
         <div className="mt-5">
@@ -30,11 +30,11 @@ const Functionalities = ({ label, items, handleChange, handleAddItem, handleRemo
         </div>
     );
 };
-Functionalities.propTypes = {
+MultiLineTextField.propTypes = {
     items: PropTypes.array,
     handleChange: PropTypes.func,
     handleAddItem: PropTypes.func,
     handleRemoveItem: PropTypes.func
 }
 
-export default Functionalities;
+export default MultiLineTextField;

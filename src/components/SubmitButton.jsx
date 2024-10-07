@@ -1,4 +1,4 @@
-import React from 'react';
+import PropTypes from 'prop-types';
 
 const SubmitButton = ({ loading }) => {
   return (
@@ -10,6 +10,9 @@ const SubmitButton = ({ loading }) => {
       { loading ? "Submitting" : "Submit"}
     </button>
   );
+};
+SubmitButton.propTypes = {
+  loading: PropTypes.bool.isRequired,
 };
 
 export default SubmitButton;
