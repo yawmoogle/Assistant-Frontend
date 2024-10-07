@@ -56,10 +56,11 @@ div.home-page {
 
   div.body {
     background-color: rgb(17, 25, 40, 0.75);
-    backdrop-filter: blur(19px) saturate(180%);
+    backdrop-filter: blur(19px) saturate(100%);
 
     flex: 18;
     width: 100vw;
+    min-height: 100vh;
     display: flex;
     flex-direction: row;
 

@@ -34,7 +34,7 @@ body {
   display: flex;
   flex-direction: row;
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
 
   background-image: url('/bg.jpg');
 
@@ -42,7 +42,7 @@ body {
     display: flex;
     flex-direction: row;
     width: 100vw;
-    height: 100vh;
+    min-height: 100vh;
 
     div#error-page {
       flex: 1;
