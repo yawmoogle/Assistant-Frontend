@@ -48,12 +48,12 @@ export default function Backlog() {
     }
 
     return (
-        <div id="project-details" className="flex-grow h-full mx-auto bg-white overflow-x-hidden">
-            {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <div id="project-details" className="flex-grow h-full mx-auto my-auto bg-white rounded justify-items-center">
+            {/* {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
-            </div>}
-            <h1 className="text-black text-3xl font-bold mt-10 mb-5 ml-5 text-left">
+            </div>} */}
+            <h1 className="text-black text-3xl font-bold mx-5 my-10 text-left">
                 {project.project.projectDetails.title}
             </h1>
             <h2 className="text-black text-xl ml-5 mb-5 text-left">

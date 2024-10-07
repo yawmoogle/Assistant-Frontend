@@ -3,7 +3,7 @@ import './home-page.css'
 import SideBar from './sidebar/SideBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuthContext } from '../../contexts/auth/useAuthContext';
@@ -17,6 +17,8 @@ const HomePage = () =>  {
   const { alert, setAlert } = useAlertContext();
   const navigate = useNavigate();
 
+  const sideBarref = useRef(null);
+
   useEffect(() => {
     setTimeout(() => {
       setAlert(null);
@@ -26,6 +28,18 @@ const HomePage = () =>  {
   const toggleSidebar = () => {
     setShowSidebar(!showSidebar)
   }
+
+  const handleClickOutside = (e) => {
+    if (showSidebar && sideBarref.current && !sideBarref.current.contains(e.target)) {
+      setShowSidebar(false)
+    }
+  }
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSidebar]);
 
   const handleLogout = () => {
     setUser(null);
@@ -48,7 +62,7 @@ const HomePage = () =>  {
         </div>
       </div>
       <div className="body">
-        <SideBar showSidebar={showSidebar} />
+        <SideBar showSidebar={showSidebar} sidebarref={sideBarref}/>
         <div className='main-content'>
           {alert ? <Alert severity={alert.severity}>{alert.message}</Alert> : <></>}
           <Outlet />
