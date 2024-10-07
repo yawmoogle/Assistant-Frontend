@@ -8,6 +8,12 @@
     align-items: center;
     padding: 130px;
 
+    div.MuiPaper-root {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+    }
+
     .divider {
         height: 75%;
         width: 1px;

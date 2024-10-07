@@ -30,16 +30,19 @@ body {
   font-family: "Roboto", sans-serif;
   font-weight: 400;
 
-  margin: 0;
+  /* margin: 0; */
   display: flex;
   flex-direction: row;
-  min-width: 100vw;
-  min-height: 100vh;
+  width: 100vw;
+  height: 100vh;
+
+  background-image: url('/bg.jpg');
 
   div#root {
     display: flex;
     flex-direction: row;
-    margin: 0;
+    width: 100vw;
+    height: 100vh;
 
     div#error-page {
       flex: 1;
@@ -47,15 +50,6 @@ body {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-    }
-
-    div.main-app {
-      display: flex;
-      flex-direction: row;
-
-      div.welcome-card {
-        width: 100vw;
-      }
     }
   }
 }
@@ -78,10 +72,6 @@ button {
 }
 button:hover {
   border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
 }
 
 @media (prefers-color-scheme: light) {

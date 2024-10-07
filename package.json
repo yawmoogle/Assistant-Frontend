@@ -21,6 +21,7 @@
     "assistant-frontend": "file:",
     "localforage": "^1.10.0",
     "match-sorter": "^6.3.4",
+    "prop-types": "^15.8.1",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-router-dom": "^6.26.0",
