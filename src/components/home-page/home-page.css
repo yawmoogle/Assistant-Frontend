@@ -1,0 +1,92 @@
+div.home-page {
+  display: flex;
+  flex-direction: column;
+  
+  div.header {
+    flex: 1;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+
+    div.hamburger-menu {
+      width: 80px;
+      height: 77.5px;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+
+      button {
+        background-color: transparent;
+        height: 100%;
+        width: 100%;
+        padding: 0;
+        border-color: transparent;
+      }
+
+      svg {
+        color: white;
+        height: 100%;
+        width: 50%;
+      }
+    }
+
+    div.login-logout {
+      width: 80px;
+      height: 77.5px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: center;
+
+      button {
+        background-color: transparent;
+        color: white;
+        border-style: none;
+        padding: 0;
+        
+        svg {
+          height: 30px;
+          width: 30px;
+        }
+      }
+    }
+  }
+
+  div.body {
+    background-color: rgb(17, 25, 40, 0.75);
+    backdrop-filter: blur(19px) saturate(180%);
+
+    flex: 18;
+    width: 100vw;
+    display: flex;
+    flex-direction: row;
+
+    div.sidebar {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 80px;
+      padding: 0;
+    }
+
+    div.main-content {
+
+      div.MuiPaper-root {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+      }
+
+      flex: 10;
+      padding: 30px;
+    }
+  }
+
+  div.footer {
+    flex: 1;
+    width: 100vw;
+  }
+}
