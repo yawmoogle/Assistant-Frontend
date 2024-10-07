@@ -1,17 +1,16 @@
 // Form.jsx
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 
 import Functionalities from '../../../components/MultiLineTextField/MultiLineTextField';
 import Roles from '../../../components/PillTextField';
 import SubmitButton from '../../../components/SubmitButton';
-import Dropdown from '../../../components/DropdownOptions';
 import Title from '../../../components/TextField';
 import Description from '../../../components/TooltipTextField';
 
 import { updateProject } from '../../../projects';
 
-import { Select, MenuItem, Slider, InputLabel } from '@mui/material';
+import { Select, MenuItem, Slider } from '@mui/material';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
