@@ -1,6 +1,6 @@
 import localforage from "localforage";
 import { matchSorter } from "match-sorter";
-import sortArray from 'sort-array';
+import sortBy from "sort-by";
 
 export async function getProjects(query) {
   let projects = await localforage.getItem("projects");
@@ -8,8 +8,7 @@ export async function getProjects(query) {
   if (query) {
     projects = matchSorter(projects, query, { keys: ["first", "last"] });
   }
-  return sortArray(projects, {by:["last","createdAt"]});
-  //return projects.sort(sortBy("last", "createdAt"));
+  return projects.sort(sortBy("last", "createdAt"));
 }
 
 export async function createProject() {
