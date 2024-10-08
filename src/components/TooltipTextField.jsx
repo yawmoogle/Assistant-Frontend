@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const TooltipTextField = ({ label, inputValue, inputChange, tooltip }) => {
+const TooltipTextField = ({ label, name, inputValue, inputChange, tooltip }) => {
     const [showTooltip, setShowTooltip] = useState(false);
     const placeholderTooltip = tooltip || "Placeholder Tooltip"
     return(
@@ -36,6 +36,7 @@ const TooltipTextField = ({ label, inputValue, inputChange, tooltip }) => {
             <div className="border border-gray rounded-lg flex flex-wrap items-center focus-within:border-blue mt-5">
             <input
                 type="text"
+                name={name}
                 value={inputValue}
                 onChange={inputChange}
                 placeholder={`Enter your ${label} here`}

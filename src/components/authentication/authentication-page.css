@@ -21,3 +21,19 @@
         margin: 130px;
     }
 }
+@media screen and (max-width:600px) {
+    .authentication-page {
+        background-size: 100% 100%;
+        flex-direction: column;
+        min-height: 100vh;
+        height: auto;
+        padding: 10px;
+        margin-bottom: auto;
+        
+        .divider {
+            width: 75%;
+            height: 1px;
+            margin: 1rem;
+        }
+    }
+}
