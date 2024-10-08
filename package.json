@@ -24,7 +24,8 @@
     "prop-types": "^15.8.1",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
-    "react-router-dom": "^6.26.0"
+    "react-router-dom": "^6.26.0",
+    "sort-array": "^5.0.0"
   },
   "peerDependencies": {
     "react": "^17.0.0 || ^18.0.0",

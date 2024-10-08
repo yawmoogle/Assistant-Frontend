@@ -14,7 +14,7 @@ const PillTextField = ({label, inputValue, inputPills, handleInputChange, handle
                         {pill}
                         <span
                         onClick={() => handleInputRemove(index)}
-                        className="ml-2 cursor-pointer font-bold text-red-600">
+                        className="ml-2 cursor-pointer font-bold">
                             &times;
                         </span>
                     </div>
@@ -25,7 +25,7 @@ const PillTextField = ({label, inputValue, inputPills, handleInputChange, handle
                     onChange={handleInputChange}
                     onKeyDown={handleInputEntry}
                     placeholder={`Enter your ${label} and press Enter`}
-                    className="bg-slate-50 flex-grow p-2 border-none outline-none w-full"
+                    className="bg-slate-50 flex-grow p-2 border-none outline-none w-full text-black"
                 >
                 </input>
             </div>

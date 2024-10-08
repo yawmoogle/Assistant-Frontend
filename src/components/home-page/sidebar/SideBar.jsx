@@ -16,12 +16,12 @@ export async function action() {
   return redirect(`/backlog/${project.uri}/edit`);
 }
 
-const SideBar = ({ showSidebar }) => {
+const SideBar = ({ showSidebar, sidebarRef }) => {
 
   const { projects } = useLoaderData();  
 
   return (
-      <div className={`sidebar ${showSidebar ? "sidebar-show" : "sidebar-hide"}`}>
+      <div ref={sidebarRef} className={`sidebar ${showSidebar ? "sidebar-show" : "sidebar-hide"}`}>
         <div className="navigation-items">
           <div className="navigation-item">
             <Form method="post">
@@ -50,6 +50,9 @@ const SideBar = ({ showSidebar }) => {
 
 SideBar.propTypes = {
   showSidebar: PropTypes.bool.isRequired,
+  sidebarRef: PropTypes.shape({
+    current: PropTypes.any
+  })
 };
 
 export default SideBar;

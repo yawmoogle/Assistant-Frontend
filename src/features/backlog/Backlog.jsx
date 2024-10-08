@@ -48,18 +48,20 @@ export default function Backlog() {
     }
 
     return (
-        <div id="project-details" className="flex-grow h-full mx-auto bg-white overflow-x-hidden">
+        <div id="project-details" className="flex-grow h-full p-6 bg-orange-400 overflow-x-hidden">
+            <div className="bg-white p-6">
             {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
-            <h1 className="text-black text-3xl font-bold mt-10 mb-5 ml-5 text-left">
+            
+            <h1 className="text-black text-3xl font-bold mb-5text-left">
                 {project.project.projectDetails.title}
             </h1>
-            <h2 className="text-black text-xl ml-5 mb-5 text-left">
+            <h2 className="text-black text-xl mb-5 text-left">
                 {project.project.projectDetails.description}
             </h2>
-            <h1 className="text-black text-xl font-bold ml-5 mb-5 text-left">User Stories</h1>
+            <h1 className="text-black text-xl font-bold mb-5 text-left">User Stories</h1>
             {project?.project?.userStories?.length > 0 &&(
             <div className="bg-slate-100 flex flex-wrap justify-items-start w-11/12">
 
@@ -90,22 +92,25 @@ export default function Backlog() {
             ))}
             </div>
             )}
-            <div className="container flex bg-slate-100">
-            <Form action="edit" className="mt-4 ml-5 mb-5">
+            <div className="container flex-row flex p-1">
+            <Form action="edit">
                 <button type="submit" className="border-2 bg-button hover:bg-sidebar">
                     Edit
                 </button>
-                <DownloadButton dltarget={project.project}/>
             </Form>
-            <button className="ml-5 border-2 bg-button hover:bg-sidebar"
+            <div className="flex flex-row items-center space-x-5">
+            <DownloadButton dltarget={project.project}/>
+            <button className="border-2 bg-button hover:bg-sidebar"
                     onClick={handleRegenerate}
                     disabled={loading}>
                     { loading ? "Regenerating": "Keep & Regenerate" }
             </button>
-            <button className="ml-5 border-2 bg-button hover-bg-sidebar"
+            <button className="border-2 bg-button hover-bg-sidebar"
             >
                 Import to JIRA
             </button>
+            </div>
+            </div>
             </div>
         </div>
     )
