@@ -131,7 +131,6 @@ const Form = () => {
         setResponseMessage('Error: Failed to submit');
       }
     } catch (error) {
-      console.log(error);
       setResponseMessage('Error: Network issue connecting to API');
     }
     setLoading(false);

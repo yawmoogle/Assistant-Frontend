@@ -28,6 +28,7 @@ const SideBar = ({ showSidebar, sidebarRef }) => {
               <button type='submit'>
                 <AddCircleOutlineIcon />
               </button>
+              <p className="caption">Add New</p>
             </Form>
           </div>
           <nav className="project-list">
@@ -35,7 +36,7 @@ const SideBar = ({ showSidebar, sidebarRef }) => {
                 <div key={project.uri} className="navigation-item">
                   <NavLink
                     to={`/backlog/${project.uri}`} 
-                    className={({isActive, isPending}) => isActive ? "active project" : isPending ? "pending project" : "project"}
+                    className={({isActive, isPending}) => isActive ? "active" : isPending ? "pending" : "project"}
                   >
                     <ViewKanbanIcon />
                     <p className="caption">{project.projectDetails.title}</p>
