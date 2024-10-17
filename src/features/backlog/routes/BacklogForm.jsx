@@ -73,7 +73,7 @@ const Form = () => {
   const handleInputChange = (e) => {
     switch (e.target.name) {
       case 'title':
-      setTitleValue(e.target.value);
+        setTitleValue(e.target.value);
       break;
       case 'description':
         setDescriptionValue(e.target.value);
@@ -131,7 +131,6 @@ const Form = () => {
         setResponseMessage('Error: Failed to submit');
       }
     } catch (error) {
-      console.log(error);
       setResponseMessage('Error: Network issue connecting to API');
     }
     setLoading(false);
@@ -139,7 +138,7 @@ const Form = () => {
 
   return (
     <>
-      <div className="w-11/12 h-auto p-6 bg-white">
+      <div className="w-full h-auto p-6 bg-orange-400">
       <form onSubmit={handleSubmit} className="w-auto h-auto p-6 bg-slate-100">
         {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
         <span className="block sm:inline">{responseMessage}</span>

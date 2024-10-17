@@ -16,18 +16,19 @@ export async function action() {
   return redirect(`/backlog/${project.uri}/edit`);
 }
 
-const SideBar = ({ showSidebar }) => {
+const SideBar = ({ showSidebar, sidebarRef }) => {
 
   const { projects } = useLoaderData();  
 
   return (
-      <div className={`sidebar ${showSidebar ? "sidebar-show" : "sidebar-hide"}`}>
+      <div ref={sidebarRef} className={`sidebar ${showSidebar ? "sidebar-show" : "sidebar-hide"}`}>
         <div className="navigation-items">
           <div className="navigation-item">
             <Form method="post">
               <button type='submit'>
                 <AddCircleOutlineIcon />
               </button>
+              <p className="caption">Add New</p>
             </Form>
           </div>
           <nav className="project-list">
@@ -35,7 +36,7 @@ const SideBar = ({ showSidebar }) => {
                 <div key={project.uri} className="navigation-item">
                   <NavLink
                     to={`/backlog/${project.uri}`} 
-                    className={({isActive, isPending}) => isActive ? "active project" : isPending ? "pending project" : "project"}
+                    className={({isActive, isPending}) => isActive ? "active" : isPending ? "pending" : "project"}
                   >
                     <ViewKanbanIcon />
                     <p className="caption">{project.projectDetails.title}</p>
@@ -50,6 +51,9 @@ const SideBar = ({ showSidebar }) => {
 
 SideBar.propTypes = {
   showSidebar: PropTypes.bool.isRequired,
+  sidebarRef: PropTypes.shape({
+    current: PropTypes.any
+  })
 };
 
 export default SideBar;

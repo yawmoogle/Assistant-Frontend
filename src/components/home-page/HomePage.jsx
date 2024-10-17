@@ -3,7 +3,7 @@ import './home-page.css'
 import SideBar from './sidebar/SideBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import LoginIcon from '@mui/icons-material/Login';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useAuthContext } from '../../contexts/auth/useAuthContext';
@@ -27,11 +27,25 @@ const HomePage = () =>  {
     setShowSidebar(!showSidebar)
   }
 
+  const sidebarRef = useRef(null);
+
   const handleLogout = () => {
     setUser(null);
     setAlert({ severity: 'success', message: 'Logout Successfully!'})
     navigate('/register', { replace: true })
   }
+
+  const handleClickOutside = (e) => {
+    if (showSidebar && sidebarRef.current && !sidebarRef.current.contains(e.target)) {
+      setShowSidebar(false)
+    }
+  }
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showSidebar]);
 
   return (
     <div className='home-page'>
@@ -48,7 +62,7 @@ const HomePage = () =>  {
         </div>
       </div>
       <div className="body">
-        <SideBar showSidebar={showSidebar} />
+        <SideBar showSidebar={showSidebar} sidebarRef={sidebarRef}/>
         <div className='main-content'>
           {alert ? <Alert severity={alert.severity}>{alert.message}</Alert> : <></>}
           <Outlet />
