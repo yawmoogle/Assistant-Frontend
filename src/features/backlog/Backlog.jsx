@@ -3,6 +3,7 @@ import { Form, useLoaderData, useNavigate } from 'react-router-dom';
 import './Backlog.css'
 import { getProject, updateProject } from '../../projects'
 import DownloadButton from '../../components/DownloadButton';
+import JiraImportButton from './JiraImportButton';
 
 export async function loader({ params }) {
     const project = await getProject(params.projectId);
@@ -110,9 +111,7 @@ export default function Backlog() {
                     disabled={loading}>
                     { loading ? "Regenerating": "Keep & Regenerate" }
             </button>
-            <button className="border-2 bg-button hover-bg-sidebar">
-                Import to JIRA
-            </button>
+            <JiraImportButton project={project} />
             </div>
             </div>
             </div>

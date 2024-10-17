@@ -30,7 +30,7 @@ const Form = () => {
   const [rolePills, setRolePills] = useState(project.projectDetails.roles.map(role => role));
   const [titleValue, setTitleValue] = useState(project.projectDetails.title || '');
   const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
-  const [AIValue, setAIValue] = useState(project.config.AIModel || '');
+  const [AIValue, setAIValue] = useState(project.config.model || '');
   const [questionsValue, setQuestionsValue] = useState(project.config.numOfQuestions || 5);
   const [storiesValue, setStoriesValue] = useState(project.config.numOfUserStories || 10);
 
@@ -164,7 +164,7 @@ const Form = () => {
           label="AI Model"
           onChange={handleInputChange}>
             <MenuItem value={"GEMINI"}>Gemini</MenuItem>
-            <MenuItem value={"CHATGPT"}>ChatGPT</MenuItem>
+            {/* <MenuItem value={"CHATGPT"}>ChatGPT</MenuItem> */}
         </Select>
         <div className="flex-auto max-w-md">
         <label className="text-black text-xl text-left font-bold mt-5 flex items-center">Number of Questions</label>
