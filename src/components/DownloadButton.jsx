@@ -1,4 +1,4 @@
-import React from 'react';
+import { Button } from '@mui/material';
 
 const DownloadButton = ({dltarget}) => {
   const handleDownload = async (e) => {
@@ -43,7 +43,7 @@ const DownloadButton = ({dltarget}) => {
     }
   };
 
-  return <button className="ml-5 border-2 bg-button hover:bg-sidebar" onClick={handleDownload}>Download CSV</button>;
+  return <Button variant="outlined" color="primary" onClick={handleDownload}>Download CSV</Button>;
 };
 
 export default DownloadButton;

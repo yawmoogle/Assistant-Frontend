@@ -1,11 +1,17 @@
 import { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Link } from '@mui/material';
+import { useAlertContext } from '../../contexts/alert/useAlertContext';
 
 const JiraImportButton = ({project}) => {
     const [open, setOpen] = useState(false);
     const [email, setEmail] = useState('');
     const [jiraUrl, setJiraUrl] = useState('');
     const [apiKey, setApiKey] = useState('');
+
+    const validateEmail = (email) => {
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    }
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -17,6 +23,10 @@ const JiraImportButton = ({project}) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!email || !jiraUrl || !apiKey) {
+            alert('Please fill in all details for JIRA import.')
+            return;
+        }
 
         const credentials = `${email}:${apiKey}`;
         const encodedCredentials = btoa(credentials);
@@ -26,6 +36,8 @@ const JiraImportButton = ({project}) => {
             jiraURL:jiraUrl,
             ...project
         };
+
+        console.log(data);
 
         try {
             const response = await fetch('http://localhost:8080/auth', {
@@ -62,33 +74,37 @@ const JiraImportButton = ({project}) => {
                         Please enter your JIRA details to proceed with the import.
                     </DialogContentText>
                     <TextField
+                        error={!validateEmail(email)}
                         autoFocus
                         margin="dense"
                         label="Email"
                         type="email"
                         fullWidth
-                        value={email}
+                        required value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        required />
+                        helperText={ validateEmail(email) ? " " : "Please enter a valid email"}
+                        />
                     <TextField
+                        error={!jiraUrl}
                         margin="dense"
                         label="JIRA URL"
                         type="url"
                         fullWidth
-                        value={jiraUrl}
+                        required value={jiraUrl}
                         onChange={(e) => setJiraUrl(e.target.value)}
-                        required />
-                    <Link href="guide-to-jira-url" target="_blank" rel="noopener">
+                        />
+                    <Link href="https://confluence.atlassian.com/jirakb/how-to-find-your-site-url-to-set-up-the-jira-data-center-and-server-mobile-app-954244798.html" target="_blank" rel="noopener">
                     Guide to finding your JIRA base URL
                     </Link>
                     <TextField
+                        error={!apiKey}
                         margin="dense"
                         label="API Key"
                         type="text"
                         fullWidth
-                        value={apiKey}
+                        required value={apiKey}
                         onChange={(e) => setApiKey(e.target.value)}
-                        required />
+                        />
                     <Link href="https://support.atlassian.com/atlassian-account/docs/manage-api-tokens-for-your-atlassian-account/" target="_blank" rel="noopener">
                     Guide to generating your JIRA API key
                     </Link>

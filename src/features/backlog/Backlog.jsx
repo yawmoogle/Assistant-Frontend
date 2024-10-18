@@ -4,6 +4,7 @@ import './Backlog.css'
 import { getProject, updateProject } from '../../projects'
 import DownloadButton from '../../components/DownloadButton';
 import JiraImportButton from './JiraImportButton';
+import { Button } from '@mui/material';
 
 export async function loader({ params }) {
     const project = await getProject(params.projectId);
@@ -98,19 +99,17 @@ export default function Backlog() {
             ))}
             </div>
             )}
-            <div className="container flex-row flex p-1">
-            <Form action="edit">
-                <button type="submit" className="border-2 bg-button hover:bg-sidebar">
-                    Edit
-                </button>
+            <div className="container flex-row flex p-1 space-x-5">
+            <Form action="edit" className="flex p-2">
+                <Button variant="outlined" color="primary" type="submit">
+                Edit
+                </Button> 
             </Form>
             <div className="flex flex-row items-center space-x-5">
             <DownloadButton dltarget={project}/>
-            <button className="border-2 bg-button hover:bg-sidebar"
-                    onClick={handleRegenerate}
-                    disabled={loading}>
-                    { loading ? "Regenerating": "Keep & Regenerate" }
-            </button>
+            <Button onClick={handleRegenerate} variant="outlined" color="primary" disabled={loading}>
+                { loading ? "Regenerating": "Keep & Regenerate"}
+            </Button>
             <JiraImportButton project={project} />
             </div>
             </div>
