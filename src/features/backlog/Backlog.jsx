@@ -74,7 +74,7 @@ export default function Backlog() {
             {project.userStories
             .filter(story => story.userStory.trim() !== "" || story.description.trim() !== "")
             .map((story,index) => (
-                <div key={index} className="bg-story text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center">
+                <div key={index} className="bg-story text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2">
                     <div className="flex items-center justify-center">
                         <input
                             type="checkbox"

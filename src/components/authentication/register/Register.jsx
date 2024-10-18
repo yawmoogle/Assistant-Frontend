@@ -85,7 +85,7 @@ const Register = () => {
                         <div className="label">
                             <label htmlFor="password">Password</label>
                         </div>
-                        <TextField 
+                        <TextField
                             id="password" 
                             label="Password" 
                             variant="outlined"

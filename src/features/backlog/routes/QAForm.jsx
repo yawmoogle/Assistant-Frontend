@@ -54,8 +54,7 @@ const QAForm = () => {
         if (response.ok) {
             const data = await response.json();
             const userStories = {
-                id:data.project_context_id,
-                userStories: data.user_stories
+                userStories: data
             }
             await updateProject(project.uri, userStories);
             setResponseMessage('Success: ${data}');

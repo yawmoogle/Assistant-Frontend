@@ -1,6 +1,5 @@
 div.register-card {
-    flex: 1;
-    margin: 130px;
+    margin: 5%;
 
     color: white;
     background-color: rgb(17, 25, 40, 0.75);
@@ -8,7 +7,7 @@ div.register-card {
 
     border-radius: 12px;
     border: 1px solid rgba(0, 0, 0, 0.125);
-    padding: 20px;
+    padding: 40px;
 
     display: flex;
     flex-direction: column;
@@ -22,8 +21,8 @@ div.register-card {
     form div.form {
         display: flex;
         flex-direction: column;
-        padding-left: 20px;
-        padding-right: 20px;
+        padding-left: 5%;
+        padding-right: 5%;
 
         div.aa-field {
             display: flex;
@@ -39,7 +38,7 @@ div.register-card {
                 }
             }  
             div.MuiFormControl-root {
-                width: 220px;
+                width:220px;
                 
                 label {
                     color: white;

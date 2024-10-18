@@ -121,9 +121,13 @@ const Form = () => {
         const data = await response.json();
         console.log(data);
         const questions = {
-          id:data.project_context_id,
-          clarificationQAs: data.clarification_qa_list
+          id:data[0].project_context_id,
+          clarificationQAs: data
         };
+        // const questions = {
+        //   id:data.project_context_id,
+        //   clarificationQAs: data.clarification_qa_list
+        // };
         await updateProject(project.uri, questions);
         navigate(`/backlog/${project.uri}/questions`);
         setResponseMessage('Success: ${data}');

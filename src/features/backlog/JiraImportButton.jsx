@@ -34,13 +34,13 @@ const JiraImportButton = ({project}) => {
         const data = {
             encodedEmailAndApiKey:encodedCredentials,
             jiraURL:jiraUrl,
-            ...project
+            context:project
         };
 
         console.log(data);
 
         try {
-            const response = await fetch('http://localhost:8080/auth', {
+            const response = await fetch('http://localhost:8080/jira/auth', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
