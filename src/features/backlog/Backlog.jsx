@@ -78,11 +78,11 @@ export default function Backlog() {
                     <div className="flex items-center justify-center">
                         <input
                             type="checkbox"
-                            checked={selectedUserStories.some(s => s.userStory === story.userStory)}
+                            checked={selectedUserStories.some(s => s.user_story === story.user_story)}
                             onChange={() => {
                                 setSelectedUserStories(
-                                    selectedUserStories.some(s => s.userStory === story.userStory)
-                                   ? selectedUserStories.filter(s => s.userStory !== story.userStory)
+                                    selectedUserStories.some(s => s.user_story === story.user_story)
+                                   ? selectedUserStories.filter(s => s.user_story !== story.user_story)
                                     : [...selectedUserStories, story]
                                 );
                             }}
