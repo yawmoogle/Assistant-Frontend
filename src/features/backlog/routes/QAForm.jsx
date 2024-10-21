@@ -36,7 +36,6 @@ const QAForm = () => {
         setLoading(true);
         const updatedProject = {
             ...project,
-            id:"3002", //placeholder for future DTO
             clarificationQAs: project.clarificationQAs.map((question, index) => ({
                 ...question,
                 answer: answers[index]
