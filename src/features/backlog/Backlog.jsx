@@ -72,7 +72,7 @@ export default function Backlog() {
             <div className="bg-slate-100 flex flex-wrap justify-items-start w-11/12">
 
             {project.userStories
-            .filter(story => story.userStory.trim() !== "" || story.description.trim() !== "")
+            .filter(story => story.user_story.trim() !== "" || story.description.trim() !== "")
             .map((story,index) => (
                 <div key={index} className="bg-story text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2">
                     <div className="flex items-center justify-center">
@@ -90,7 +90,7 @@ export default function Backlog() {
                         />
                     </div>
                     <div className="flex-1 text-black text-xl font-semibold">
-                        {story.userStory.replace(/^\d+\.\s*/, "")}
+                        {story.user_story.replace(/^\d+\.\s*/, "")}
                     </div>
                     <div className="flex-1 text-black text-sm font-sans whitespace-pre-wrap break-words">
                         {story.description.replace(/([:.]) (\d+\.)/g, "$1\n$2")}
