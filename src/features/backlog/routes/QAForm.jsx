@@ -36,7 +36,6 @@ const QAForm = () => {
         setLoading(true);
         const updatedProject = {
             ...project,
-            id:"3002", //placeholder for future DTO
             clarificationQAs: project.clarificationQAs.map((question, index) => ({
                 ...question,
                 answer: answers[index]
@@ -54,8 +53,7 @@ const QAForm = () => {
         if (response.ok) {
             const data = await response.json();
             const userStories = {
-                id:data.project_context_id,
-                userStories: data.user_stories
+                userStories: data
             }
             await updateProject(project.uri, userStories);
             setResponseMessage('Success: ${data}');
