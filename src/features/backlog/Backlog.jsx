@@ -31,18 +31,18 @@ export default function Backlog() {
         try {
             //to switch endpoint once created
             const response = await fetch('http://localhost:8080/api/v1/user-stories',{
-                method: 'PATCH',
+                method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(project),
+                body: JSON.stringify(updatedProject),
                 });
             if (response.ok) {
                 const data = await response.json();
                 //concat new questions with selected old
                 const userStories = {
-                    id: data.project_context_id,
-                    userStories: selectedUserStories.concat(data.user_stories)
+                    id: data[0].project_context_id,
+                    userStories: selectedUserStories.concat(data)
                 }
                 await updateProject(project.uri, userStories);
                 navigate(`/backlog/${project.uri}`)
@@ -74,7 +74,7 @@ export default function Backlog() {
             {project.userStories
             .filter(story => story.user_story.trim() !== "" || story.description.trim() !== "")
             .map((story,index) => (
-                <div key={index} className="bg-story text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2">
+                <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2">
                     <div className="flex items-center justify-center">
                         <input
                             type="checkbox"
