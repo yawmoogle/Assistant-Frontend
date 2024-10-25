@@ -124,6 +124,7 @@ const Form = () => {
           id:data[0].project_context_id,
           clarificationQAs: data
         };
+        console.log(questions);
         // const questions = {
         //   id:data.project_context_id,
         //   clarificationQAs: data.clarification_qa_list
