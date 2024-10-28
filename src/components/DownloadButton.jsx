@@ -1,4 +1,4 @@
-import React from 'react';
+import { Button } from '@mui/material';
 
 const DownloadButton = ({dltarget}) => {
   const handleDownload = async (e) => {
@@ -6,7 +6,7 @@ const DownloadButton = ({dltarget}) => {
     console.log(JSON.stringify(dltarget));
     try {
       // Make a POST request to the backend endpoint
-      const response = await fetch('https://assistant-backend-uhn9.onrender.com/api/v1/download', {
+      const response = await fetch('http://localhost:8080/api/v1/download', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -43,7 +43,7 @@ const DownloadButton = ({dltarget}) => {
     }
   };
 
-  return <button className="ml-5 border-2 bg-button hover:bg-sidebar" onClick={handleDownload}>Download CSV</button>;
+  return <Button variant="outlined" color="primary" onClick={handleDownload}>Download CSV</Button>;
 };
 
 export default DownloadButton;

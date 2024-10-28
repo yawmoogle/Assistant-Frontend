@@ -3,6 +3,8 @@ import { Form, useLoaderData, useNavigate } from 'react-router-dom';
 import './Backlog.css'
 import { getProject, updateProject } from '../../projects'
 import DownloadButton from '../../components/DownloadButton';
+import JiraImportButton from './JiraImportButton';
+import { Button } from '@mui/material';
 
 export async function loader({ params }) {
     const project = await getProject(params.projectId);
@@ -29,18 +31,18 @@ export default function Backlog() {
         try {
             //to switch endpoint once created
             const response = await fetch('http://localhost:8080/api/v1/user-stories',{
-                method: 'PATCH',
+                method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(project),
+                body: JSON.stringify(updatedProject),
                 });
             if (response.ok) {
                 const data = await response.json();
                 //concat new questions with selected old
                 const userStories = {
-                    id: data.project_context_id,
-                    userStories: selectedUserStories.concat(data.user_stories)
+                    id: data[0].project_context_id,
+                    userStories: selectedUserStories.concat(data)
                 }
                 await updateProject(project.uri, userStories);
                 navigate(`/backlog/${project.uri}`)
@@ -70,17 +72,17 @@ export default function Backlog() {
             <div className="bg-slate-100 flex flex-wrap justify-items-start w-11/12">
 
             {project.userStories
-            .filter(story => story.userStory.trim() !== "" || story.description.trim() !== "")
+            .filter(story => story.user_story.trim() !== "" || story.description.trim() !== "")
             .map((story,index) => (
-                <div key={index} className="bg-story text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center">
+                <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2">
                     <div className="flex items-center justify-center">
                         <input
                             type="checkbox"
-                            checked={selectedUserStories.some(s => s.userStory === story.userStory)}
+                            checked={selectedUserStories.some(s => s.user_story === story.user_story)}
                             onChange={() => {
                                 setSelectedUserStories(
-                                    selectedUserStories.some(s => s.userStory === story.userStory)
-                                   ? selectedUserStories.filter(s => s.userStory !== story.userStory)
+                                    selectedUserStories.some(s => s.user_story === story.user_story)
+                                   ? selectedUserStories.filter(s => s.user_story !== story.user_story)
                                     : [...selectedUserStories, story]
                                 );
                             }}
@@ -88,7 +90,7 @@ export default function Backlog() {
                         />
                     </div>
                     <div className="flex-1 text-black text-xl font-semibold">
-                        {story.userStory.replace(/^\d+\.\s*/, "")}
+                        {story.user_story.replace(/^\d+\.\s*/, "")}
                     </div>
                     <div className="flex-1 text-black text-sm font-sans whitespace-pre-wrap break-words">
                         {story.description.replace(/([:.]) (\d+\.)/g, "$1\n$2")}
@@ -97,22 +99,18 @@ export default function Backlog() {
             ))}
             </div>
             )}
-            <div className="container flex-row flex p-1">
-            <Form action="edit">
-                <button type="submit" className="border-2 bg-button hover:bg-sidebar">
-                    Edit
-                </button>
+            <div className="container flex-row flex p-1 space-x-5">
+            <Form action="edit" className="flex p-2">
+                <Button variant="outlined" color="primary" type="submit">
+                Edit
+                </Button> 
             </Form>
             <div className="flex flex-row items-center space-x-5">
             <DownloadButton dltarget={project}/>
-            <button className="border-2 bg-button hover:bg-sidebar"
-                    onClick={handleRegenerate}
-                    disabled={loading}>
-                    { loading ? "Regenerating": "Keep & Regenerate" }
-            </button>
-            <button className="border-2 bg-button hover-bg-sidebar">
-                Import to JIRA
-            </button>
+            <Button onClick={handleRegenerate} variant="outlined" color="primary" disabled={loading}>
+                { loading ? "Regenerating": "Keep & Regenerate"}
+            </Button>
+            <JiraImportButton project={project} />
             </div>
             </div>
             </div>
