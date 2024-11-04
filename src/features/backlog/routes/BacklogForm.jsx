@@ -10,7 +10,7 @@ import Description from '../../../components/TooltipTextField';
 
 import { updateProject } from '../../../projects';
 
-import { Select, MenuItem, Slider } from '@mui/material';
+import { Select, MenuItem, TextField } from '@mui/material';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -71,21 +71,22 @@ const Form = () => {
   };
   
   const handleInputChange = (e) => {
-    switch (e.target.name) {
+    const { name, value } = e.target;
+    switch (name) {
       case 'title':
-        setTitleValue(e.target.value);
+        setTitleValue(value);
       break;
       case 'description':
-        setDescriptionValue(e.target.value);
+        setDescriptionValue(value);
       break;
       case 'model':
-        setAIValue(e.target.value);
+        setAIValue(value);
       break;
       case 'questions':
-        setQuestionsValue(e.target.value);
+        setQuestionsValue(Number(value));
       break;
       case 'stories':
-        setStoriesValue(e.target.value);
+        setStoriesValue(Number(value));
       break;
     }
   }
@@ -173,26 +174,26 @@ const Form = () => {
         </Select>
         <div className="flex-auto max-w-md">
         <label className="text-black text-xl text-left font-bold mt-5 flex items-center">Number of Questions</label>
-        <Slider 
+        <TextField
           aria-label="Number of Questions"
           name="questions"
-          valueLabelDisplay="auto"
+          type="number"
           size="small"
-          defaultValue={5}
           value={questionsValue}
-          min={1}
-          max={20}
+          slotProps={{
+            htmlInput: {min:1, max:20}
+          }}
           onChange={handleInputChange}/>
         <label className="text-black text-xl text-left font-bold mt-5 flex items-center">Number of User Stories</label>
-        <Slider 
+        <TextField
           aria-label="Number of User Stories"
           name="stories"
-          valueLabelDisplay="auto"
+          type="number"
           size="small"
-          defaultValue={10}
           value={storiesValue}
-          min={1}
-          max={50}
+          slotProps={{
+            htmlInput: {min:1, max:50}
+          }}
           onChange={handleInputChange}/>
         </div>
         <Functionalities
@@ -203,7 +204,7 @@ const Form = () => {
           handleRemoveItem={handleRemoveFunctionality}
         />
         <Roles 
-          label="Roles"
+          label="Role of User"
           inputValue={roleValue}
           inputPills={rolePills}
           handleInputChange={handleRoleChange}

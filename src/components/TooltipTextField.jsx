@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import PropTypes from 'prop-types';
 
 const TooltipTextField = ({ label, name, inputValue, inputChange, tooltip }) => {
     const [showTooltip, setShowTooltip] = useState(false);
@@ -44,7 +45,14 @@ const TooltipTextField = ({ label, name, inputValue, inputChange, tooltip }) => 
                 />
         </div>
         </div>    
-)}
+)};
+TooltipTextField.propTypes = {
+  label: PropTypes.string,
+  name: PropTypes.string,
+  inputValue: PropTypes.string,
+  inputChange: PropTypes.func,
+  tooltip: PropTypes.string,
+}
 
 export default TooltipTextField;
 
