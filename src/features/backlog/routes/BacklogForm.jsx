@@ -146,7 +146,7 @@ const Form = () => {
     <>
       <div className="w-full h-auto p-6 bg-orange-400">
       <form onSubmit={handleSubmit} className="w-auto h-auto p-6 bg-slate-100">
-        {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
         <span className="block sm:inline">{responseMessage}</span>
         <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
         </span>
