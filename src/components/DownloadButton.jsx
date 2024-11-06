@@ -1,4 +1,5 @@
 import { Button } from '@mui/material';
+import PropTypes from 'prop-types';
 
 const DownloadButton = ({dltarget}) => {
   const handleDownload = async (e) => {
@@ -45,5 +46,7 @@ const DownloadButton = ({dltarget}) => {
 
   return <Button variant="outlined" color="primary" onClick={handleDownload}>Download CSV</Button>;
 };
-
+DownloadButton.propTypes = {
+  dltarget: PropTypes.object.isRequired,
+}
 export default DownloadButton;

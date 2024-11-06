@@ -4,7 +4,7 @@ import './Backlog.css'
 import { getProject, updateProject } from '../../projects'
 import DownloadButton from '../../components/DownloadButton';
 import JiraImportButton from './JiraImportButton';
-import { Button } from '@mui/material';
+import { Button, TextField } from '@mui/material';
 
 export async function loader({ params }) {
     const project = await getProject(params.projectId);
@@ -16,17 +16,33 @@ export default function Backlog() {
 
     const navigate = useNavigate();
 
-    const [selectedUserStories, setSelectedUserStories] = useState([]);
+    const [userStories, setUserStories] = useState(project.userStories);
+    const [storiesValue, setStoriesValue] = useState(5);
     const [loading, setLoading] = useState(false);
     const [responseMessage, setResponseMessage] = useState('');
+
+    const handleInputChange = (e) => {
+        setStoriesValue(e.target.value);
+    };
+
+    const handleDeleteUserStory = (indexToDelete) => {
+        const updatedUserStories = userStories.filter((_,index) => index !== indexToDelete);
+        setUserStories(updatedUserStories);
+        const updatedProject  = {...project, userStories: updatedUserStories};
+        console.log(updatedProject);
+        updateProject(project.uri, updatedProject);
+    };
 
     const handleRegenerate = async (e) => {
         e.preventDefault();
         setLoading(true);
         const updatedProject = {
             ...project,
-            userStories: selectedUserStories,
+            config:{
+                numOfUserStories:storiesValue
+            }
         }
+        console.log(updatedProject);
         await updateProject(project.uri, updatedProject);
         try {
             //to switch endpoint once created
@@ -40,10 +56,12 @@ export default function Backlog() {
             if (response.ok) {
                 const data = await response.json();
                 //concat new questions with selected old
+                const updatedUserStories = project.userStories.concat(data);
                 const userStories = {
                     id: data[0].project_context_id,
-                    userStories: selectedUserStories.concat(data)
+                    userStories: updatedUserStories
                 }
+                setUserStories(updatedUserStories);
                 await updateProject(project.uri, userStories);
                 navigate(`/backlog/${project.uri}`)
             }
@@ -56,7 +74,7 @@ export default function Backlog() {
     return (
         <div id="project-details" className="flex-grow h-full p-6 bg-orange-400 overflow-x-hidden">
             <div className="bg-white p-6">
-            {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
@@ -68,27 +86,33 @@ export default function Backlog() {
                 {project.projectDetails.description}
             </h2>
             <h1 className="text-black text-xl font-bold mb-5 text-left">User Stories</h1>
+            <div className="flex align-middle space-x-1">
+            <TextField
+                aria-label="Regenerate Stories"
+                name="regenerate_stories"
+                size="small"
+                type="number"
+                value={storiesValue}
+                slotProps={{
+                    htmlInput : {min:1, max:50}
+                }}
+                onChange={handleInputChange}/>
+            <Button onClick={handleRegenerate} variant="outlined" color="primary" disabled={loading}>
+                { loading ? "Regenerating": "Regenerate"}
+            </Button>
+            </div>
             {project?.userStories?.length > 0 &&(
             <div className="bg-slate-100 flex flex-wrap justify-items-start w-11/12">
 
-            {project.userStories
+            {userStories
             .filter(story => story.user_story.trim() !== "" || story.description.trim() !== "")
             .map((story,index) => (
-                <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2">
-                    <div className="flex items-center justify-center">
-                        <input
-                            type="checkbox"
-                            checked={selectedUserStories.some(s => s.user_story === story.user_story)}
-                            onChange={() => {
-                                setSelectedUserStories(
-                                    selectedUserStories.some(s => s.user_story === story.user_story)
-                                   ? selectedUserStories.filter(s => s.user_story !== story.user_story)
-                                    : [...selectedUserStories, story]
-                                );
-                            }}
-                            className="mr-4"
-                        />
-                    </div>
+                <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2 relative">
+                    <Button
+                        onClick={() => handleDeleteUserStory(index)}
+                        sx={{ position: "absolute", top:8, right:8}}>
+                        Delete
+                    </Button>
                     <div className="flex-1 text-black text-xl font-semibold">
                         {story.user_story.replace(/^\d+\.\s*/, "")}
                     </div>
@@ -106,11 +130,8 @@ export default function Backlog() {
                 </Button> 
             </Form>
             <div className="flex flex-row items-center space-x-5">
-            <DownloadButton dltarget={project}/>
-            <Button onClick={handleRegenerate} variant="outlined" color="primary" disabled={loading}>
-                { loading ? "Regenerating": "Keep & Regenerate"}
-            </Button>
-            <JiraImportButton project={project} />
+            <DownloadButton dltarget={{...project,userStories:userStories}}/>
+            <JiraImportButton project={{...project,userStories:userStories}} />
             </div>
             </div>
             </div>

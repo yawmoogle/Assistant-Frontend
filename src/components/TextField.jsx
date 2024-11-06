@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import PropTypes from 'prop-types';
 
 const TextField = ({label, name, inputValue, inputChange}) => {
@@ -21,6 +20,7 @@ const TextField = ({label, name, inputValue, inputChange}) => {
 };
 TextField.propTypes = {
     label: PropTypes.string,
+    name: PropTypes.string,
     inputValue: PropTypes.string,
     inputChange: PropTypes.func,
 }

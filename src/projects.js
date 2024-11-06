@@ -41,8 +41,8 @@ export async function updateProject(uri, updates) {
   let project = projects.find(project => project.uri === uri);
   if (!project) throw new Error("No project found for", uri);
   Object.assign(project, updates);
-  await set(projects);
-  return project;
+  set(projects).catch((error) => console.error("Failed to sync project to localstorage", error));
+  return { ...project, ...updates};
 }
 
 export async function deleteProject(uri) {
