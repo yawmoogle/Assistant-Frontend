@@ -19,6 +19,7 @@ export async function loader({ params }) {
 const QAForm = () => {
     const { project } = useLoaderData();
     const navigate = useNavigate();
+    const [questions, setQuestions] = usestate([]);
 
 
     const [loading, setLoading] = useState(false);
@@ -67,6 +68,14 @@ const QAForm = () => {
     setLoading(false);
     };
 
+    const handleDelete = (id) => {
+        const element = this.props.keyProp
+        if(id === element){
+            element.remove();
+        }
+        
+    };
+
     return (
         <>
         <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-slate-100">
@@ -76,7 +85,7 @@ const QAForm = () => {
             </div>}
         <div className="mt-10 text-black flex flex-col mb-2">
         {project.clarificationQAs.map((question,index) => (
-            <div key={index} className="flex flex-col">
+            <div key={index} keyProp={index} className="flex flex-col">
                 <label className="text-black text-xl mt-5">
                     {question.question}
                 </label>
@@ -88,6 +97,7 @@ const QAForm = () => {
                     placeholder="Enter your answer to the above question"
                     className="bg-white flex-grow p-2 border-none outline-none mt-2"
                 />
+            <button onClick="handleDelete()">Delete</button>
             </div>
         ))}
         </div>
