@@ -25,9 +25,22 @@ export default function Backlog() {
         setStoriesValue(e.target.value);
     };
 
-    const handleDeleteUserStory = (indexToDelete) => {
+    const handleDeleteUserStory = async (indexToDelete) => {
         const updatedUserStories = userStories.filter((_,index) => index !== indexToDelete);
         setUserStories(updatedUserStories);
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/user-stories:batch-delete`,{
+                method: 'POST',
+                body: [indexToDelete]
+            });
+            if (response.ok) {
+                setResponseMessage('User story deleted successfully');
+            } else {
+                setResponseMessage('Failed to delete user story');
+            }
+        } catch (error) {
+            setResponseMessage('Network error connecting to API');
+        }
         const updatedProject  = {...project, userStories: updatedUserStories};
         console.log(updatedProject);
         updateProject(project.uri, updatedProject);
