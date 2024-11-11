@@ -69,10 +69,8 @@ const QAForm = () => {
     };
 
     const handleDelete = (id) => {
-        const element = this.props.keyProp
-        if(id === element){
-            element.remove();
-        }
+        const element = document.getElementById(id)
+        element.remove();
         
     };
 
@@ -85,7 +83,7 @@ const QAForm = () => {
             </div>}
         <div className="mt-10 text-black flex flex-col mb-2">
         {project.clarificationQAs.map((question,index) => (
-            <div key={index} keyProp={index} className="flex flex-col">
+            <div key={index} id="{{ 'question-' + $index }}" className="flex flex-col">
                 <label className="text-black text-xl mt-5">
                     {question.question}
                 </label>
@@ -97,7 +95,7 @@ const QAForm = () => {
                     placeholder="Enter your answer to the above question"
                     className="bg-white flex-grow p-2 border-none outline-none mt-2"
                 />
-            <button onClick="handleDelete()">Delete</button>
+            <button onClick="handleDelete(this.id)">Delete</button>
             </div>
         ))}
         </div>
