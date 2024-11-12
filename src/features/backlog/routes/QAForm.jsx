@@ -2,6 +2,7 @@ import { useState } from 'react';
 import SubmitButton from '../../../components/SubmitButton';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import { updateProject, getProject } from '../../../projects';
+import { Button} from '@mui/material';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -22,6 +23,7 @@ const QAForm = () => {
 
 
     const [loading, setLoading] = useState(false);
+    const [questions, setQuestions] = useState(project.clarificationQAs||[]);
     const [answers, setAnswers] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
 
@@ -67,6 +69,13 @@ const QAForm = () => {
     setLoading(false);
     };
 
+    const handleDelete = (e,idx) => {
+        e.preventDefault();
+        const updatedQuestions = questions.filter((_, index) => index !== idx);
+        setQuestions(updatedQuestions);
+        const updatedProject = {...project, clarificationQAs: updatedQuestions}
+        updateProject(project.uri, updatedProject)
+    };
     return (
         <>
         <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-slate-100">
@@ -75,8 +84,9 @@ const QAForm = () => {
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
         <div className="mt-10 text-black flex flex-col mb-2">
-        {project.clarificationQAs.map((question,index) => (
-            <div key={index} className="flex flex-col">
+
+        {questions.map((question,index) => (
+            <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex flex-col justify-start items-stretch space-x-2 relative">
                 <label className="text-black text-xl mt-5">
                     {question.question}
                 </label>
@@ -87,7 +97,13 @@ const QAForm = () => {
                     id={`answer-${index}`}
                     placeholder="Enter your answer to the above question"
                     className="bg-white flex-grow p-2 border-none outline-none mt-2"
+                    size="50"
                 />
+                <Button
+                    onClick = {(e)=>handleDelete(e,index)}
+                    sx={{ position: "absolute", top:8, right:8}}>
+                    Delete
+                </Button>
             </div>
         ))}
         </div>
