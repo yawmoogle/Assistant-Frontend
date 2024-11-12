@@ -2,6 +2,7 @@ import { useState } from 'react';
 import SubmitButton from '../../../components/SubmitButton';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import { updateProject, getProject } from '../../../projects';
+import { Button} from '@mui/material';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -19,10 +20,10 @@ export async function loader({ params }) {
 const QAForm = () => {
     const { project } = useLoaderData();
     const navigate = useNavigate();
-    const [questions, setQuestions] = usestate([]);
 
 
     const [loading, setLoading] = useState(false);
+    const [questions, setQuestions] = useState(project.clarificationQAs||[]);
     const [answers, setAnswers] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
 
@@ -68,10 +69,12 @@ const QAForm = () => {
     setLoading(false);
     };
 
-    const handleDelete = (id) => {
-        const element = document.getElementById(id)
-        element.remove();
-        
+    const handleDelete = (e,idx) => {
+        e.preventDefault();
+        const updatedQuestions = questions.filter((_, index) => index !== idx);
+        setQuestions(updatedQuestions);
+        const updatedProject = {...project, clarificationQAs: updatedQuestions}
+        updateProject(project.uri, updatedProject)
     };
 
     return (
@@ -82,8 +85,8 @@ const QAForm = () => {
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
         <div className="mt-10 text-black flex flex-col mb-2">
-        {project.clarificationQAs.map((question,index) => (
-            <div key={index} id="{{ 'question-' + $index }}" className="flex flex-col">
+        {questions.map((question,index) => (
+            <div key={index} className="flex flex-col">
                 <label className="text-black text-xl mt-5">
                     {question.question}
                 </label>
@@ -95,7 +98,10 @@ const QAForm = () => {
                     placeholder="Enter your answer to the above question"
                     className="bg-white flex-grow p-2 border-none outline-none mt-2"
                 />
-            <button onClick="handleDelete(this.id)">Delete</button>
+                <Button
+                    onClick = {(e)=>handleDelete(e,index)}>
+                    Delete
+                </Button>
             </div>
         ))}
         </div>
