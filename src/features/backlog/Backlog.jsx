@@ -65,7 +65,7 @@ export default function Backlog() {
         const deletedUserStory = userStories.filter((_,index) => index == indexToDelete)[0]
         setUserStories(updatedUserStories);
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/user-stories:batch-delete`,{
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/user-stories:batch-delete`,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json'
