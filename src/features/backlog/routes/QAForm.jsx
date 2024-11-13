@@ -80,6 +80,24 @@ const QAForm = () => {
         // });
         if (response.ok) {
             // new restful implementation
+            try {
+                const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/user-stories`, {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedProject.config)
+                })
+                if (response.ok) {
+                    const data = await response.json();
+                    updatedProject.userStories = data;
+                    await updateProject(project.uri, updatedProject);
+                    navigate(`/backlog/${project.uri}`);
+                }
+            } catch (error) {
+                console.error('Error: Failed to update user stories', error);
+                setResponseMessage('Error: Failed to update user stories');
+            }
             return navigate(`/backlog/${project.uri}`);
             // const data = await response.json();
             // const userStories = {
