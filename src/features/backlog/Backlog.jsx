@@ -95,23 +95,23 @@ export default function Backlog() {
                 numOfUserStories:storiesValue
             }
         }
-//        const payload = updatedProject.config;
+       const payload = updatedProject.config;
         await updateProject(project.uri, updatedProject);
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/user-stories`,{
-                method: 'post',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(updatedProject)
-            });
-            // const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/user-stories`,{
-            //     method: 'POST',
-            //     headers:{
+            // const response = await fetch(`http://localhost:8080/api/v1/user-stories`,{
+            //     method: 'post',
+            //     headers: {
             //         'Content-Type': 'application/json',
             //     },
-            //     body: JSON.stringify(payload),
-            //     });
+            //     body: JSON.stringify(updatedProject)
+            // });
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/user-stories`,{
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+                });
             if (response.ok) {
                 const data = await response.json();
                 //concat new questions with selected old

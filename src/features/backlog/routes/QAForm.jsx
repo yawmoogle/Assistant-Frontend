@@ -64,30 +64,30 @@ const QAForm = () => {
         await updateProject(project.uri, updatedProject);
     try {
         // new restful implementation
-        // const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/questions:batch-update`,{
-        //     method: 'post',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(payload)
-        // })
-        const response = await fetch(`http://localhost:8080/api/v1/user-stories`,{
-            method: "post",
+        const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/questions:batch-update`,{
+            method: 'post',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(updatedProject),
-        });
+            body: JSON.stringify(payload)
+        })
+        // const response = await fetch(`http://localhost:8080/api/v1/user-stories`,{
+        //     method: "post",
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(updatedProject),
+        // });
         if (response.ok) {
             // new restful implementation
-            // return navigate(`/backlog/${project.uri}`);
-            const data = await response.json();
-            const userStories = {
-                userStories: data
-            }
-            await updateProject(project.uri, userStories);
-            setResponseMessage('Success: ${data}');
             return navigate(`/backlog/${project.uri}`);
+            // const data = await response.json();
+            // const userStories = {
+            //     userStories: data
+            // }
+            // await updateProject(project.uri, userStories);
+            // setResponseMessage('Success: ${data}');
+            // return navigate(`/backlog/${project.uri}`);
         } else {
             setResponseMessage('Error: Failed to submit');
         }
