@@ -105,7 +105,7 @@ export default function Backlog() {
             //     },
             //     body: JSON.stringify(updatedProject)
             // });
-            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/user-stories`,{
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/user-stories`,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
