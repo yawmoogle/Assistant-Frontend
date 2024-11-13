@@ -64,7 +64,7 @@ const QAForm = () => {
         await updateProject(project.uri, updatedProject);
     try {
         // new restful implementation
-        const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/questions:batch-update`,{
+        const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/questions:batch-update`,{
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'
