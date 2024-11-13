@@ -23,7 +23,7 @@ export default function Backlog() {
     const [responseMessage, setResponseMessage] = useState('');
     const [activeStep, setActiveStep] = useState(2);
     const [editingIndex, setEditingIndex] = useState(null);
-    const [editStory, setEditStory] = useState({user_story:'', description:''})
+    const [editStory, setEditStory] = useState({user_story_id: '',user_story:'', description:''})
 
 
     const handleInputChange = (e) => {
@@ -47,17 +47,31 @@ export default function Backlog() {
     const handleEditClick = (index, story) => {
         console.log(story);
         setEditingIndex(index);
-        setEditStory({user_story: story.user_story, description: story.description});
+        setEditStory({user_story_id: story.user_story_id, user_story: story.user_story, description: story.description});
     }
 
     const handleSaveClick = async (index) => {
         const updatedUserStories = [...userStories]
-        updatedUserStories[index] = [...editStory];
+        updatedUserStories[index] = editStory;
         setUserStories(updatedUserStories);
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/user-stories`, {
+                method: 'put',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(editStory)
+            })
+            if (response.ok) {
+                setResponseMessage('User Story saved successfully');
+            }
+        } catch (error) {
+            setResponseMessage('Problem with saving user story to database');
+        }
         setEditingIndex(null);
 
         const updatedProject = {...project, userStories:updatedUserStories};
-        updateProject(project.uri, updatedProject);
+        await updateProject(project.uri, updatedProject);
     }
 
     const handleDeleteUserStory = async (indexToDelete) => {
@@ -183,7 +197,7 @@ export default function Backlog() {
                         >
                         Delete
                     </Button>
-                {editingIndex === index? (
+                {editingIndex === index ? (
                     <div className="pt-8 flex flex-row w-full justify-start items-center space-x-2">
                     <TextField
                         fullWidth

@@ -115,13 +115,29 @@ const QAForm = () => {
     setLoading(false);
     };
 
-    const handleDelete = (e,idx) => {
+    const handleDelete = async (e,idx) => {
         e.preventDefault();
         const updatedQuestions = questions.filter((_, index) => index !== idx);
+        const deletedQuestion = questions.filter((_, index) => index == idx);
         setQuestions(updatedQuestions);
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/questions:batch-delete`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify([deletedQuestion[0].clarification_qa_id])
+            });
+            if (response.ok) {
+                setResponseMessage('Question deleted successfully');
+            } 
+        } catch (error) {
+            setResponseMessage('Error deleting question from database');
+        }
         const updatedProject = {...project, clarificationQAs: updatedQuestions}
-        updateProject(project.uri, updatedProject)
+        await updateProject(project.uri, updatedProject)
     };
+
     return (
         <div id="questions" className="flex-grow h-full p-6 bg-orange-400 overflow-x-hidden">
         <div className="bg-white p-6">
