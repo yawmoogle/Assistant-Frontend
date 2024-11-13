@@ -168,6 +168,7 @@ const Form = () => {
           if (response.ok) {
             const data = await response.json();
             updatedProject.clarificationQAs = data;
+            updateProject(project.uri, updatedProject);
             navigate(`/backlog/${project.uri}/questions`)
           }
         } catch (error) {
