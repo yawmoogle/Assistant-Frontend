@@ -24,7 +24,7 @@ const QAForm = () => {
 
 
     const [loading, setLoading] = useState(false);
-    const [questions, setQuestions] = useState(project.clarificationQAs||[]);
+    const [questions, setQuestions] = useState(project.clarification_qas||[]);
     const [answers, setAnswers] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
     const [activeStep, setActiveStep] = useState(1);
@@ -55,12 +55,13 @@ const QAForm = () => {
         setLoading(true);
         const updatedProject = {
             ...project,
-            clarificationQAs: project.clarificationQAs.map((question, index) => ({
+            clarification_qas: project.clarification_qas.map((question, index) => ({
                 ...question,
                 answer: answers[index]
             }))
         };
-        const payload = updatedProject.clarificationQAs;
+        const payload = updatedProject.clarification_qas;
+        console.log(payload);
         await updateProject(project.uri, updatedProject);
     try {
         // new restful implementation
@@ -90,7 +91,7 @@ const QAForm = () => {
                 })
                 if (response.ok) {
                     const data = await response.json();
-                    updatedProject.userStories = data;
+                    updatedProject.user_stories = data;
                     await updateProject(project.uri, updatedProject);
                     navigate(`/backlog/${project.uri}`);
                 }
@@ -134,7 +135,7 @@ const QAForm = () => {
         } catch (error) {
             setResponseMessage('Error deleting question from database');
         }
-        const updatedProject = {...project, clarificationQAs: updatedQuestions}
+        const updatedProject = {...project, clarification_qas: updatedQuestions}
         await updateProject(project.uri, updatedProject)
     };
 

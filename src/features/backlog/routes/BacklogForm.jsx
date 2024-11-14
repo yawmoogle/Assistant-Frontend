@@ -26,14 +26,14 @@ const Form = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [functionalities, setFunctionalities] = useState(project.projectDetails.functionalities.map(func => func));
+  const [functionalities, setFunctionalities] = useState(project.project_details.functionalities.map(func => func));
   const [roleValue, setRoleValue] = useState('');
-  const [rolePills, setRolePills] = useState(project.projectDetails.roles.map(role => role));
-  const [titleValue, setTitleValue] = useState(project.projectDetails.title || '');
-  const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
+  const [rolePills, setRolePills] = useState(project.project_details.roles.map(role => role));
+  const [titleValue, setTitleValue] = useState(project.project_details.title || '');
+  const [descriptionValue, setDescriptionValue] = useState(project.project_details.description ||'');
   const [AIValue, setAIValue] = useState(project.config.model || '');
-  const [questionsValue, setQuestionsValue] = useState(project.config.numOfQuestions || 5);
-  const [storiesValue, setStoriesValue] = useState(project.config.numOfUserStories || 10);
+  const [questionsValue, setQuestionsValue] = useState(project.config.num_of_questions || 5);
+  const [storiesValue, setStoriesValue] = useState(project.config.num_of_user_stories || 10);
   const [activeStep, setActiveStep] = useState(0);
 
   const [responseMessage, setResponseMessage] = useState('');
@@ -113,11 +113,11 @@ const Form = () => {
     const updatedProject ={
       ...project,
       config:{
-        model: AIValue,
-        numOfQuestions: questionsValue,
-        numOfUserStories: storiesValue
+        ai_model_name: AIValue,
+        num_of_questions: questionsValue,
+        num_of_user_stories: storiesValue
       },
-      projectDetails:{
+      project_details:{
         title:titleValue,
         description:descriptionValue,
         functionalities:functionalities,
@@ -149,7 +149,7 @@ const Form = () => {
         //   clarificationQAs: data
         // };
         const updatedProject = data;
-        updatedProject.config = {model: AIValue, numOfQuestions: questionsValue, numOfUserStories: storiesValue};
+        updatedProject.config = {ai_model_name: AIValue, num_of_questions: questionsValue, num_of_user_stories: storiesValue};
         console.log(updatedProject);
         await updateProject(project.uri, updatedProject);
         // console.log(questions);
@@ -167,7 +167,7 @@ const Form = () => {
           });
           if (response.ok) {
             const data = await response.json();
-            updatedProject.clarificationQAs = data;
+            updatedProject.clarification_qas = data;
             await updateProject(project.uri, updatedProject);
             navigate(`/backlog/${project.uri}/questions`);
           }

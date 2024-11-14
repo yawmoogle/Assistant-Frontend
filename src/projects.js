@@ -16,14 +16,14 @@ export async function createProject() {
   let uri = Math.random().toString(36).substring(2, 9);
   let project = { uri,
     config:{model:"GEMINI", numOfQuestions:5, numOfUserStories:10},
-    projectDetails:{
+    project_details:{
       title: "", 
       description: "",
       functionalities: [],
       roles: [],
     },
-    clarificationQAs:[],
-    userStories:[] };
+    clarification_qas:[],
+    user_stories:[] };
   let projects = await getProjects();
   projects.unshift(project);
   await set(projects);

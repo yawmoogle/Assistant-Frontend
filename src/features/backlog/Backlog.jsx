@@ -17,7 +17,7 @@ export default function Backlog() {
 
     const navigate = useNavigate();
 
-    const [userStories, setUserStories] = useState(project.userStories||[]);
+    const [userStories, setUserStories] = useState(project.user_stories||[]);
     const [storiesValue, setStoriesValue] = useState(5);
     const [loading, setLoading] = useState(false);
     const [responseMessage, setResponseMessage] = useState('');
@@ -70,7 +70,7 @@ export default function Backlog() {
         }
         setEditingIndex(null);
 
-        const updatedProject = {...project, userStories:updatedUserStories};
+        const updatedProject = {...project, user_stories:updatedUserStories};
         await updateProject(project.uri, updatedProject);
     }
 
@@ -94,7 +94,7 @@ export default function Backlog() {
         } catch (error) {
             setResponseMessage('Network error connecting to API');
         }
-        const updatedProject  = {...project, userStories: updatedUserStories};
+        const updatedProject  = {...project, user_stories: updatedUserStories};
         console.log(updatedProject);
         updateProject(project.uri, updatedProject);
     };
@@ -106,7 +106,7 @@ export default function Backlog() {
         const updatedProject = {
             ...project,
             config:{
-                numOfUserStories:storiesValue
+                num_of_user_stories:storiesValue
             }
         }
        const payload = updatedProject.config;
@@ -129,10 +129,10 @@ export default function Backlog() {
             if (response.ok) {
                 const data = await response.json();
                 //concat new questions with selected old
-                const updatedUserStories = project.userStories.concat(data);
+                const updatedUserStories = project.user_stories.concat(data);
                 const userStories = {
                     id: data[0].project_context_id,
-                    userStories: updatedUserStories
+                    user_stories: updatedUserStories
                 }
                 setUserStories(updatedUserStories);
                 await updateProject(project.uri, userStories);
@@ -178,7 +178,7 @@ export default function Backlog() {
                 { loading ? "Generating": "Generate"}
             </Button>
             </div>
-            {project?.userStories?.length > 0 &&(
+            {userStories.length > 0 &&(
             <div className="bg-slate-100 flex flex-col justify-items-start w-11/12">
             
             {userStories
@@ -238,8 +238,8 @@ export default function Backlog() {
                 </Button> 
             </Form>
             <div className="flex flex-row items-center space-x-5">
-            <DownloadButton dltarget={{...project,userStories:userStories}}/>
-            <JiraImportButton project={{...project,userStories:userStories}} />
+            <DownloadButton dltarget={{...project,user_stories:userStories}}/>
+            <JiraImportButton project={{...project,user_stories:userStories}} />
             </div>
             </div>
             </div>
