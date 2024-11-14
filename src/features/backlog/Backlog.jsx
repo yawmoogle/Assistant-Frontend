@@ -17,8 +17,8 @@ export default function Backlog() {
 
     const navigate = useNavigate();
 
-    const [userStories, setUserStories] = useState(project.user_stories||[]);
-    const [storiesValue, setStoriesValue] = useState(5);
+    const [userStories, setUserStories] = useState(project.user_stories || []);
+    const [storiesValue, setStoriesValue] = useState(project.config.num_of_user_stories || 5);
     const [loading, setLoading] = useState(false);
     const [responseMessage, setResponseMessage] = useState('');
     const [activeStep, setActiveStep] = useState(2);
@@ -157,10 +157,10 @@ export default function Backlog() {
             </div>}
             
             <h1 className="text-black text-3xl font-bold mb-5text-left">
-                {project.projectDetails.title}
+                {project.project_details.title}
             </h1>
             <h2 className="text-black text-xl mb-5 text-left">
-                {project.projectDetails.description}
+                {project.project_details.description}
             </h2>
             <h1 className="text-black text-xl font-bold mb-5 text-left">User Stories</h1>
             <div className="flex align-middle space-x-1">
