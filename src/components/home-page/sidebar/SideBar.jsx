@@ -39,7 +39,7 @@ const SideBar = ({ showSidebar, sidebarRef }) => {
                     className={({isActive, isPending}) => isActive ? "active" : isPending ? "pending" : "project"}
                   >
                     <ViewKanbanIcon />
-                    <p className="caption">{project.projectDetails.title}</p>
+                    <p className="caption">{project.project_details.title}</p>
                   </NavLink>
                 </div>
             ))}
