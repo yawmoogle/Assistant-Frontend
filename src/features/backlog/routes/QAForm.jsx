@@ -2,7 +2,7 @@ import { useState } from 'react';
 import SubmitButton from '../../../components/SubmitButton';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import { updateProject, getProject } from '../../../projects';
-import { Button} from '@mui/material';
+import { Button, TextField } from '@mui/material';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -19,6 +19,7 @@ export async function loader({ params }) {
 
 const QAForm = () => {
     const { project } = useLoaderData();
+    
     const navigate = useNavigate();
 
 
@@ -26,12 +27,17 @@ const QAForm = () => {
     const [questions, setQuestions] = useState(project.clarificationQAs||[]);
     const [answers, setAnswers] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
+    const [questionsValue, setQuestionsValue] = useState(5);
 
     const handleChange = (e, index) => {
         const newAnswers = [...answers];
         newAnswers[index] = e.target.value;
         setAnswers(newAnswers);
     }
+
+    const handleInputChange = (e) => {
+        setQuestionsValue(e.target.value);
+    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -77,6 +83,44 @@ const QAForm = () => {
         updateProject(project.uri, updatedProject)
     };
 
+    const handleRegenerate = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        const updatedProject = {
+            ...project,
+            config:{
+                numOfQuestions: questionsValue
+            }
+        }
+        console.log(updatedProject);
+        await updateProject(project.uri, updatedProject);
+        try {
+            // TODO: switch to restful endpoints
+            const response = await fetch('http://localhost:8080/api/v1/questions',{
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updatedProject),
+                });
+            if (response.ok) {
+                const data = await response.json();
+                //concat new questions with selected old
+                const updatedClarificationQuestions = project.clarificationQAs.concat(data);
+                const clarificationQuestions = {
+                    id: data[0].project_context_id,
+                    clarificationQAs: updatedClarificationQuestions
+                }
+                setQuestions(updatedClarificationQuestions);
+                await updateProject(project.uri, clarificationQuestions);
+                navigate(`/backlog/${project.uri}/questions`)
+            }
+        } catch (error) {
+            setResponseMessage('Error: Network issue connecting to API.');
+        }
+        setLoading(false);
+    };
+
     return (
         <>
         <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-slate-100">
@@ -84,6 +128,21 @@ const QAForm = () => {
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
+        <div className="flex align-middle space-x-1">
+        <TextField
+            aria-label="Regenerate Questions"
+            name="regenerate_questions"
+            size="small"
+            type="number"
+            value={questionsValue}
+            slotProps={{
+                htmlInput : {min:1, max:50}
+            }}
+            onChange={handleInputChange}/>
+        <Button onClick={(e) => handleRegenerate(e)} variant="outlined" color="primary" disabled={loading}>
+            { loading ? "Regenerating": "Regenerate"} 
+        </Button>
+        </div>
         <div className="mt-10 text-black flex flex-col mb-2">
         {questions.map((question,index) => (
             <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex flex-col justify-start items-stretch space-x-2 relative">
