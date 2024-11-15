@@ -7,6 +7,7 @@ import Roles from '../../../components/PillTextField';
 import SubmitButton from '../../../components/SubmitButton';
 import Title from '../../../components/TextField';
 import Description from '../../../components/TooltipTextField';
+import NavigationStepper from '../../../components/NavigationStepper';
 
 import { updateProject } from '../../../projects';
 
@@ -33,6 +34,7 @@ const Form = () => {
   const [AIValue, setAIValue] = useState(project.config.model || '');
   const [questionsValue, setQuestionsValue] = useState(project.config.numOfQuestions || 5);
   const [storiesValue, setStoriesValue] = useState(project.config.numOfUserStories || 10);
+  const [activeStep, setActiveStep] = useState(0);
 
   const [responseMessage, setResponseMessage] = useState('');
 
@@ -91,6 +93,20 @@ const Form = () => {
     }
   }
 
+  const handleStepChange = (newStep) => {
+    setActiveStep(newStep);
+    switch (newStep) {
+      case(1):
+        navigate(`/backlog/${project.uri}/questions`);
+        break;
+      case(2):
+        navigate(`/backlog/${project.uri}/`);
+        break;
+      default:
+        break;
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -143,8 +159,12 @@ const Form = () => {
   };
 
   return (
-    <>
-      <div className="w-full h-auto p-6 bg-orange-400">
+    <div id="project-details" className="flex-grow h-full p-6 bg-orange-400 overflow-x-hidden">
+      <div className="w-full h-auto p-6 bg-white">
+      <NavigationStepper
+        activeStep={activeStep}
+        onChangeStep={handleStepChange}
+      />
       <form onSubmit={handleSubmit} className="w-auto h-auto p-6 bg-slate-100">
         {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
         <span className="block sm:inline">{responseMessage}</span>
@@ -214,7 +234,7 @@ const Form = () => {
         <SubmitButton loading={loading}/>
       </form>
       </div>
-    </>
+    </div>
   );
 };
 
