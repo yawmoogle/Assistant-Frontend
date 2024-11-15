@@ -141,8 +141,9 @@ const QAForm = () => {
         } catch (error) {
             setResponseMessage('Error deleting question from database');
         }
-        const updatedProject = {...project, clarification_qas: updatedQuestions}
-        await updateProject(project.uri, updatedProject)
+        // const updatedProject = {...project, clarification_qas: updatedQuestions}
+        project.clarification_qas=updatedQuestions;
+        await updateProject(project.uri, project);
     };
 
     const handleRegenerate = async (e) => {
