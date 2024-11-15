@@ -3,6 +3,7 @@ import SubmitButton from '../../../components/SubmitButton';
 import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import { updateProject, getProject } from '../../../projects';
 import { Button, TextField } from '@mui/material';
+import NavigationStepper from '../../../components/NavigationStepper';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -28,6 +29,7 @@ const QAForm = () => {
     const [answers, setAnswers] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
     const [questionsValue, setQuestionsValue] = useState(5);
+    const [activeStep, setActiveStep] = useState(1);
 
     const handleChange = (e, index) => {
         const newAnswers = [...answers];
@@ -39,6 +41,21 @@ const QAForm = () => {
         setQuestionsValue(e.target.value);
     };
 
+    const handleStepChange = (newStep) => {
+        setActiveStep(newStep);
+        switch (newStep) {
+            case (0):
+                navigate(`/backlog/${project.uri}/edit`);
+                break;
+            case (2):
+                navigate(`/backlog/${project.uri}/`)
+                break;
+            default:
+                break;
+        }
+    }
+
+    //old implementation without restful
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -49,9 +66,18 @@ const QAForm = () => {
                 answer: answers[index]
             }))
         };
+        const payload = updatedProject.clarificationQAs;
         await updateProject(project.uri, updatedProject);
     try {
-        const response = await fetch("http://localhost:8080/api/v1/user-stories",{
+        // new restful implementation
+        // const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/questions:batch-update`,{
+        //     method: 'post',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(payload)
+        // })
+        const response = await fetch(`http://localhost:8080/api/v1/user-stories`,{
             method: "post",
             headers: {
                 'Content-Type': 'application/json',
@@ -59,6 +85,8 @@ const QAForm = () => {
             body: JSON.stringify(updatedProject),
         });
         if (response.ok) {
+            // new restful implementation
+            // return navigate(`/backlog/${project.uri}`);
             const data = await response.json();
             const userStories = {
                 userStories: data
@@ -122,7 +150,12 @@ const QAForm = () => {
     };
 
     return (
-        <>
+        <div id="questions" className="flex-grow h-full p-6 bg-orange-400 overflow-x-hidden">
+        <div className="bg-white p-6">
+        <NavigationStepper
+            activeStep={activeStep}
+            onChangeStep={handleStepChange}
+        />
         <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-slate-100">
             {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
             <span className="block sm:inline">{responseMessage}</span>
@@ -169,7 +202,8 @@ const QAForm = () => {
         </div>
         <SubmitButton loading={loading}/>
         </form>
-        </>
+        </div>
+        </div>
     )
 }
 

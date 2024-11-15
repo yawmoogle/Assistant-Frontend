@@ -5,6 +5,7 @@ import { getProject, updateProject } from '../../projects'
 import DownloadButton from '../../components/DownloadButton';
 import JiraImportButton from './JiraImportButton';
 import { Button, TextField } from '@mui/material';
+import NavigationStepper from '../../components/NavigationStepper';
 
 export async function loader({ params }) {
     const project = await getProject(params.projectId);
@@ -16,23 +17,75 @@ export default function Backlog() {
 
     const navigate = useNavigate();
 
-    const [userStories, setUserStories] = useState(project.userStories);
+    const [userStories, setUserStories] = useState(project.userStories||[]);
     const [storiesValue, setStoriesValue] = useState(5);
     const [loading, setLoading] = useState(false);
     const [responseMessage, setResponseMessage] = useState('');
+    const [activeStep, setActiveStep] = useState(2);
+    const [editingIndex, setEditingIndex] = useState(null);
+    const [editStory, setEditStory] = useState({user_story:'', description:''})
+
 
     const handleInputChange = (e) => {
         setStoriesValue(e.target.value);
     };
 
-    const handleDeleteUserStory = (indexToDelete) => {
-        const updatedUserStories = userStories.filter((_,index) => index !== indexToDelete);
+    const handleStepChange = (newStep) => {
+        setActiveStep(newStep);
+        switch (newStep) {
+            case (1):
+                navigate(`/backlog/${project.uri}/questions`);
+                break;
+            case (0):
+                navigate(`/backlog/${project.uri}/edit`);
+                break;
+            default:
+                break;
+        }
+    }
+
+    const handleEditClick = (index, story) => {
+        console.log(story);
+        setEditingIndex(index);
+        setEditStory({user_story: story.user_story, description: story.description});
+    }
+
+    const handleSaveClick = async (index) => {
+        const updatedUserStories = [...userStories]
+        updatedUserStories[index] = [...editStory];
         setUserStories(updatedUserStories);
+        setEditingIndex(null);
+
+        const updatedProject = {...project, userStories:updatedUserStories};
+        updateProject(project.uri, updatedProject);
+    }
+
+    const handleDeleteUserStory = async (indexToDelete) => {
+        const updatedUserStories = userStories.filter((_,index) => index !== indexToDelete);
+        const deletedUserStory = userStories.filter((_,index) => index == indexToDelete)[0]
+        setUserStories(updatedUserStories);
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/user-stories:batch-delete`,{
+                method: 'POST',
+                headers:{
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify([deletedUserStory.user_story_id])
+            });
+            if (response.ok) {
+                setResponseMessage('User story deleted successfully');
+            } else {
+                setResponseMessage('Failed to delete user story');
+            }
+        } catch (error) {
+            setResponseMessage('Network error connecting to API');
+        }
         const updatedProject  = {...project, userStories: updatedUserStories};
         console.log(updatedProject);
         updateProject(project.uri, updatedProject);
     };
 
+    //new implementation
     const handleRegenerate = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -42,17 +95,23 @@ export default function Backlog() {
                 numOfUserStories:storiesValue
             }
         }
-        console.log(updatedProject);
+//        const payload = updatedProject.config;
         await updateProject(project.uri, updatedProject);
         try {
-            //to switch endpoint once created
-            const response = await fetch('http://localhost:8080/api/v1/user-stories',{
-                method: 'POST',
-                headers:{
+            const response = await fetch(`http://localhost:8080/api/v1/user-stories`,{
+                method: 'post',
+                headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedProject),
-                });
+                body: JSON.stringify(updatedProject)
+            });
+            // const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/user-stories`,{
+            //     method: 'POST',
+            //     headers:{
+            //         'Content-Type': 'application/json',
+            //     },
+            //     body: JSON.stringify(payload),
+            //     });
             if (response.ok) {
                 const data = await response.json();
                 //concat new questions with selected old
@@ -74,6 +133,10 @@ export default function Backlog() {
     return (
         <div id="project-details" className="flex-grow h-full p-6 bg-orange-400 overflow-x-hidden">
             <div className="bg-white p-6">
+            <NavigationStepper
+                activeStep={activeStep}
+                onChangeStep={handleStepChange}
+            />
             {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
@@ -98,27 +161,58 @@ export default function Backlog() {
                 }}
                 onChange={handleInputChange}/>
             <Button onClick={handleRegenerate} variant="outlined" color="primary" disabled={loading}>
-                { loading ? "Regenerating": "Regenerate"}
+                { loading ? "Generating": "Generate"}
             </Button>
             </div>
             {project?.userStories?.length > 0 &&(
-            <div className="bg-slate-100 flex flex-wrap justify-items-start w-11/12">
-
+            <div className="bg-slate-100 flex flex-col justify-items-start w-11/12">
+            
             {userStories
             .filter(story => story.user_story.trim() !== "" || story.description.trim() !== "")
             .map((story,index) => (
                 <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2 relative">
                     <Button
+                        onClick={() => (editingIndex === index ? handleSaveClick(index) : handleEditClick(index, story))}
+                         sx={{ position: 'absolute', top: 8, right: 80 }}
+                        >
+                        {editingIndex === index ? 'Save' : 'Edit'}
+                    </Button>
+                    <Button
                         onClick={() => handleDeleteUserStory(index)}
-                        sx={{ position: "absolute", top:8, right:8}}>
+                        sx={{ position: "absolute", top:8, right:8}}
+                        >
                         Delete
                     </Button>
+                {editingIndex === index? (
+                    <div className="pt-8 flex flex-row w-full justify-start items-center space-x-2">
+                    <TextField
+                        fullWidth
+                        variant='outlined'
+                        value={editStory.user_story}
+                        onChange={(e) => setEditStory({...editStory, user_story:e.target.value})}
+                        className="flex-1 font-semibold"
+                        multiline
+                    />
+                    <TextField
+                        fullWidth
+                        variant='outlined'
+                        value={editStory.description}
+                        onChange={(e) => setEditStory({...editStory, description:e.target.value})}
+                        margin="normal"
+                        className="flex-1 font-sans"
+                        multiline
+                    />
+                    </div>)
+                    :(
+                    <>
                     <div className="flex-1 text-black text-xl font-semibold">
                         {story.user_story.replace(/^\d+\.\s*/, "")}
                     </div>
-                    <div className="flex-1 text-black text-sm font-sans whitespace-pre-wrap break-words">
+                    <div className="flex-1 text-black text-sm font-sans whitespace-pre-wrap break-words mt-8">
                         {story.description.replace(/([:.]) (\d+\.)/g, "$1\n$2")}
                     </div>
+                    </>
+                    )}
                 </div>
             ))}
             </div>
