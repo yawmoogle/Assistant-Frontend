@@ -143,7 +143,6 @@ const QAForm = () => {
         console.log(updatedProject);
         await updateProject(project.uri, updatedProject);
         try {
-            // TODO: switch to restful endpoints
             const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/questions`,{
                 method: 'POST',
                 headers:{
@@ -180,17 +179,17 @@ const QAForm = () => {
             </div>}
         <div className="flex align-middle space-x-1">
         <TextField
-            aria-label="Regenerate Questions"
-            name="regenerate_questions"
+            aria-label="Generate Questions"
+            name="Generate_questions"
             size="small"
             type="number"
             value={questionsValue}
             slotProps={{
-                htmlInput : {min:1, max:50}
+                htmlInput : {min:1, max:20}
             }}
             onChange={handleInputChange}/>
         <Button onClick={(e) => handleRegenerate(e)} variant="outlined" color="primary" disabled={loading}>
-            { loading ? "Regenerating": "Regenerate"} 
+            { loading ? "Generating": "Generate"} 
         </Button>
         </div>
         <div className="mt-10 text-black flex flex-col mb-2">
