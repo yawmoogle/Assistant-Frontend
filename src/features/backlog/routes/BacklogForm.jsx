@@ -31,7 +31,7 @@ const Form = () => {
   const [rolePills, setRolePills] = useState(project.project_details.roles.map(role => role));
   const [titleValue, setTitleValue] = useState(project.project_details.title || '');
   const [descriptionValue, setDescriptionValue] = useState(project.project_details.description ||'');
-  const [AIValue, setAIValue] = useState(project.config.model || '');
+  const [AIValue, setAIValue] = useState(project.config.ai_model_name || '');
   const [questionsValue, setQuestionsValue] = useState(project.config.num_of_questions || 5);
   const [storiesValue, setStoriesValue] = useState(project.config.num_of_user_stories || 10);
   const [activeStep, setActiveStep] = useState(0);
@@ -134,28 +134,14 @@ const Form = () => {
         },
         body: JSON.stringify(updatedProject),
       });
-      // const response = await fetch('http://localhost:8080/api/v1/questions', {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(updatedProject),
-      // });
       if (response.ok) {
         const data = await response.json();
         console.log(data);
-        // const questions = {
-        //   id:data[0].project_context_id,
-        //   clarificationQAs: data
-        // };
         const updatedProject = data;
         updatedProject.config = {ai_model_name: AIValue, num_of_questions: questionsValue, num_of_user_stories: storiesValue};
         console.log(updatedProject);
         await updateProject(project.uri, updatedProject);
-        // console.log(questions);
-        // await updateProject(project.uri, questions);
-        // navigate(`/backlog/${project.uri}/questions`);
-        setResponseMessage('Success: ${data}');
+        setResponseMessage(`Please wait, retrieving questions`);
         try {
           const payload = updatedProject.config;
           const response = await fetch(`http://localhost:8080/api/v1/projects/${updatedProject.project_context_id}/questions`,{

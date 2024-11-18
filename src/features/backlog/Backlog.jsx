@@ -6,6 +6,8 @@ import DownloadButton from '../../components/DownloadButton';
 import JiraImportButton from './JiraImportButton';
 import { Button, TextField } from '@mui/material';
 import NavigationStepper from '../../components/NavigationStepper';
+import ConfirmationButton from '../../components/ConfirmationButton';
+import DeleteButton from './DeleteButton';
 
 export async function loader({ params }) {
     const project = await getProject(params.projectId);
@@ -24,7 +26,6 @@ export default function Backlog() {
     const [activeStep, setActiveStep] = useState(2);
     const [editingIndex, setEditingIndex] = useState(null);
     const [editStory, setEditStory] = useState({user_story_id: '',user_story:'', description:''})
-
 
     const handleInputChange = (e) => {
         setStoriesValue(e.target.value);
@@ -185,18 +186,20 @@ export default function Backlog() {
             .filter(story => story.user_story.trim() !== "" || story.description.trim() !== "")
             .map((story,index) => (
                 <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2 relative">
-                    <Button
-                        onClick={() => (editingIndex === index ? handleSaveClick(index) : handleEditClick(index, story))}
-                         sx={{ position: 'absolute', top: 8, right: 80 }}
-                        >
-                        {editingIndex === index ? 'Save' : 'Edit'}
-                    </Button>
-                    <Button
-                        onClick={() => handleDeleteUserStory(index)}
-                        sx={{ position: "absolute", top:8, right:8}}
+                    <ConfirmationButton
+                        editingIndex={editingIndex}
+                        index={index}
+                        handleEditClick={handleEditClick}
+                        handleSaveClick={handleSaveClick}
+                        story={story}
+                    >
+                    </ConfirmationButton>
+                    <DeleteButton
+                        index={index}
+                        handleDeleteFunction={handleDeleteUserStory}
                         >
                         Delete
-                    </Button>
+                    </DeleteButton>
                 {editingIndex === index ? (
                     <div className="pt-8 flex flex-row w-full justify-start items-center space-x-2">
                     <TextField
@@ -238,8 +241,8 @@ export default function Backlog() {
                 </Button> 
             </Form>
             <div className="flex flex-row items-center space-x-5">
-            <DownloadButton dltarget={{...project,user_stories:userStories}}/>
-            <JiraImportButton project={{...project,user_stories:userStories}} />
+            <DownloadButton dltarget={project.project_context_id}/>
+            <JiraImportButton project={project.project_context_id} />
             </div>
             </div>
             </div>

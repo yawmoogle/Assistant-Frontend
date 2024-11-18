@@ -4,6 +4,7 @@ import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import { updateProject, getProject } from '../../../projects';
 import { Button, TextField } from '@mui/material';
 import NavigationStepper from '../../../components/NavigationStepper';
+import DeleteButton from '../DeleteButton';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -78,13 +79,6 @@ const QAForm = () => {
             },
             body: JSON.stringify(payload)
         })
-        // const response = await fetch(`http://localhost:8080/api/v1/user-stories`,{
-        //     method: "post",
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(updatedProject),
-        // });
         if (response.ok) {
             // new restful implementation
             try {
@@ -106,13 +100,6 @@ const QAForm = () => {
                 setResponseMessage('Error: Failed to update user stories');
             }
             return navigate(`/backlog/${project.uri}`);
-            // const data = await response.json();
-            // const userStories = {
-            //     userStories: data
-            // }
-            // await updateProject(project.uri, userStories);
-            // setResponseMessage('Success: ${data}');
-            // return navigate(`/backlog/${project.uri}`);
         } else {
             setResponseMessage('Error: Failed to submit');
         }
@@ -141,7 +128,6 @@ const QAForm = () => {
         } catch (error) {
             setResponseMessage('Error deleting question from database');
         }
-        // const updatedProject = {...project, clarification_qas: updatedQuestions}
         project.clarification_qas=updatedQuestions;
         await updateProject(project.uri, project);
     };
@@ -227,11 +213,11 @@ const QAForm = () => {
                     className="bg-white flex-grow p-2 border-none outline-none mt-2"
                     size="50"
                 />
-                <Button
-                    onClick = {(e)=>handleDelete(e,index)}
-                    sx={{ position: "absolute", top:8, right:8}}>
+                <DeleteButton
+                    index={index}
+                    handleDeleteFunction={handleDelete}>
                     Delete
-                </Button>
+                </DeleteButton>
             </div>
         ))}
         </div>
