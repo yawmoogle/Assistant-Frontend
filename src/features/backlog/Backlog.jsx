@@ -138,6 +138,7 @@ export default function Backlog() {
                 setUserStories(updatedUserStories);
                 await updateProject(project.uri, userStories);
                 navigate(`/backlog/${project.uri}`)
+                setResponseMessage(`${storiesValue} NEW user stories generated`);
             }
         } catch (error) {
             setResponseMessage('Error: Network issue connecting to API.');
@@ -185,7 +186,7 @@ export default function Backlog() {
             {userStories
             .filter(story => story.user_story.trim() !== "" || story.description.trim() !== "")
             .map((story,index) => (
-                <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2 relative">
+                <div key={index} className="bg-white text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2 relative">
                     <ConfirmationButton
                         editingIndex={editingIndex}
                         index={index}
@@ -196,6 +197,7 @@ export default function Backlog() {
                     </ConfirmationButton>
                     <DeleteButton
                         index={index}
+                        item="user story"
                         handleDeleteFunction={handleDeleteUserStory}
                         >
                         Delete
@@ -243,6 +245,7 @@ export default function Backlog() {
             <div className="flex flex-row items-center space-x-5">
             <DownloadButton dltarget={project.project_context_id}/>
             <JiraImportButton project={project.project_context_id} />
+            <Button variant="outlined" color="primary">Authenticate Jira</Button>
             </div>
             </div>
             </div>

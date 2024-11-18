@@ -109,8 +109,7 @@ const QAForm = () => {
     setLoading(false);
     };
 
-    const handleDelete = async (e,idx) => {
-        e.preventDefault();
+    const handleDelete = async (idx) => {
         const updatedQuestions = questions.filter((_, index) => index !== idx);
         const deletedQuestion = questions.filter((_, index) => index == idx);
         setQuestions(updatedQuestions);
@@ -138,31 +137,28 @@ const QAForm = () => {
         const updatedProject = {
             ...project,
             config:{
-                numOfQuestions: questionsValue
+                num_of_questions: questionsValue
             }
         }
         console.log(updatedProject);
         await updateProject(project.uri, updatedProject);
         try {
             // TODO: switch to restful endpoints
-            const response = await fetch('http://localhost:8080/api/v1/questions',{
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/questions`,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedProject),
+                body: JSON.stringify(updatedProject.config),
                 });
             if (response.ok) {
                 const data = await response.json();
                 //concat new questions with selected old
-                const updatedClarificationQuestions = project.clarificationQAs.concat(data);
-                const clarificationQuestions = {
-                    id: data[0].project_context_id,
-                    clarificationQAs: updatedClarificationQuestions
-                }
+                const updatedClarificationQuestions = project.clarification_qas.concat(data);
                 setQuestions(updatedClarificationQuestions);
-                await updateProject(project.uri, clarificationQuestions);
+                await updateProject(project.uri, updatedClarificationQuestions);
                 navigate(`/backlog/${project.uri}/questions`)
+                setResponseMessage(`${questionsValue} NEW questions have been generated.`);
             }
         } catch (error) {
             setResponseMessage('Error: Network issue connecting to API.');
@@ -206,7 +202,7 @@ const QAForm = () => {
                 </label>
                 <input
                     type="text"
-                    value={answers[index]||""}
+                    value={question.answer||""}
                     onChange={(e) => handleChange(e, index)}
                     id={`answer-${index}`}
                     placeholder="Enter your answer to the above question"
@@ -215,6 +211,7 @@ const QAForm = () => {
                 />
                 <DeleteButton
                     index={index}
+                    item="question"
                     handleDeleteFunction={handleDelete}>
                     Delete
                 </DeleteButton>

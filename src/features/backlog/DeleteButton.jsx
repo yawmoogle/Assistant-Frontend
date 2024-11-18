@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import PropTypes from 'prop-types';
 
-const DeleteButton = ({ index, handleDeleteFunction }) => {
+const DeleteButton = ({ index, item, handleDeleteFunction }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpenDialog = () => {
@@ -31,7 +31,7 @@ const DeleteButton = ({ index, handleDeleteFunction }) => {
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            Are you sure you want to delete this user story? This action cannot be undone.
+            Are you sure you want to delete this {item}? This action cannot be undone.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -50,6 +50,7 @@ const DeleteButton = ({ index, handleDeleteFunction }) => {
 export default DeleteButton;
 DeleteButton.propTypes = {
     index: PropTypes.number,
-    handleDeleteUserStory: PropTypes.func
+    item: PropTypes.string,
+    handleDeleteFunction: PropTypes.func
 }
 
