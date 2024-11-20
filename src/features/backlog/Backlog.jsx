@@ -3,9 +3,10 @@ import { Form, useLoaderData, useNavigate } from 'react-router-dom';
 import './Backlog.css'
 import { getProject, updateProject } from '../../projects'
 import DownloadButton from '../../components/DownloadButton';
-import JiraImportButton from './JiraImportButton';
 import { Button, TextField } from '@mui/material';
 import NavigationStepper from '../../components/NavigationStepper';
+import ConfirmationButton from '../../components/ConfirmationButton';
+import DeleteButton from './DeleteButton';
 
 export async function loader({ params }) {
     const project = await getProject(params.projectId);
@@ -17,14 +18,16 @@ export default function Backlog() {
 
     const navigate = useNavigate();
 
-    const [userStories, setUserStories] = useState(project.userStories||[]);
-    const [storiesValue, setStoriesValue] = useState(5);
-    const [loading, setLoading] = useState(false);
-    const [responseMessage, setResponseMessage] = useState('');
-    const [activeStep, setActiveStep] = useState(2);
+    const [userStories, setUserStories] = useState(project.user_stories || []);
+    const [storiesValue, setStoriesValue] = useState(project.config.num_of_user_stories || 5);
     const [editingIndex, setEditingIndex] = useState(null);
-    const [editStory, setEditStory] = useState({user_story:'', description:''})
+    const [editStory, setEditStory] = useState({user_story_id: '',user_story:'', description:''})
 
+    const [loading, setLoading] = useState(false);
+    const [activeStep, setActiveStep] = useState(2);    
+
+    const [responseMessage, setResponseMessage] = useState('');
+    const [responseType, setResponseType] = useState('');
 
     const handleInputChange = (e) => {
         setStoriesValue(e.target.value);
@@ -44,28 +47,68 @@ export default function Backlog() {
         }
     }
 
+    const handleJiraAuth = () => {
+        window.location.href=`https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=R3kSLux1IdufBR8hSFdOTzp3mslo5i7N&scope=read%3Ajira-work%20manage%3Ajira-project%20manage%3Ajira-configuration%20read%3Ajira-user%20write%3Ajira-work&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fprojects%2Fauth&response_type=code&prompt=consent`
+    };
+
+    const handleJiraImport = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/jira/import`, {
+                method: 'get',
+            })
+            if (response.ok) {
+                const data = await response.json();
+                setResponseMessage(`${data.message}`);
+                setResponseType('success');
+            }
+        } catch (error) {
+            console.error(error);
+            setResponseMessage(`Problem with importing user stories to Jira: ${error}`);
+            setResponseType('error');
+        }
+        setLoading(false);
+    }
+
     const handleEditClick = (index, story) => {
-        console.log(story);
         setEditingIndex(index);
-        setEditStory({user_story: story.user_story, description: story.description});
+        setEditStory({user_story_id: story.user_story_id, user_story: story.user_story, description: story.description});
     }
 
     const handleSaveClick = async (index) => {
+        setLoading(true);
         const updatedUserStories = [...userStories]
-        updatedUserStories[index] = [...editStory];
+        updatedUserStories[index] = editStory;
         setUserStories(updatedUserStories);
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/user-stories`, {
+                method: 'put',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(editStory)
+            })
+            if (response.ok) {
+                setResponseMessage('User Story saved successfully');
+                setResponseType('success');
+            }
+        } catch (error) {
+            setResponseMessage('Problem with saving user story to database: ' + error.message);
+            setResponseType('error');
+        }
         setEditingIndex(null);
 
-        const updatedProject = {...project, userStories:updatedUserStories};
-        updateProject(project.uri, updatedProject);
+        const updatedProject = {...project, user_stories:updatedUserStories};
+        await updateProject(project.uri, updatedProject);
+        setLoading(false);
     }
 
     const handleDeleteUserStory = async (indexToDelete) => {
+        setLoading(true);
         const updatedUserStories = userStories.filter((_,index) => index !== indexToDelete);
         const deletedUserStory = userStories.filter((_,index) => index == indexToDelete)[0]
-        setUserStories(updatedUserStories);
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/user-stories:batch-delete`,{
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/user-stories:batch-delete`,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json'
@@ -73,16 +116,20 @@ export default function Backlog() {
                 body: JSON.stringify([deletedUserStory.user_story_id])
             });
             if (response.ok) {
+                setUserStories(updatedUserStories);
                 setResponseMessage('User story deleted successfully');
+                setResponseType('success');
             } else {
                 setResponseMessage('Failed to delete user story');
+                setResponseType('error');
             }
         } catch (error) {
-            setResponseMessage('Network error connecting to API');
+            setResponseMessage('Network error deleting user stories: ' + error.message);
+            setResponseType('error');
         }
-        const updatedProject  = {...project, userStories: updatedUserStories};
-        console.log(updatedProject);
+        const updatedProject  = {...project, user_stories: updatedUserStories};
         updateProject(project.uri, updatedProject);
+        setLoading(false);
     };
 
     //new implementation
@@ -92,40 +139,36 @@ export default function Backlog() {
         const updatedProject = {
             ...project,
             config:{
-                numOfUserStories:storiesValue
+                num_of_user_stories:storiesValue
             }
         }
-//        const payload = updatedProject.config;
+       const payload = updatedProject.config;
         await updateProject(project.uri, updatedProject);
         try {
-            const response = await fetch(`http://localhost:8080/api/v1/user-stories`,{
-                method: 'post',
-                headers: {
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/user-stories`,{
+                method: 'POST',
+                headers:{
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedProject)
-            });
-            // const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/user-stories`,{
-            //     method: 'POST',
-            //     headers:{
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: JSON.stringify(payload),
-            //     });
+                body: JSON.stringify(payload),
+                });
             if (response.ok) {
                 const data = await response.json();
-                //concat new questions with selected old
-                const updatedUserStories = project.userStories.concat(data);
+                const updatedUserStories = project.user_stories.concat(data);
                 const userStories = {
                     id: data[0].project_context_id,
-                    userStories: updatedUserStories
+                    user_stories: updatedUserStories
                 }
                 setUserStories(updatedUserStories);
                 await updateProject(project.uri, userStories);
                 navigate(`/backlog/${project.uri}`)
+                setResponseMessage(`${storiesValue} NEW user stories generated`);
+                setResponseType('success');
             }
         } catch (error) {
+            console.error(error);
             setResponseMessage('Error: Network issue connecting to API.');
+            setResponseType('error');
         }
         setLoading(false);
     }
@@ -137,16 +180,19 @@ export default function Backlog() {
                 activeStep={activeStep}
                 onChangeStep={handleStepChange}
             />
-            {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
+            {responseMessage && <div className={`border px-4 py-3 mb-5 rounded relative ${responseType === 'error'
+                ? 'bg-red-100 border-red-400 text-red-700'
+                : 'bg-green-100 border-green-400 text-green-700'
+            }`} role="alert">
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
             
             <h1 className="text-black text-3xl font-bold mb-5text-left">
-                {project.projectDetails.title}
+                {project.project_details.title}
             </h1>
             <h2 className="text-black text-xl mb-5 text-left">
-                {project.projectDetails.description}
+                {project.project_details.description}
             </h2>
             <h1 className="text-black text-xl font-bold mb-5 text-left">User Stories</h1>
             <div className="flex align-middle space-x-1">
@@ -164,26 +210,31 @@ export default function Backlog() {
                 { loading ? "Generating": "Generate"}
             </Button>
             </div>
-            {project?.userStories?.length > 0 &&(
+            {userStories.length > 0 &&(
             <div className="bg-slate-100 flex flex-col justify-items-start w-11/12">
             
             {userStories
             .filter(story => story.user_story.trim() !== "" || story.description.trim() !== "")
             .map((story,index) => (
-                <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2 relative">
-                    <Button
-                        onClick={() => (editingIndex === index ? handleSaveClick(index) : handleEditClick(index, story))}
-                         sx={{ position: 'absolute', top: 8, right: 80 }}
-                        >
-                        {editingIndex === index ? 'Save' : 'Edit'}
-                    </Button>
-                    <Button
-                        onClick={() => handleDeleteUserStory(index)}
-                        sx={{ position: "absolute", top:8, right:8}}
+                <div key={index} className="bg-white text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex-row flex justify-start items-center space-x-2 relative">
+                    <ConfirmationButton
+                        editingIndex={editingIndex}
+                        index={index}
+                        handleEditClick={handleEditClick}
+                        handleSaveClick={handleSaveClick}
+                        story={story}
+                        loading={loading}
+                    >
+                    </ConfirmationButton>
+                    <DeleteButton
+                        index={index}
+                        item="user story"
+                        handleDeleteFunction={handleDeleteUserStory}
+                        loading={loading}
                         >
                         Delete
-                    </Button>
-                {editingIndex === index? (
+                    </DeleteButton>
+                {editingIndex === index ? (
                     <div className="pt-8 flex flex-row w-full justify-start items-center space-x-2">
                     <TextField
                         fullWidth
@@ -219,13 +270,14 @@ export default function Backlog() {
             )}
             <div className="container flex-row flex p-1 space-x-5">
             <Form action="edit" className="flex p-2">
-                <Button variant="outlined" color="primary" type="submit">
+                <Button variant="outlined" color="primary" type="submit" disabled={loading}>
                 Edit
                 </Button> 
             </Form>
             <div className="flex flex-row items-center space-x-5">
-            <DownloadButton dltarget={{...project,userStories:userStories}}/>
-            <JiraImportButton project={{...project,userStories:userStories}} />
+            <DownloadButton loading={loading} dltarget={project.project_context_id}/>
+            <Button variant="outlined" color="primary" disabled={loading} onClick={handleJiraImport}>Import to Jira</Button>
+            <Button variant="outlined" color="primary" disabled={loading} onClick={handleJiraAuth}>Authenticate Jira</Button>
             </div>
             </div>
             </div>

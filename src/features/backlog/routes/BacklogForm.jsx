@@ -26,17 +26,18 @@ const Form = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [functionalities, setFunctionalities] = useState(project.projectDetails.functionalities.map(func => func));
+  const [functionalities, setFunctionalities] = useState(project.project_details.functionalities.map(func => func));
   const [roleValue, setRoleValue] = useState('');
-  const [rolePills, setRolePills] = useState(project.projectDetails.roles.map(role => role));
-  const [titleValue, setTitleValue] = useState(project.projectDetails.title || '');
-  const [descriptionValue, setDescriptionValue] = useState(project.projectDetails.description ||'');
-  const [AIValue, setAIValue] = useState(project.config.model || '');
-  const [questionsValue, setQuestionsValue] = useState(project.config.numOfQuestions || 5);
-  const [storiesValue, setStoriesValue] = useState(project.config.numOfUserStories || 10);
+  const [rolePills, setRolePills] = useState(project.project_details.roles.map(role => role));
+  const [titleValue, setTitleValue] = useState(project.project_details.title || '');
+  const [descriptionValue, setDescriptionValue] = useState(project.project_details.description ||'');
+  const [AIValue, setAIValue] = useState(project.config.ai_model_name || '');
+  const [questionsValue, setQuestionsValue] = useState(project.config.num_of_questions || 5);
+  const [storiesValue, setStoriesValue] = useState(project.config.num_of_user_stories || 10);
   const [activeStep, setActiveStep] = useState(0);
 
   const [responseMessage, setResponseMessage] = useState('');
+  const [responseType, setResponseType] = useState('');
 
   const navigate = useNavigate();
 
@@ -113,11 +114,11 @@ const Form = () => {
     const updatedProject ={
       ...project,
       config:{
-        model: AIValue,
-        numOfQuestions: questionsValue,
-        numOfUserStories: storiesValue
+        ai_model_name: AIValue,
+        num_of_questions: questionsValue,
+        num_of_user_stories: storiesValue
       },
-      projectDetails:{
+      project_details:{
         title:titleValue,
         description:descriptionValue,
         functionalities:functionalities,
@@ -126,8 +127,7 @@ const Form = () => {
     }
     try {
       await updateProject(project.uri, updatedProject);
-      console.log(updatedProject)
-      const response = await fetch('http://localhost:8080/api/v1/questions', {
+      const response = await fetch(`http://localhost:8080/api/v1/projects`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -136,24 +136,37 @@ const Form = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
-        const questions = {
-          id:data[0].project_context_id,
-          clarificationQAs: data
-        };
-        console.log(questions);
-        // const questions = {
-        //   id:data.project_context_id,
-        //   clarificationQAs: data.clarification_qa_list
-        // };
-        await updateProject(project.uri, questions);
-        navigate(`/backlog/${project.uri}/questions`);
-        setResponseMessage('Success: ${data}');
+        const updatedProject = data;
+        updatedProject.config = {ai_model_name: AIValue, num_of_questions: questionsValue, num_of_user_stories: storiesValue};
+        await updateProject(project.uri, updatedProject);
+        setResponseMessage(`Please wait, retrieving questions`);
+        setResponseType('error');
+        try {
+          const payload = updatedProject.config;
+          const response = await fetch(`http://localhost:8080/api/v1/projects/${updatedProject.project_context_id}/questions`,{
+            method: "post",
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(payload),
+          });
+          if (response.ok) {
+            const data = await response.json();
+            updatedProject.clarification_qas = data;
+            await updateProject(project.uri, updatedProject);
+            navigate(`/backlog/${project.uri}/questions`);
+          }
+        } catch (error) {
+          setResponseMessage('Error: Network issue retrieving questions: '+error.message);
+          setResponseType('error');
+        }
       } else {
         setResponseMessage('Error: Failed to submit');
+        setResponseType('error');
       }
     } catch (error) {
-      setResponseMessage('Error: Network issue connecting to API');
+      setResponseMessage('Error: Network issue creating or updating project: ' + error.message);
+      setResponseType('error');
     }
     setLoading(false);
   };
@@ -166,7 +179,10 @@ const Form = () => {
         onChangeStep={handleStepChange}
       />
       <form onSubmit={handleSubmit} className="w-auto h-auto p-6 bg-slate-100">
-        {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
+        {responseMessage && <div className={`border px-4 py-3 mb-5 rounded relative ${responseType === 'error'
+          ? 'bg-red-100 border-red-400 text-red-700'
+          : 'bg-green-100 border-green-400 text-green-700'
+        }`} role="alert">
         <span className="block sm:inline">{responseMessage}</span>
         <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
         </span>

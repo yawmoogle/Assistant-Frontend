@@ -4,6 +4,7 @@ import { redirect, useLoaderData, useNavigate } from 'react-router-dom';
 import { updateProject, getProject } from '../../../projects';
 import { Button, TextField } from '@mui/material';
 import NavigationStepper from '../../../components/NavigationStepper';
+import DeleteButton from '../DeleteButton';
 
 export async function action({ request, params }) {
     const formData = await request.formData();
@@ -25,16 +26,17 @@ const QAForm = () => {
 
 
     const [loading, setLoading] = useState(false);
-    const [questions, setQuestions] = useState(project.clarificationQAs||[]);
-    const [answers, setAnswers] = useState('');
+    const [questions, setQuestions] = useState(project.clarification_qas||[]);
     const [responseMessage, setResponseMessage] = useState('');
+    const [responseType, setResponseType] = useState('');
     const [questionsValue, setQuestionsValue] = useState(5);
     const [activeStep, setActiveStep] = useState(1);
 
     const handleChange = (e, index) => {
-        const newAnswers = [...answers];
-        newAnswers[index] = e.target.value;
-        setAnswers(newAnswers);
+        const { value } = e.target;
+        const updatedQuestions = questions.map((question, idx) =>
+        idx === index ? {...question, answer:value} : question);
+        setQuestions(updatedQuestions);
     }
 
     const handleInputChange = (e) => {
@@ -61,54 +63,75 @@ const QAForm = () => {
         setLoading(true);
         const updatedProject = {
             ...project,
-            clarificationQAs: project.clarificationQAs.map((question, index) => ({
-                ...question,
-                answer: answers[index]
-            }))
+            clarification_qas: questions
         };
-        const payload = updatedProject.clarificationQAs;
+        const payload = updatedProject.clarification_qas;
+        console.log(payload);
         await updateProject(project.uri, updatedProject);
     try {
         // new restful implementation
-        // const response = await fetch(`http://localhost:8080/api/v1/projects/${project.id}/questions:batch-update`,{
-        //     method: 'post',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(payload)
-        // })
-        const response = await fetch(`http://localhost:8080/api/v1/user-stories`,{
-            method: "post",
+        const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/questions:batch-update`,{
+            method: 'post',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(updatedProject),
-        });
+            body: JSON.stringify(payload)
+        })
         if (response.ok) {
             // new restful implementation
-            // return navigate(`/backlog/${project.uri}`);
-            const data = await response.json();
-            const userStories = {
-                userStories: data
+            try {
+                const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/user-stories`, {
+                    method: 'post',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(updatedProject.config)
+                })
+                if (response.ok) {
+                    const data = await response.json();
+                    updatedProject.user_stories = data;
+                    await updateProject(project.uri, updatedProject);
+                    navigate(`/backlog/${project.uri}`);
+                }
+            } catch (error) {
+                console.error('Error: Failed to update user stories', error);
+                setResponseMessage('Error: Failed to update user stories: ' + error.message);
+                setResponseType('error');
             }
-            await updateProject(project.uri, userStories);
-            setResponseMessage('Success: ${data}');
             return navigate(`/backlog/${project.uri}`);
         } else {
-            setResponseMessage('Error: Failed to submit');
+            setResponseMessage('Error: Failed to submit',response);
+            setResponseType('error');
         }
     } catch (error) {
-        setResponseMessage('Error: Network issue connecting to API');
+        setResponseMessage('Error: Network issue updating questions with answers: ' + error.message);
+        setResponseType('error');
     }
     setLoading(false);
     };
 
-    const handleDelete = (e,idx) => {
-        e.preventDefault();
+    const handleDelete = async (idx) => {
         const updatedQuestions = questions.filter((_, index) => index !== idx);
+        const deletedQuestion = questions.filter((_, index) => index == idx);
         setQuestions(updatedQuestions);
-        const updatedProject = {...project, clarificationQAs: updatedQuestions}
-        updateProject(project.uri, updatedProject)
+        try {
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/questions:batch-delete`, {
+                method: 'post',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify([deletedQuestion[0].clarification_qa_id])
+            });
+            if (response.ok) {
+                setResponseMessage('Question deleted successfully');
+                setResponseType('success');
+            } 
+        } catch (error) {
+            setResponseMessage('Error deleting question from database: '+ error.message);
+            setResponseType('error');
+        }
+        project.clarification_qas=updatedQuestions;
+        await updateProject(project.uri, project);
     };
 
     const handleRegenerate = async (e) => {
@@ -117,34 +140,31 @@ const QAForm = () => {
         const updatedProject = {
             ...project,
             config:{
-                numOfQuestions: questionsValue
+                num_of_questions: questionsValue
             }
         }
-        console.log(updatedProject);
         await updateProject(project.uri, updatedProject);
         try {
-            // TODO: switch to restful endpoints
-            const response = await fetch('http://localhost:8080/api/v1/questions',{
+            const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/questions`,{
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(updatedProject),
+                body: JSON.stringify(updatedProject.config),
                 });
             if (response.ok) {
                 const data = await response.json();
                 //concat new questions with selected old
-                const updatedClarificationQuestions = project.clarificationQAs.concat(data);
-                const clarificationQuestions = {
-                    id: data[0].project_context_id,
-                    clarificationQAs: updatedClarificationQuestions
-                }
+                const updatedClarificationQuestions = project.clarification_qas.concat(data);
                 setQuestions(updatedClarificationQuestions);
-                await updateProject(project.uri, clarificationQuestions);
+                await updateProject(project.uri, updatedClarificationQuestions);
                 navigate(`/backlog/${project.uri}/questions`)
+                setResponseMessage(`${questionsValue} NEW questions have been generated.`);
+                setResponseType('success');
             }
         } catch (error) {
-            setResponseMessage('Error: Network issue connecting to API.');
+            setResponseMessage('Error: Network issue generating new questions: ' + error.message);
+            setResponseType('error');
         }
         setLoading(false);
     };
@@ -157,23 +177,26 @@ const QAForm = () => {
             onChangeStep={handleStepChange}
         />
         <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-slate-100">
-            {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
+            {responseMessage && <div className={`border px-4 py-3 mb-5 rounded relative ${responseType === 'error' 
+                ? 'bg-red-100 border-red-400 text-red-700'
+                : 'bg-green-100 border-green-400 text-green-700'
+            }`} role="alert">
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
         <div className="flex align-middle space-x-1">
         <TextField
-            aria-label="Regenerate Questions"
-            name="regenerate_questions"
+            aria-label="Generate Questions"
+            name="Generate_questions"
             size="small"
             type="number"
             value={questionsValue}
             slotProps={{
-                htmlInput : {min:1, max:50}
+                htmlInput : {min:1, max:20}
             }}
             onChange={handleInputChange}/>
         <Button onClick={(e) => handleRegenerate(e)} variant="outlined" color="primary" disabled={loading}>
-            { loading ? "Regenerating": "Regenerate"} 
+            { loading ? "Generating": "Generate"} 
         </Button>
         </div>
         <div className="mt-10 text-black flex flex-col mb-2">
@@ -185,18 +208,19 @@ const QAForm = () => {
                 </label>
                 <input
                     type="text"
-                    value={answers[index]||""}
+                    value={question.answer||""}
                     onChange={(e) => handleChange(e, index)}
                     id={`answer-${index}`}
                     placeholder="Enter your answer to the above question"
                     className="bg-white flex-grow p-2 border-none outline-none mt-2"
                     size="50"
                 />
-                <Button
-                    onClick = {(e)=>handleDelete(e,index)}
-                    sx={{ position: "absolute", top:8, right:8}}>
+                <DeleteButton
+                    index={index}
+                    item="question"
+                    handleDeleteFunction={handleDelete}>
                     Delete
-                </Button>
+                </DeleteButton>
             </div>
         ))}
         </div>
