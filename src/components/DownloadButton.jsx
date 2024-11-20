@@ -1,7 +1,7 @@
 import { Button } from '@mui/material';
 import PropTypes from 'prop-types';
 
-const DownloadButton = ({dltarget}) => {
+const DownloadButton = ({ loading, dltarget}) => {
   const handleDownload = async (e) => {
     e.preventDefault();
     console.log(JSON.stringify(dltarget));
@@ -40,7 +40,7 @@ const DownloadButton = ({dltarget}) => {
     }
   };
 
-  return <Button variant="outlined" color="primary" onClick={handleDownload}>Download CSV</Button>;
+  return <Button variant="outlined" color="primary" disabled={loading} onClick={handleDownload}>Download CSV</Button>;
 };
 DownloadButton.propTypes = {
   dltarget: PropTypes.number.isRequired,

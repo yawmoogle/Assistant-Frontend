@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import PropTypes from 'prop-types';
 
-const DeleteButton = ({ index, item, handleDeleteFunction }) => {
+const DeleteButton = ({ loading, index, item, handleDeleteFunction }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpenDialog = () => {
@@ -23,6 +23,7 @@ const DeleteButton = ({ index, item, handleDeleteFunction }) => {
       <Button
         onClick={handleOpenDialog}
         sx={{ position: "absolute", top: 8, right: 8 }}
+        disabled={loading}
       >
         Delete
       </Button>
@@ -49,8 +50,9 @@ const DeleteButton = ({ index, item, handleDeleteFunction }) => {
 
 export default DeleteButton;
 DeleteButton.propTypes = {
-    index: PropTypes.number,
-    item: PropTypes.string,
-    handleDeleteFunction: PropTypes.func
+  loading: PropTypes.bool,
+  index: PropTypes.number,
+  item: PropTypes.string,
+  handleDeleteFunction: PropTypes.func
 }
 

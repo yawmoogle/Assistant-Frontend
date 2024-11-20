@@ -37,6 +37,7 @@ const Form = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const [responseMessage, setResponseMessage] = useState('');
+  const [responseType, setResponseType] = useState('');
 
   const navigate = useNavigate();
 
@@ -126,7 +127,6 @@ const Form = () => {
     }
     try {
       await updateProject(project.uri, updatedProject);
-      console.log(updatedProject)
       const response = await fetch(`http://localhost:8080/api/v1/projects`, {
         method: 'POST',
         headers: {
@@ -136,12 +136,11 @@ const Form = () => {
       });
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
         const updatedProject = data;
         updatedProject.config = {ai_model_name: AIValue, num_of_questions: questionsValue, num_of_user_stories: storiesValue};
-        console.log(updatedProject);
         await updateProject(project.uri, updatedProject);
         setResponseMessage(`Please wait, retrieving questions`);
+        setResponseType('error');
         try {
           const payload = updatedProject.config;
           const response = await fetch(`http://localhost:8080/api/v1/projects/${updatedProject.project_context_id}/questions`,{
@@ -158,13 +157,16 @@ const Form = () => {
             navigate(`/backlog/${project.uri}/questions`);
           }
         } catch (error) {
-          setResponseMessage('Error: Network issue connecting to API');
+          setResponseMessage('Error: Network issue retrieving questions: '+error.message);
+          setResponseType('error');
         }
       } else {
         setResponseMessage('Error: Failed to submit');
+        setResponseType('error');
       }
     } catch (error) {
-      setResponseMessage('Error: Network issue connecting to API');
+      setResponseMessage('Error: Network issue creating or updating project: ' + error.message);
+      setResponseType('error');
     }
     setLoading(false);
   };
@@ -177,7 +179,10 @@ const Form = () => {
         onChangeStep={handleStepChange}
       />
       <form onSubmit={handleSubmit} className="w-auto h-auto p-6 bg-slate-100">
-        {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
+        {responseMessage && <div className={`border px-4 py-3 mb-5 rounded relative ${responseType === 'error'
+          ? 'bg-red-100 border-red-400 text-red-700'
+          : 'bg-green-100 border-green-400 text-green-700'
+        }`} role="alert">
         <span className="block sm:inline">{responseMessage}</span>
         <span className="absolute top-0 bottom-0 right-0 px-4 py-3">
         </span>

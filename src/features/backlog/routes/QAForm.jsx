@@ -27,15 +27,16 @@ const QAForm = () => {
 
     const [loading, setLoading] = useState(false);
     const [questions, setQuestions] = useState(project.clarification_qas||[]);
-    const [answers, setAnswers] = useState('');
     const [responseMessage, setResponseMessage] = useState('');
+    const [responseType, setResponseType] = useState('');
     const [questionsValue, setQuestionsValue] = useState(5);
     const [activeStep, setActiveStep] = useState(1);
 
     const handleChange = (e, index) => {
-        const newAnswers = [...answers];
-        newAnswers[index] = e.target.value;
-        setAnswers(newAnswers);
+        const { value } = e.target;
+        const updatedQuestions = questions.map((question, idx) =>
+        idx === index ? {...question, answer:value} : question);
+        setQuestions(updatedQuestions);
     }
 
     const handleInputChange = (e) => {
@@ -62,10 +63,7 @@ const QAForm = () => {
         setLoading(true);
         const updatedProject = {
             ...project,
-            clarification_qas: project.clarification_qas.map((question, index) => ({
-                ...question,
-                answer: answers[index]
-            }))
+            clarification_qas: questions
         };
         const payload = updatedProject.clarification_qas;
         console.log(payload);
@@ -97,14 +95,17 @@ const QAForm = () => {
                 }
             } catch (error) {
                 console.error('Error: Failed to update user stories', error);
-                setResponseMessage('Error: Failed to update user stories');
+                setResponseMessage('Error: Failed to update user stories: ' + error.message);
+                setResponseType('error');
             }
             return navigate(`/backlog/${project.uri}`);
         } else {
-            setResponseMessage('Error: Failed to submit');
+            setResponseMessage('Error: Failed to submit',response);
+            setResponseType('error');
         }
     } catch (error) {
-        setResponseMessage('Error: Network issue connecting to API');
+        setResponseMessage('Error: Network issue updating questions with answers: ' + error.message);
+        setResponseType('error');
     }
     setLoading(false);
     };
@@ -123,9 +124,11 @@ const QAForm = () => {
             });
             if (response.ok) {
                 setResponseMessage('Question deleted successfully');
+                setResponseType('success');
             } 
         } catch (error) {
-            setResponseMessage('Error deleting question from database');
+            setResponseMessage('Error deleting question from database: '+ error.message);
+            setResponseType('error');
         }
         project.clarification_qas=updatedQuestions;
         await updateProject(project.uri, project);
@@ -140,7 +143,6 @@ const QAForm = () => {
                 num_of_questions: questionsValue
             }
         }
-        console.log(updatedProject);
         await updateProject(project.uri, updatedProject);
         try {
             const response = await fetch(`http://localhost:8080/api/v1/projects/${project.project_context_id}/questions`,{
@@ -158,9 +160,11 @@ const QAForm = () => {
                 await updateProject(project.uri, updatedClarificationQuestions);
                 navigate(`/backlog/${project.uri}/questions`)
                 setResponseMessage(`${questionsValue} NEW questions have been generated.`);
+                setResponseType('success');
             }
         } catch (error) {
-            setResponseMessage('Error: Network issue connecting to API.');
+            setResponseMessage('Error: Network issue generating new questions: ' + error.message);
+            setResponseType('error');
         }
         setLoading(false);
     };
@@ -173,7 +177,10 @@ const QAForm = () => {
             onChangeStep={handleStepChange}
         />
         <form onSubmit={handleSubmit} className="w-full h-full p-6 bg-slate-100">
-            {responseMessage && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 mb-5 rounded relative" role="alert">
+            {responseMessage && <div className={`border px-4 py-3 mb-5 rounded relative ${responseType === 'error' 
+                ? 'bg-red-100 border-red-400 text-red-700'
+                : 'bg-green-100 border-green-400 text-green-700'
+            }`} role="alert">
             <span className="block sm:inline">{responseMessage}</span>
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}

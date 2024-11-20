@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import PropTypes from 'prop-types';
 
-const ConfirmationButton = ({ editingIndex, index, handleSaveClick, handleEditClick, story }) => {
+const ConfirmationButton = ({ loading, editingIndex, index, handleSaveClick, handleEditClick, story }) => {
   const [open, setOpen] = useState(false);
 
   const handleButtonClick = () => {
@@ -27,6 +27,7 @@ const ConfirmationButton = ({ editingIndex, index, handleSaveClick, handleEditCl
       <Button
         onClick={handleButtonClick}
         sx={{ position: 'absolute', top: 8, right: 80 }}
+        disabled={loading}
       >
         {editingIndex === index ? 'Save' : 'Edit'}
       </Button>
@@ -51,9 +52,10 @@ const ConfirmationButton = ({ editingIndex, index, handleSaveClick, handleEditCl
 
 export default ConfirmationButton;
 ConfirmationButton.propTypes = {
-    editingIndex: PropTypes.number,
-    index: PropTypes.number,
-    handleSaveClick: PropTypes.func,
-    handleEditClick: PropTypes.func,
-    story: PropTypes.object
+  loading:PropTypes.bool,
+  editingIndex: PropTypes.number,
+  index: PropTypes.number,
+  handleSaveClick: PropTypes.func,
+  handleEditClick: PropTypes.func,
+  story: PropTypes.object
 }
