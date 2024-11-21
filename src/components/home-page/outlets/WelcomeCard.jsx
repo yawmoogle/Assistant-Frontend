@@ -3,7 +3,7 @@ import "./welcome-card.css"
 const WelcomeCard = () => {
 
     return(<div className="welcome-card">
-        <h1 className="title">AIDEN</h1>
+        <img src="/icon.png" alt="A logo of a few interconnected hexagons with AIDEN located on the left"/>
         <p className="description">Your Everyday AI Assistant</p>
     </div>);
 };

@@ -1,7 +1,6 @@
 @import url('https://unpkg.com/css.gg@2.0.0/icons/css/add.css');
 
 div.sidebar {
-  background-image: url('/bg.jpg');
   display: flex;
   justify-content: center;
   padding: 20px;

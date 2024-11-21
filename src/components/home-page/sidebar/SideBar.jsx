@@ -21,7 +21,7 @@ const SideBar = ({ showSidebar, sidebarRef }) => {
   const { projects } = useLoaderData();  
 
   return (
-      <div ref={sidebarRef} className={`sidebar ${showSidebar ? "sidebar-show" : "sidebar-hide"}`}>
+      <div ref={sidebarRef} className={`sidebar bg-orange-500 ${showSidebar ? "sidebar-show" : "sidebar-hide"}`}>
         <div className="navigation-items">
           <div className="navigation-item">
             <Form method="post">

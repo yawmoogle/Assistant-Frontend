@@ -140,6 +140,7 @@ const QAForm = () => {
         const updatedProject = {
             ...project,
             config:{
+                ...project.config,
                 num_of_questions: questionsValue
             }
         }
@@ -185,6 +186,7 @@ const QAForm = () => {
             <span className="absolute top-0 bottom-0 right-0 px-4 py-3"/>
             </div>}
         <div className="flex align-middle space-x-1">
+        <label className="text-xl font-bold text-black mt-1 text-left">Generate More Questions:</label>
         <TextField
             aria-label="Generate Questions"
             name="Generate_questions"
@@ -199,7 +201,7 @@ const QAForm = () => {
             { loading ? "Generating": "Generate"} 
         </Button>
         </div>
-        <div className="mt-10 text-black flex flex-col mb-2">
+        <div className="text-black flex flex-col mb-2">
 
         {questions.map((question,index) => (
             <div key={index} className="bg-slate-300 text-black border-4 border-black mx-6 my-4 p-4 rounded-md flex flex-col justify-start items-stretch space-x-2 relative">

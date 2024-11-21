@@ -23,6 +23,7 @@ export async function action({ request, params }) {
 
 const Form = () => {
   const { project } = useLoaderData();
+  console.log(project);
 
   const [loading, setLoading] = useState(false);
 
