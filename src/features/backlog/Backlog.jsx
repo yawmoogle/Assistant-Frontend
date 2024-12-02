@@ -48,7 +48,7 @@ export default function Backlog() {
     }
 
     const handleJiraAuth = () => {
-        window.location.href=`https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=R3kSLux1IdufBR8hSFdOTzp3mslo5i7N&scope=read%3Ajira-work%20manage%3Ajira-project%20manage%3Ajira-configuration%20read%3Ajira-user%20write%3Ajira-work&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fprojects%2Fauth&response_type=code&prompt=consent`
+        window.location.href=`https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=R3kSLux1IdufBR8hSFdOTzp3mslo5i7N&scope=read%3Ajira-work%20manage%3Ajira-project%20manage%3Ajira-configuration%20read%3Ajira-user%20write%3Ajira-work&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fprojects%2Fauth&response_type=code&prompt=consent&state=${project.project_context_id}`
     };
 
     const handleJiraImport = async () => {

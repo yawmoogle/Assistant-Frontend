@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-const TextField = ({label, name, inputValue, inputChange}) => {
+const TextField = ({ required, label, name, inputValue, inputChange}) => {
     return (
         <div>
             <label className="text-black text-xl text-left font-bold mb-5 flex items-center">{label}</label>
@@ -13,12 +13,14 @@ const TextField = ({label, name, inputValue, inputChange}) => {
                 onChange={inputChange}
                 placeholder={`Enter your ${label} here`}
                 className="bg-white text-black flex-grow p-2 border-none outline-none"
+                required={required}
                 />
             </div>
         </div>
     )
 };
 TextField.propTypes = {
+    required: PropTypes.bool,
     label: PropTypes.string,
     name: PropTypes.string,
     inputValue: PropTypes.string,
