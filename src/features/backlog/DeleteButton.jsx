@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import PropTypes from 'prop-types';
 
@@ -6,16 +6,16 @@ const DeleteButton = ({ loading, index, item, handleDeleteFunction }) => {
   const [open, setOpen] = useState(false);
 
   const handleOpenDialog = () => {
-    setOpen(true); // Open the confirmation dialog
+    setOpen(true);
   };
 
   const handleCloseDialog = () => {
-    setOpen(false); // Close the dialog without deleting
+    setOpen(false);
   };
 
   const handleConfirmDelete = () => {
-    setOpen(false); // Close the dialog
-    handleDeleteFunction(index); // Call the delete function
+    setOpen(false);
+    handleDeleteFunction(index);
   };
 
   return (

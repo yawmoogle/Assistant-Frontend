@@ -15,13 +15,12 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 import WelcomeCard from './components/home-page/outlets/WelcomeCard.jsx';
 import AuthContextProvider from './contexts/auth/AuthContextProvider.jsx';
-import ProtectedRoute from './components/ProtectedRoute.jsx';
 import AlertContextProvider from './contexts/alert/AlertContextProvider.jsx';
 
 const router =  createBrowserRouter([
   {
     path: "/",
-    element: <ProtectedRoute><HomePage /></ProtectedRoute>,
+    element: <HomePage />,
     errorElement: <ErrorPage />,
     loader: projectLoader,
     action: projectAction,

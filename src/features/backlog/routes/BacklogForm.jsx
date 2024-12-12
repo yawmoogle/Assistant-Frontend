@@ -23,6 +23,7 @@ export async function action({ request, params }) {
 
 const Form = () => {
   const { project } = useLoaderData();
+  console.log(project);
 
   const [loading, setLoading] = useState(false);
 
@@ -191,12 +192,15 @@ const Form = () => {
           label="Title"
           name="title"
           inputValue={titleValue}
-          inputChange={handleInputChange}/>
+          inputChange={handleInputChange}
+          required={1}/>
         <Description 
           label="Description"
           name="description"
           inputValue={descriptionValue}
-          inputChange={handleInputChange}/>
+          inputChange={handleInputChange}
+          tooltip="A short description of your project"
+          required={1}/>
         <label className="text-black text-xl text-left font-bold mt-5 flex items-center" id="ai-label">AI Model</label>
         <Select
           labelId="ai-label"

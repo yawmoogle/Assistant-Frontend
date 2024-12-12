@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import PropTypes from 'prop-types';
 
-const TooltipTextField = ({ label, name, inputValue, inputChange, tooltip }) => {
+const TooltipTextField = ({ required, label, name, inputValue, inputChange, tooltip }) => {
     const [showTooltip, setShowTooltip] = useState(false);
     const placeholderTooltip = tooltip || "Placeholder Tooltip"
     return(
@@ -42,11 +42,13 @@ const TooltipTextField = ({ label, name, inputValue, inputChange, tooltip }) => 
                 onChange={inputChange}
                 placeholder={`Enter your ${label} here`}
                 className="bg-white text-black flex-grow p-2 border-none outline-none"
+                required={required}
                 />
         </div>
         </div>    
 )};
 TooltipTextField.propTypes = {
+  required: PropTypes.bool,
   label: PropTypes.string,
   name: PropTypes.string,
   inputValue: PropTypes.string,

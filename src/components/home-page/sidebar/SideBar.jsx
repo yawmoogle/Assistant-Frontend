@@ -21,7 +21,7 @@ const SideBar = ({ showSidebar, sidebarRef }) => {
   const { projects } = useLoaderData();  
 
   return (
-      <div ref={sidebarRef} className={`sidebar ${showSidebar ? "sidebar-show" : "sidebar-hide"}`}>
+      <div ref={sidebarRef} className={`sidebar bg-orange-500 ${showSidebar ? "sidebar-show" : "sidebar-hide"}`}>
         <div className="navigation-items">
           <div className="navigation-item">
             <Form method="post">
@@ -39,7 +39,7 @@ const SideBar = ({ showSidebar, sidebarRef }) => {
                     className={({isActive, isPending}) => isActive ? "active" : isPending ? "pending" : "project"}
                   >
                     <ViewKanbanIcon />
-                    <p className="caption">{project.project_details.title}</p>
+                    <p className="text-black caption">{project.project_details.title}</p>
                   </NavLink>
                 </div>
             ))}

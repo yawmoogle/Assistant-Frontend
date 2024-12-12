@@ -48,7 +48,7 @@ export default function Backlog() {
     }
 
     const handleJiraAuth = () => {
-        window.location.href=`https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=R3kSLux1IdufBR8hSFdOTzp3mslo5i7N&scope=read%3Ajira-work%20manage%3Ajira-project%20manage%3Ajira-configuration%20read%3Ajira-user%20write%3Ajira-work&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fprojects%2Fauth&response_type=code&prompt=consent`
+        window.location.href=`https://auth.atlassian.com/authorize?audience=api.atlassian.com&client_id=R3kSLux1IdufBR8hSFdOTzp3mslo5i7N&scope=read%3Ajira-work%20manage%3Ajira-project%20manage%3Ajira-configuration%20read%3Ajira-user%20write%3Ajira-work&redirect_uri=http%3A%2F%2Flocalhost%3A8080%2Fapi%2Fv1%2Fprojects%2Fauth&response_type=code&prompt=consent&state=${project.project_context_id}`
     };
 
     const handleJiraImport = async () => {
@@ -138,8 +138,9 @@ export default function Backlog() {
         setLoading(true);
         const updatedProject = {
             ...project,
-            config:{
-                num_of_user_stories:storiesValue
+            config: {
+                ...project.config,
+                num_of_user_stories: storiesValue
             }
         }
        const payload = updatedProject.config;
@@ -196,6 +197,7 @@ export default function Backlog() {
             </h2>
             <h1 className="text-black text-xl font-bold mb-5 text-left">User Stories</h1>
             <div className="flex align-middle space-x-1">
+            <label className="text-black text-xl font-bold mt-1 text-left">Generate More Stories:</label>
             <TextField
                 aria-label="Regenerate Stories"
                 name="regenerate_stories"
@@ -241,8 +243,10 @@ export default function Backlog() {
                         variant='outlined'
                         value={editStory.user_story}
                         onChange={(e) => setEditStory({...editStory, user_story:e.target.value})}
-                        className="flex-1 font-semibold"
                         multiline
+                        slotProps={{
+                            input: { style:{fontWeight: 'bold'}}
+                        }}
                     />
                     <TextField
                         fullWidth
@@ -250,16 +254,18 @@ export default function Backlog() {
                         value={editStory.description}
                         onChange={(e) => setEditStory({...editStory, description:e.target.value})}
                         margin="normal"
-                        className="flex-1 font-sans"
                         multiline
+                        slotProps={{
+                            input: { style:{fontWeight: 'light'}}
+                        }}
                     />
                     </div>)
                     :(
                     <>
-                    <div className="flex-1 text-black text-xl font-semibold">
+                    <div className="flex-1 text-black text-xl font-bold">
                         {story.user_story.replace(/^\d+\.\s*/, "")}
                     </div>
-                    <div className="flex-1 text-black text-sm font-sans whitespace-pre-wrap break-words mt-8">
+                    <div className="flex-1 text-black text-sm font-semibold whitespace-pre-wrap break-words mt-8">
                         {story.description.replace(/([:.]) (\d+\.)/g, "$1\n$2")}
                     </div>
                     </>
@@ -268,16 +274,16 @@ export default function Backlog() {
             ))}
             </div>
             )}
-            <div className="container flex-row flex p-1 space-x-5">
+            <div className="container flex-row flex p-1 space-x-3">
             <Form action="edit" className="flex p-2">
                 <Button variant="outlined" color="primary" type="submit" disabled={loading}>
-                Edit
+                Edit Project Details
                 </Button> 
             </Form>
             <div className="flex flex-row items-center space-x-5">
             <DownloadButton loading={loading} dltarget={project.project_context_id}/>
-            <Button variant="outlined" color="primary" disabled={loading} onClick={handleJiraImport}>Import to Jira</Button>
             <Button variant="outlined" color="primary" disabled={loading} onClick={handleJiraAuth}>Authenticate Jira</Button>
+            <Button variant="outlined" color="primary" disabled={loading} onClick={handleJiraImport}>Export to Jira</Button>
             </div>
             </div>
             </div>

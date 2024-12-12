@@ -43,6 +43,7 @@ const DownloadButton = ({ loading, dltarget}) => {
   return <Button variant="outlined" color="primary" disabled={loading} onClick={handleDownload}>Download CSV</Button>;
 };
 DownloadButton.propTypes = {
+  loading: PropTypes.bool,
   dltarget: PropTypes.number.isRequired,
 }
 export default DownloadButton;
