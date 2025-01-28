@@ -7,8 +7,12 @@ const DownloadButton = ({ loading, dltarget}) => {
     console.log(JSON.stringify(dltarget));
     try {
       // Make a POST request to the backend endpoint
-      const response = await fetch(`http://localhost:8080/api/v1/projects/${dltarget}/download`, {
-        method: 'GET',
+      const response = await fetch(`http://localhost:8080/api/v1/download`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(dltarget)
       });
       // Check if the response is ok
       if (response.ok) {
@@ -44,6 +48,6 @@ const DownloadButton = ({ loading, dltarget}) => {
 };
 DownloadButton.propTypes = {
   loading: PropTypes.bool,
-  dltarget: PropTypes.number.isRequired,
+  dltarget: PropTypes.object.isRequired,
 }
 export default DownloadButton;

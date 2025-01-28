@@ -281,7 +281,7 @@ export default function Backlog() {
                 </Button> 
             </Form>
             <div className="flex flex-row items-center space-x-5">
-            <DownloadButton loading={loading} dltarget={project.project_context_id}/>
+            <DownloadButton loading={loading} dltarget={project}/>
             <Button variant="outlined" color="primary" disabled={loading} onClick={handleJiraAuth}>Authenticate Jira</Button>
             <Button variant="outlined" color="primary" disabled={loading} onClick={handleJiraImport}>Export to Jira</Button>
             </div>
